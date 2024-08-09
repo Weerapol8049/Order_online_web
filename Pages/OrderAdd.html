@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Order</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="../css/fonts.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../css/adminlte.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="../plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.all.min.js"></script>
+
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_green.css">
+
+    <style>
+      .input-icons i {
+        position: absolute;
+      }
+
+      .input-icons {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .icon {
+        padding: 10px;
+        min-width: 40px;
+      }
+
+      .input-field {
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+      }
+
+    </style>
+  </head>
+
+  <body style="margin-left: 20px;">
+    <!-- Site wrapper -->
+    <div>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1>Add order</h1>
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item active">Order add</li>
+                </ol>
+              </div>
+            </div>
+          </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+          <div class="row">
+            <div class="col-md-8">
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Sales order daily</h3>
+
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <!-- ----------------------------------------------------------------------------- -->
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label for="salesDate">วันที่ขาย</label>
+                        <div class="input-icons">
+                          <i class="fa fa-calendar icon"></i>
+                          <input type="date" id="salesDate" class="form-control"
+                            style="background-color: white; padding-left: 30px;" dateFormat='dd/mm/yyyy'>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="form-group">
+                        <label>Sales EmpID</label>
+                        <select class="form-control select2bs4" id="personnelNumber" style="width: 100%;">
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- ----------------------------------------------------------------------------- -->
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="store">Store Id</label>
+                        <select id="store" class="form-control select2bs4" style="width: 100%;">
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="pool">Pool</label>
+                        <select id="pool" class="form-control select2bs4" multiple style="width: 100%;">
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- ----------------------------------------------------------------------------- -->
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="qty">จำนวน</label>
+                        <input type="number" id="qty" class="form-control" min="0"
+                          oninput="this.value = Math.abs(this.value)">
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="amount">ยอดเงินรวม</label>
+                        <input type="number" id="amount" class="form-control" min="0" step=".01" value="0.00"
+                          data-decimal="2" oninput="enforceNumberValidation(this)"
+                          oninput="this.value = Math.abs(this.value)">
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <!-- ----------------------------------------------------------------------------- -->
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="discount">ส่วนลด</label>
+                        <input type="number" id="discount" class="form-control" min="0" step=".01" value="0.00"
+                          data-decimal="2" oninput="enforceNumberValidation(this)"
+                          oninput="this.value = Math.abs(this.value)">
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="shippingcost">ค่าขนส่ง</label>
+                        <input type="number" id="shippingcost" class="form-control" min="0" step=".01" value="0.00"
+                          data-decimal="2" oninput="enforceNumberValidation(this)"
+                          oninput="this.value = Math.abs(this.value)">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- ----------------------------------------------------------------------------- -->
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label for="remark">หมายเหตุ</label>
+                        <input type="text" id="remark" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label for="free">ของแถม</label>
+                        <input type="text" id="free" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group">
+                        <label for="installTeam">ทีมติดตั้ง</label>
+                        <input type="text" id="installTeam" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col-md-8">
+              <div class="card card-secondary">
+                <div class="card-header">
+                  <h3 class="card-title">Customer</h3>
+                  <!-- ----------------------------------------------------------------------------- -->
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-8">
+                      <div class="form-group">
+                        <label for="custName">ชื่อ - นามสกุล</label>
+                        <input type="text" id="custName" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label for="taxnum">เลขประจำตัวผู้เสียภาษี</label>
+                        <input type="text" id="taxnum" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- ----------------------------------------------------------------------------- -->
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="salesOrder">Sales order (ลูกค้า / RP)</label>
+                        <input type="text" id="salesOrder" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="purchOrder">Purchase order (ลูกค้า / TR)</label>
+                        <input type="text" id="purchOrder" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- ----------------------------------------------------------------------------- -->
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label for="province">จังหวัด ติดตั้ง</label>
+                        <select id="province" class="form-control select2bs4" style="width: 100%;"
+                          onchange="getRegion(document.getElementById('province').value)">
+
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label for="region">ภูมิภาค ติดตั้ง</label>
+                        <select id="region" class="form-control select2bs4" style="width: 100%;">
+
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label for="addressZipcode">รหัสไปรษณีย์</label>
+                        <input type="text" id="addressZipcode" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="form-group">
+                        <label for="addressProvince">จังหวัด</label>
+                        <select id="addressProvince" class="form-control select2bs4" style="width: 100%;"
+                          onchange="loadAddressCity(document.getElementById('addressProvince').value)">
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <!-- ----------------------------------------------------------------------------- -->
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="addressCity">อำเภอ/เขต</label>
+                        <select id="addressCity" class="form-control select2bs4" style="width: 100%;"
+                          onchange="loadAddressDistrict(document.getElementById('addressProvince').value, document.getElementById('addressCity').value)">
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="addressDistrict">ตำบล/แขวง</label>
+                        <select id="addressDistrict" class="form-control select2bs4" style="width: 100%;"
+                          onchange="loadAddressZipCode(document.getElementById('addressProvince').value, document.getElementById('addressCity').value, document.getElementById('addressDistrict').value)">
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- ----------------------------------------------------------------------------- -->
+
+                  <div class="form-group">
+                    <label for="addressStreet">ที่อยู่ปัจจุบัน</label>
+                    <textarea type="text" id="addressStreet" class="form-control" multiple> </textarea>
+                  </div>
+
+                  <hr>
+
+                  <!-- ----------------------------------- Deposit ------------------------------------------ -->
+                  <div class="row">
+                    <div class="col-xs-2">
+
+                      <button type="button" class="btn btn-block btn-outline-success btn-xs" style="margin: 15px;"
+                        onclick="addCardDeposit('Add');">
+                        <i class="fas fa-plus nav-icon"></i>
+                        เพิ่มงวดมัดจำ </button>
+                    </div>
+                    <input type="number" id="countDeposit" value="0" style="display: none;">
+                    <input type="number" id="countDepositBox" value="0" style="display: none;">
+
+
+                  </div>
+                  <!-- ------------------------------------------------------------------------------ -->
+                  <div id="divDeposit">
+                    <div class="card" id="cardDeposit" style="display: none; padding: 10px;">
+
+                    </div>
+                  </div>
+
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="col-8">
+              <a href="./OrdersPage.html" class="btn btn-secondary">ยกเลิก</a>
+              <input type="submit" value="สร้าง" class="btn btn-success float-right" onclick="create()">
+            </div>
+          </div>
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+
+
+      <!-- Control Sidebar -->
+      <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+      </aside>
+      <!-- /.control-sidebar -->
+    </div>
+    <footer class="main-footer" style="margin-left: 0;">
+      <div class="float-right d-none d-lg-block">
+        <b>Version</b> 3.2.0
+      </div>
+      <!-- <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
+      reserved. -->
+    </footer>
+    <!-- ./wrapper -->
+    <script>
+      var input = document.getElementById("addressZipcode");
+      input.addEventListener("keypress", function (event)
+      {
+        if (event.key === "Enter")
+        {
+          event.preventDefault();
+          findAddress(input.value);
+        }
+      });
+    </script>
+    <script src="../js/flagment/combo.js"></script>
+    <script src="../js/AddEdit.js"></script>
+    <!-- jQuery -->
+    <script src="../plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../js/adminlte.min.js"></script>
+    <!-- Select2 -->
+    <script src="../plugins/select2/js/select2.full.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
+      integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type='text/javascript' src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
+    <script type='text/javascript' src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
+    <script>
+
+      $(function ()
+      {
+        $('.select2bs4').select2({
+          theme: 'bootstrap4'
+        })
+
+        config = {
+          enableTime: false,
+          dateFormat: "d/m/Y",
+          locale: 'th',
+          defaultDate: "today"
+        }
+        flatpickr("input[type=date]", config);
+
+
+      })
+
+      function enforceNumberValidation(ele)
+      {
+        if ($(ele).data('decimal') != null)
+        {
+          // found valid rule for decimal
+          var decimal = parseInt($(ele).data('decimal')) || 0;
+          var val = $(ele).val();
+          if (decimal > 0)
+          {
+            var splitVal = val.split('.');
+            if (splitVal.length == 2 && splitVal[1].length > decimal)
+            {
+              // user entered invalid input
+              $(ele).val(splitVal[0] + '.' + splitVal[1].substr(0, decimal));
+            }
+          } else if (decimal == 0)
+          {
+            // do not allow decimal place
+            var splitVal = val.split('.');
+            if (splitVal.length > 1)
+            {
+              // user entered invalid input
+              $(ele).val(splitVal[0]); // always trim everything after '.'
+            }
+          }
+        }
+      }
+    </script>
+
+  </body>
+
+</html>

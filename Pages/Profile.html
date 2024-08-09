@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/adminlte.min.css">
+    <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.all.min.js"></script>
+</head>
+<body>
+      <!-- Content Wrapper. Contains page content -->
+      <div style="margin-left: 20px;">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <!-- <h1>Profile</h1> -->
+              </div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item"><a href="OrdersPage.html">Orders</a></li>
+                  <li class="breadcrumb-item active">Profile</li>
+                </ol>
+              </div>
+            </div>
+          </div><!-- /.container-fluid -->
+        </section>
+    
+        <!-- Main content -->
+        <section class="content">
+    
+            <div class="row">
+              <div class="col-md-4"></div>
+              <div class="col-md-4">
+                <!-- Widget: user widget style 1 -->
+                <div class="card card-widget widget-user">
+                  <!-- Add the bg color to the header using any of the bg-* classes -->
+                  <div class="widget-user-header bg-info">
+                    <h3 class="widget-user-username" id="usName">Alexander Pierce</h3>
+                    <h5 class="widget-user-desc" id="userType">SALES</h5>
+                  </div>
+                  <div class="widget-user-image">
+                    <img class="img-circle elevation-2" src="../images/person-icon.png" alt="User Avatar">
+                  </div>
+                  <div class="card-footer">
+                    <div class="row">
+                      <div class="col-sm-4 border-right">
+                        <div class="description-block">
+                          <h5 class="description-header">3,200</h5>
+                          <span class="description-text" >ORDERS</span>
+                        </div>
+                        <!-- /.description-block -->
+                      </div>
+                      <!-- /.col -->
+                      <div class="col-sm-4 border-right">
+                        <div class="description-block">
+                          <h5 class="description-header">13,000</h5>
+                          <span class="description-text">FOLLOWERS</span>
+                        </div>
+                        <!-- /.description-block -->
+                      </div>
+                      <!-- /.col -->
+                      <div class="col-sm-4">
+                        <div class="description-block">
+                          <h5 class="description-header">1</h5>
+                          <span class="description-text">STORE</span>
+                        </div>
+                        <!-- /.description-block -->
+                      </div>
+                      <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                  </div>
+                </div>
+                <!-- /.widget-user -->
+              </div>
+              <div class="col-md-4"></div>
+            </div>
+            <br>
+            <div class="row">
+              <div class="col-md-3"></div>
+              <div class="col-md-6">
+                <!-- Box Comment -->
+                <div class="card card-widget">
+                  <div class="card-header">
+                    <div class="user-block">
+                  
+                      <span class="username"><a href="#" id="usName2">Jonathan Burke Jr.</a></span>
+                      <!-- <span class="description">Shared publicly - 7:30 PM Today</span> -->
+                    </div>
+                    <!-- /.user-block -->
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" title="Mark as read">
+                        <i class="far fa-circle"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                    <!-- /.card-tools -->
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body" >
+                    <h5>Account</h5>
+                    <div id="card-account">
+                      <div class="card-comment">
+                        <div class="comment-text">
+                          <span class="username">
+                            RST
+                            <span class="text-muted float-right">8:03 PM Today</span>
+                          </span><!-- /.username -->
+                         โฮมโปรรังสิต
+                        </div>
+                        <!-- /.comment-text -->
+                      </div>
+                    </div>
+                    
+                    <h5>สาขา</h5>
+                  </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer card-comments" id="card-store">
+               
+                    <!-- /.card-comment -->
+                    <div class="card-comment">
+                     
+    
+                      <div class="comment-text">
+                        <span class="username">
+                          Nora Havisham
+                          <span class="text-muted float-right">8:03 PM Today</span>
+                        </span><!-- /.username -->
+                        The point of using Lorem Ipsum is that it hrs a morer-less
+                        normal distribution of letters, as opposed to using
+                        'Content here, content here', making it look like readable English.
+                      </div>
+                      <!-- /.comment-text -->
+                    </div>
+                    <!-- /.card-comment -->
+                  </div>
+                  <!-- /.card-footer -->
+                  <div class="card-footer">
+                
+                  </div>
+                  <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+              </div>
+              <div class="col-md-3"></div>
+            </div>
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+      <!-- Control Sidebar -->
+      <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+      </aside>
+      <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+    
+    <!-- jQuery -->
+    <!-- <script src="/js/jquery.min.js"></script> -->
+    <!-- Bootstrap 4 -->
+    <script src="../js/Profile.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../js/adminlte.min.js"></script>
+    <script src="../plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../plugins/jszip/jszip.min.js"></script>
+    <script src="../plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    </body>
+    <footer class="main-footer" style="margin-left: 0;">
+      <div class="float-right d-none d-lg-block">
+          <b>Version</b> 3.2.0
+      </div>
+      <!-- <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
+      reserved. -->
+  </footer>
+</html>

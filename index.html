@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign In</title>
+
+        <!-- Google Font: Source Sans Pro -->
+        <link rel="stylesheet" href="./css/fonts.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+            integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- Theme style -->
+        <link rel="stylesheet" href="./css/adminlte.min.css">
+        <!-- overlayScrollbars -->
+        <link rel="stylesheet" href="./css/OverlayScrollbars.min.css">
+        
+        
+    </head>
+
+    <body class="hold-transition login-page">
+        <div class="login-box">
+            <div class="login-logo">
+                <div class="row">
+                    <div class="col-12">
+                        <img src="./images/LOGO_STARMARK_CMYK.jpg" alt="" style="width: 250px;">
+                    </div>
+                    <div class="col-12">
+                        <b>Order online</b>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body login-card-body">
+                    <p class="login-box-msg">Sign in to start your session</p>
+                    <form id="signin" action="Pages/LayoutPage.html" method="post">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control"  id="username" placeholder="Username" onchange="onKey()">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="password" class="form-control" id="password" placeholder="Password" onchange="onKey()">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="message" style="color:  red; margin-bottom: 10px; text-align: center;"></div>
+                        <div class="row">
+                            <div class="col-8">
+                                <!-- <div class="icheck-primary">
+                                    <input type="checkbox" id="remember">
+                                    <label for="remember">
+                                        Remember Me
+                                    </label>
+                                </div> -->
+                            </div>
+
+                            <div class="col-4">
+                                <button type="button" class="btn btn-primary btn-block" onclick="signIn()">Sign In</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="./js/SignIn.js"></script>
+        <script src="./js/jquery.min.js"></script>
+        <script src="./js/bootstrap.bundle.min.js"></script>
+        <script src="./js/adminlte.min.js"></script>
+        <script src="./plugins/jquery-validation/jquery.validate.min.js"></script>
+        <script src="./plugins/jquery-validation/additional-methods.min.js"></script>
+        
+        <!-- <script>
+             $('#signin').validate({
+                rules: {
+                    username: {
+                        required: true,
+                        minlength: 5
+                    },
+                    password: {
+                        required: true,
+                        minlength: 5
+                    },
+                },
+                messages: {
+                    username: {
+                        required: "Please enter a username",
+                        email: "Please enter a valid username"
+                    },
+                    password: {
+                        required: "Please provide a password",
+                        minlength: "Your password must be at least 5 characters long"
+                    },
+                    terms: "Please accept our terms"
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+             });
+        </script> -->
+    </body>
+
+</html>

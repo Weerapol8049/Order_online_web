@@ -1,0 +1,32 @@
+/*
+* Barebones example css for the idle timer.
+**/
+
+#fade { 
+    /*--Transparent background layer--*/
+    display: none; /*--hidden by default--*/
+    background: rgba(0,0,0,0.6);
+    position: fixed; left: 0; top: 0;
+    width: 100%; height: 100%;
+    z-index: 9999;
+  }
+  
+  
+  #idlewarn {
+    display: none; /*--hidden by default--*/
+    background: rgb(0,97,127);
+    padding: 20px;
+    border: 1px solid rgb(3,52,102);
+    float: left;
+    position: fixed;
+    top: 50%; left: 50%;
+    z-index: 99999;
+    /*--CSS3 Box Shadows--*/
+    -webkit-box-shadow: 0 5px 20px 5px #000000;
+    -moz-box-shadow: 0 5px 20px 5px #000000;
+    box-shadow: 0 5px 20px 5px #000000;
+    /*--CSS3 Rounded Corners--*/
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+  }

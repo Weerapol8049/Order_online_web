@@ -1,0 +1,36 @@
+https://adminlte.io/themes/v3/pages/UI/buttons.html
+
+datatable design
+https://kiranworkspace.com/demo/projects/code-snippets/table/appointment-table/#!
+
+login design
+https://colorlib.com/wp/html5-and-css3-login-forms/
+https://colorlib.com/etc/lf/Login_v4/index.html
+
+Download free vector art, stock photos & videos.
+https://www.vecteezy.com/
+
+ก่อน deploy API
+- สลับ config Service AX STD66  to LIVE
+- สลับ AxConnectionString in Web.config
+- api/retailso/images/upload สลับ path file for live
+- api/retailso/images/delete สลับ path file for live
+
+AX 
+STM_SM_BookingOrder
+- StmSalesSoDailyLine.ItemId
+
+
+แก้
+- create Header ยังไม่ต้องจอง [เสร็จ]
+- delete Header ลบรายการจอง [เสร็จ]
+- update region
+- เพิ่ม confirmDate ที่หน้า line กรณีที่แยกวันติดตั้ง ให้ confirm ที่ Header ใช้เป็น default [เสร็จ]
+- update confirm date 
+  * ถ้ามีการผูก SO ที่ ax แล้วให้เป็นสีฟ้า ถ้ายังไม่ผูกให้เป็นสีเหลือง
+- รายการจองแยกตาม ภูมิภาค
+
+-stock ยังไม่ update ตามที่เลือก model
+-เปลี่ยนตัวเลือก model แล้วเครีย item ที่เลือกก่อนหน้า
+-stock bomset
+-order by asc รายการ header

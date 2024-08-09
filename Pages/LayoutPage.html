@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order online</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="../css/fonts.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../css/adminlte.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="../css/OverlayScrollbars.min.css">
+
+    <link rel="stylesheet" href="../css/idletimer.css">
+
+    <script type="text/javascript">
+      function preventBack() { window.history.forward(); }
+      if (!localStorage.getItem("usr_val"))
+      {
+        setTimeout("preventBack()", 0);
+        window.onunload = function () { null };
+      }
+    </script>
+  </head>
+
+  <body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
+    <div class="wrapper">
+
+      <!-- Navbar -->
+      <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+          </li>
+          <li class="nav-item d-none d-sm-inline-block">
+            <a href="OrdersPage.html" class="nav-link">Home</a>
+          </li>
+
+        </ul>
+
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+
+
+          <li class="nav-item">
+            <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+              <i class="fas fa-expand-arrows-alt"></i>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+      <!-- /.navbar -->
+
+      <!-- Main Sidebar Container -->
+      <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="OrdersPage.html" class="brand-link">
+          <!-- <img src="/images/LOGO_STARMARK_CMYK.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
+          <span class="brand-text font-weight-light">Order online</span>
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <!-- Sidebar user panel (optional) -->
+          <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+
+              <img src="../images/person-icon.png" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+              <!-- <a href="#" class="d-block" id="usName" onclick="onProfile()"></a> -->
+              <a href="#" class="d-block" id="usName"></a>
+              <b id="storename" style="color: #D5D8DC"></b>
+            </div>
+          </div>
+
+          <!-- Sidebar Menu -->
+          <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+              <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+              <li id="menuOrder" class="nav-item">
+                <a href="../Pages/OrdersPage.html" class="nav-link">
+                  <i class="nav-icon fas fa-book"></i>
+                  <p>
+                    Orders
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="../Pages/OrdersPage.html" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Main</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="../Pages/OrderAdd.html" class="nav-link">
+                      <i class="fas fa-plus nav-icon"></i>
+                      <p>Order add</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
+              <li id="menuStockCompact" class="nav-item">
+                <a href="../Pages/StockCompact.html" class="nav-link">
+                  <i class="nav-icon fas fa-store "></i>
+                  <p>
+                    Stock compact
+                  </p>
+                </a>
+              </li>
+
+              <li id="menuStockDoorPanel" class="nav-item">
+                <a href="../Pages/StockDoorPanel.html" class="nav-link">
+                  <i class="nav-icon fas fa-store "></i>
+                  <p>
+                    Stock door panel
+                  </p>
+                </a>
+              </li>
+              <li id="menuCalendar" class="nav-item">
+                <a href="#" class="nav-link" id="linkbooking">
+                  <i class="nav-icon fas fa-calendar-alt"></i>
+                  <p>
+                    Calendar
+                  </p>
+                </a>
+              </li>
+              <li id="menuCalendar" class="nav-item">
+                <a href="https://starmark.work/kdmaxsearchweb/" class="nav-link" id="linkKdmaxSearch">
+                  <i class="nav-icon far fa-k"></i>
+                  <p>
+                    KDMAX Search
+                  </p>
+                </a>
+              </li>
+              <!-- <li class="nav-item">
+            <a href="http://starmark.work/BookingOrder_Test?User=S001" class="nav-link">
+              <i class="nav-icon far fa-calendar-alt"></i>
+              <p>
+                Calendar
+              </p>
+            </a>
+          </li> -->
+
+              <li id="menuGallery" class="nav-item">
+                <a href="../Pages/GalleryPage.html?all" class="nav-link">
+                  <i class="nav-icon far fa-image"></i>
+                  <p>
+                    Gallery
+                  </p>
+                </a>
+              </li>
+              <li id="menuCommission" class="nav-item">
+                <a href="../Pages/Commission.html" class="nav-link">
+                  <i class="nav-icon fa fa-percent" aria-hidden="true"></i>
+                  <p>
+                    Commission
+                  </p>
+                </a>
+              </li>
+              <li id="menuSignout" class="nav-item">
+                <a href="#" class="nav-link" onclick="signOut()">
+                  <i class="nav-icon fas fa-sign-out-alt"></i>
+                  <p>
+                    Sign out
+                  </p>
+                </a>
+              </li>
+              <li id="menuAdmin" class="nav-header">ADMIN</li>
+              <li id="menuUser" class="nav-item">
+                <a href="../Pages/UserPage.html" class="nav-link">
+                  <i class="nav-icon far fa-user"></i>
+                  <p>
+                    User
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+      </aside>
+
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper iframe-mode" data-widget="iframe" data-loading-screen="750">
+        <div class="nav navbar navbar-expand navbar-white navbar-light border-bottom p-0">
+          <div class="nav-item dropdown">
+            <a class="nav-link bg-danger dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+              aria-haspopup="true" aria-expanded="false">Close</a>
+            <div class="dropdown-menu mt-0">
+              <a class="dropdown-item" href="#" data-widget="iframe-close" data-type="all">Close All</a>
+              <a class="dropdown-item" href="#" data-widget="iframe-close" data-type="all-other">Close All Other</a>
+            </div>
+          </div>
+          <a class="nav-link bg-light" href="#" data-widget="iframe-scrollleft"><i
+              class="fas fa-angle-double-left"></i></a>
+          <ul class="navbar-nav overflow-hidden" role="tablist"></ul>
+          <a class="nav-link bg-light" href="#" data-widget="iframe-scrollright"><i
+              class="fas fa-angle-double-right"></i></a>
+          <a class="nav-link bg-light" href="#" data-widget="iframe-fullscreen"><i class="fas fa-expand"></i></a>
+        </div>
+        <div class="tab-content">
+          <div class="tab-empty">
+            <h2 class="display-4">No tab selected!</h2>
+          </div>
+          <div class="tab-loading">
+            <div>
+              <h2 class="display-4">Tab is loading <i class="fa fa-sync fa-spin"></i></h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Control Sidebar -->
+      <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+      </aside>
+      <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+    <script src="../js/Layout.js"></script>
+    <!-- jQuery -->
+    <script src="../js/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="../js/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+      const signInName = document.querySelector(".info");
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="../js/jquery.overlayScrollbars.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../js/adminlte.js"></script>
+
+    <script src="../js/flagment/idletimeout.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <!-- <script src="dist/js/demo.js"></script> -->
+  </body>
+
+</html>
