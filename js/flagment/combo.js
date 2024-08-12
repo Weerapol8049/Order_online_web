@@ -1763,6 +1763,8 @@ function getRegion(province) {
   };
 }
 
+//----------------------------- ที่อยู่เริ่มต้น ----------------------------------
+
 function findAddress(value) {
   if (value) {
     const xhttp = new XMLHttpRequest();
@@ -1899,6 +1901,149 @@ function loadAddressZipCode(province, city, district) {
     };
   }
 }
+
+//----------------------------- ที่อยู่ใบกำกับภาษี ----------------------------------
+
+
+function findAddress_inv(value) {
+  if (value) {
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("GET", API_ADDRESS_ZIPCODE + value);
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhttp.send();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        const data = JSON.parse(this.responseText);
+        let HTMLDistrict;
+        if (data.length > 0) {
+          HTMLDistrict += `<option value="None"></option>`;
+          data.map((row) => {
+            HTMLDistrict += `<option value="${row.District}">${row.District}</option>`;
+          });
+
+          loadAddressProvince_inv(data[0].State);
+          loadAddressCity_inv(data[0].State, data[0].City);
+
+          document.getElementById("addressDistrict_inv").innerHTML = HTMLDistrict;
+        } else {
+          Swal.fire({
+            icon: "warning",
+            title: "ไม่พบข้อมูล"
+          });
+        }
+      }
+    };
+  } else {
+    loadAddressProvince_inv("");
+    document.getElementById("addressCity_inv").innerHTML = ``;
+    document.getElementById("addressDistrict_inv").innerHTML = ``;
+  }
+}
+
+function loadAddressProvince_inv(selected) {
+  const xhttp = new XMLHttpRequest();
+  xhttp.open("GET", API_ADDRESS_PROVINCE);
+  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhttp.send();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var HTMLProvince = "";
+      const data = JSON.parse(this.responseText);
+
+      if (data.length > 0) {
+        HTMLProvince += `<option value="None"></option>`;
+        data.map((row) => {
+          if (selected == row.State)
+            HTMLProvince += `<option value="${row.State}" selected>${row.State}</option>`;
+          else
+            HTMLProvince += `<option value="${row.State}">${row.State}</option>`;
+        });
+      }
+      document.getElementById("addressProvince_inv").innerHTML = HTMLProvince;
+    }
+  };
+}
+
+function loadAddressDistrict_inv(province, city, selected) {
+  const xhttp = new XMLHttpRequest();
+  xhttp.open("GET", API_ADDRESS_DISTRICT + province + "/" + city);
+  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhttp.send();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var HTML = "";
+      const data = JSON.parse(this.responseText);
+
+      if (data.length > 0) {
+        //document.getElementById("addressZipcode").value = "";
+        HTML += `<option value="None"></option>`;
+
+        data.map((row) => {
+          if (selected == row.District)
+            HTML += `<option value="${row.District}" selected>${row.District}</option>`;
+          else
+            HTML += `<option value="${row.District}">${row.District}</option>`;
+        });
+
+        document.getElementById("addressDistrict_inv").innerHTML = HTML;
+      }
+    }
+  };
+}
+
+function loadAddressCity_inv(province, selected) {
+  const xhttp = new XMLHttpRequest();
+  xhttp.open("GET", API_ADDRESS_CITY + province);
+  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhttp.send();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var HTML = "";
+      const data = JSON.parse(this.responseText);
+
+      if (data.length > 0) {
+        HTML += `<option value="None"></option>`;
+        data.map((row) => {
+          if (selected == row.City)
+            HTML += `<option value="${row.City}" selected>${row.City}</option>`;
+          else HTML += `<option value="${row.City}">${row.City}</option>`;
+        });
+      }
+
+      document.getElementById("addressCity_inv").innerHTML = HTML;
+    }
+  };
+}
+
+function loadAddressZipCode_inv(province, city, district) {
+  if (district == "None") {
+    loadAddressCity_inv(province, city);
+    document.getElementById("addressZipcode_inv").value = "";
+    document.getElementById("addressCity_inv").value = city;
+  } else {
+    const xhttp = new XMLHttpRequest();
+    xhttp.open(
+      "GET",
+      API_ADDRESS_DISTRICT + province + "/" + city + "/" + district
+    );
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhttp.send();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        const data = JSON.parse(this.responseText);
+
+        if (data.length > 0) {
+          data.map((row) => {
+            document.getElementById("addressZipcode_inv").value = row.Zipcode;
+          });
+        }
+      }
+    };
+  }
+}
+
+
+//----------------------------- ที่อยู่จัดส่ง ----------------------------------
 
 function getValue(element) {
   return sessionStorage.getItem(element);

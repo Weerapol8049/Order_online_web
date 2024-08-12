@@ -318,6 +318,31 @@ function edit() {
   });
 }
 
+function chkInvoice(value) {
+
+  let display = 'none'
+  if (value){
+    display = 'block';
+
+    let street = document.getElementById("addressStreet").value;
+    let district = document.getElementById("addressDistrict").value;
+    let city = document.getElementById("addressCity").value;
+    let province = document.getElementById("addressProvince").value;
+    let zipcode = document.getElementById("addressZipcode").value;
+
+    document.getElementById("txtDefaultInvoice").value = street + ' ตำบล' + district + ' \nอำเภอ' + city + ' จังหวัด' + province + '\n' + zipcode;
+  }
+
+  document.getElementById("rowchkInvoice").style.display = display;
+  document.getElementById("cardInvoice").style.display = 'none';
+}
+
+function addInvoiceAddress(){
+  document.getElementById("cardInvoice").style.display = 'block';
+  document.getElementById("rowchkInvoice").style.display = 'none';
+  document.getElementById("radioDefaultInvoice").checked = false;
+}
+
 function getElementVal(element) {
   return document.getElementById(element).value;
 }
