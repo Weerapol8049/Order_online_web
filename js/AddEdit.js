@@ -28,6 +28,10 @@ let API_DEPOSIT_CREATE = SERVER_2_ax + "api/deposit/create";
 let API_CREATE_POOL = SERVER_2_ax + "api/order/pool/create";
 let API_DEPOSIT_UPDATE = SERVER_2_ax + "api/deposit/update";
 
+let API_ADDRESS_CREATE = SERVER_2_ax + "api/Order/address/create";
+let API_ADDRESS_UPDATE = SERVER_2_ax + "api/Order/address/update";
+let API_ADDRESS_DELETE = SERVER_2_ax + "api/Order/address/delete";
+
 function create() {
   let _morePool = "";
   // ------ multiple select pool ---------
@@ -82,17 +86,13 @@ function create() {
           ProvinceId: document.getElementById("province").value,
           CreateBy: localStorage.getItem("username_val"), //from SignIn.js
 
-          AddressStreet: getElementVal("addressStreet"),
-          AddressDistrict: getElementVal("addressDistrict"),
-          AddressCity: getElementVal("addressCity"),
-          AddressState: getElementVal("addressProvince"),
-          AddressZipcode: getElementVal("addressZipcode"),
           ShippingCost: getElementVal("shippingCost"),
           Discount: getElementVal("discount"),
           InstallTeam: getElementVal("installTeam"),
           Free: getElementVal("free"),
           Remark: getElementVal("remark"),
-          TaxNum: getElementVal("taxnum")
+          TaxNum: getElementVal("taxnum"),
+          Phone: getElementVal("phone")
         })
       );
       xhttp.onreadystatechange = function () {
@@ -103,6 +103,8 @@ function create() {
           const objects = JSON.parse(this.responseText);
           if (objects.Status == "OK") {
             createPool(objects.RecId);
+            // update invoice and delivery address
+            createAddress(objects.RecId);
 
             Swal.fire(
               "สร้างรายการสำเร็จ",
@@ -279,17 +281,13 @@ function edit() {
           ProvinceId: document.getElementById("province").value,
           CreateBy: "",
 
-          AddressStreet: getElementVal("addressStreet"),
-          AddressDistrict: getElementVal("addressDistrict"),
-          AddressCity: getElementVal("addressCity"),
-          AddressState: getElementVal("addressProvince"),
-          AddressZipcode: getElementVal("addressZipcode"),
           ShippingCost: getElementVal("shippingCost"),
           Discount: getElementVal("discount"),
           InstallTeam: getElementVal("installTeam"),
           Free: getElementVal("free"),
           Remark: getElementVal("remark"),
-          TaxNum: getElementVal("taxnum")
+          TaxNum: getElementVal("taxnum"),
+          Phone : getElementVal("phone")
         })
       );
       xhttp.onreadystatechange = function () {
@@ -318,29 +316,65 @@ function edit() {
   });
 }
 
-function chkInvoice(value) {
+function createAddress(recId) {
+  let id = 0;
+  let arrRow = [];
+  const rowsData = { Data: arrRow };
 
-  let display = 'none'
-  if (value){
-    display = 'block';
+  arrRow.push({
+    SalesSoDaily: recId,
+    UseDefaultInvAddress: getElementVal("chkDefaultInvoice"),
+    UseDefaultDeliveryAddress: getElementVal("chkDefaultDelivery"),
+    Street: getElementVal("addressStreet"),
+    District: getElementVal("addressDistrict"),
+    City: getElementVal("addressCity"),
+    State: getElementVal("addressProvince"),
+    Zipcode: getElementVal("addressZipcode"),
+    Type: 3, //default address
+    IsPrimary: 1
+  });
 
-    let street = document.getElementById("addressStreet").value;
-    let district = document.getElementById("addressDistrict").value;
-    let city = document.getElementById("addressCity").value;
-    let province = document.getElementById("addressProvince").value;
-    let zipcode = document.getElementById("addressZipcode").value;
-
-    document.getElementById("txtDefaultInvoice").value = street + ' ตำบล' + district + ' \nอำเภอ' + city + ' จังหวัด' + province + '\n' + zipcode;
+  if (getElementVal("chkNewInvoice")) {
+    arrRow.push({
+      SalesSoDaily: recId,
+      Street: getElementVal("addressStreet_inv"),
+      District: getElementVal("addressDistrict_inv"),
+      City: getElementVal("addressCity_inv"),
+      State: getElementVal("addressProvince_inv"),
+      Zipcode: getElementVal("addressZipcode_inv"),
+      Type: 1 //invoice address
+    });
   }
-
-  document.getElementById("rowchkInvoice").style.display = display;
-  document.getElementById("cardInvoice").style.display = 'none';
-}
-
-function addInvoiceAddress(){
-  document.getElementById("cardInvoice").style.display = 'block';
-  document.getElementById("rowchkInvoice").style.display = 'none';
-  document.getElementById("radioDefaultInvoice").checked = false;
+  
+  if (getElementVal("chkNewDelivery")) {
+    arrRow.push({
+      SalesSoDaily: recId,
+      Street: getElementVal("addressStreet_delivery"),
+      District: getElementVal("addressDistrict_delivery"),
+      City: getElementVal("addressCity_delivery"),
+      State: getElementVal("addressProvince_delivery"),
+      Zipcode: getElementVal("addressZipcode_delivery"),
+      Type: 2 //delivery address
+    });
+  }
+ 
+  const xhttp = new XMLHttpRequest();
+  xhttp.open("POST", API_ADDRESS_CREATE);
+  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhttp.send(JSON.stringify(rowsData));
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const objects = JSON.parse(this.responseText);
+      if (objects.Status == "OK") {
+        
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "สร้างที่อยู่ไม่สำเร็จ"
+        });
+      }
+    }
+  };
 }
 
 function getElementVal(element) {

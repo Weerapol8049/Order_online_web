@@ -32,7 +32,7 @@ let userAccountType = localStorage.getItem("type_val"); // 2 Manager
 // let SERVER_CB_order = 'http://starmark.work/OrderOnline_API_Orders/';//Live
 // let SERVER_CB_ax = 'http://starmark.work/OrderOnline_API_AIF/';//Live
 
-let SERVER_CB_order = 'http://starmark.work/OrderOnline_API_Order_test/';
+let SERVER_CB_order = "http://starmark.work/OrderOnline_API_Order_test/";
 //let SERVER_CB_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';
 let SERVER_CB_ax = "http://localhost:4377/";
 //let SERVER_CB_order = "http://localhost:54871/";
@@ -168,12 +168,14 @@ window.onload = function () {
     loadDeposit(recId);
     setDatePicker("#salesDate", date);
 
-    loadAddressProvince(AddressState);
-    loadAddressCity(AddressState, AddressCity);
-    loadAddressDistrict(AddressState, AddressCity, AddressDistrict);
+    // loadAddressProvince(AddressState);
+    // loadAddressCity(AddressState, AddressCity);
+    // loadAddressDistrict(AddressState, AddressCity, AddressDistrict);
 
-    setElementVal("addressStreet", AddressStreet);
-    document.getElementById("addressZipcode").value = AddressZipcode;
+    // setElementVal("addressStreet", AddressStreet);
+    // setElementVal("addressZipcode", AddressZipcode);
+
+    loadAddress(recId);
   }
 };
 
@@ -189,353 +191,6 @@ function setDatePicker(name, date) {
     defaultDate: new Date(date)
   };
   flatpickr(name, config);
-}
-
-function loadAddress(recid) {
-  const xhttp = new XMLHttpRequest();
-  xhttp.open("GET", API_LOAD_ADDRESS + recid);
-  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xhttp.send();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      const objects = JSON.parse(this.responseText);
-      loadCardAddress(objects);
-    }
-  };
-}
-
-function loadCardAddress(data) {
-  let id = 1;
-
-  data.map((object) => {
-    if (id <= depositNum) {
-      if (id == 1)
-        document.getElementById("cardDeposit").style.display = "block";
-
-      let ul = createElement("ul", {
-        id: "groupDeposit" + id,
-        className: "list-group list-group-flush"
-      });
-      document.getElementById("cardDeposit").appendChild(ul);
-
-      let row = createElement("div", { id: "row" + id, className: "row" });
-      document.getElementById("groupDeposit" + id).appendChild(row);
-
-      let seq = createElement("div", {
-        id: "seq" + id,
-        className: "col-sm-1",
-        style: "text-align: center;"
-      });
-      document.getElementById("row" + id).appendChild(seq);
-
-      let group = createElement("div", {
-        id: "group" + id,
-        className: "form-group",
-        style: "margin-bottom: 0;"
-      });
-      document.getElementById("seq" + id).appendChild(group);
-
-      let label = createElement("label", { id: "label" + id });
-      document.getElementById("group" + id).appendChild(label);
-      document.getElementById("label" + id).innerText = "ลำดับ";
-
-      let group2 = createElement("div", {
-        id: "grouplbl" + id,
-        className: "form-group"
-      });
-      document.getElementById("seq" + id).appendChild(group2);
-
-      let curseq = createElement("label", { id: "CURRSEQ" + id });
-      document.getElementById("grouplbl" + id).appendChild(curseq);
-      document.getElementById("CURRSEQ" + id).innerText = id.toString();
-
-      let seq2 = createElement("label", {
-        id: "SEQ" + id,
-        style: "display:none;"
-      });
-      document.getElementById("grouplbl" + id).appendChild(seq2);
-      document.getElementById("SEQ" + id).innerText = id.toString();
-
-      let lblRecId = createElement("label", {
-        id: "RECID" + id,
-        style: "display:none;"
-      });
-      document.getElementById("grouplbl" + id).appendChild(lblRecId);
-      document.getElementById("RECID" + id).innerText = object.RecId;
-
-      //------------------------------- วันที่จ่าย ---------------------------------------------
-
-      let colPaymDate = createElement("div", {
-        id: "colPaymDate" + id,
-        className: "col-sm-3"
-      });
-      document.getElementById("row" + id).appendChild(colPaymDate);
-
-      let lblpaymdate = createElement("label", { id: "lblPaymDate" + id });
-      document.getElementById("colPaymDate" + id).appendChild(lblpaymdate);
-      document.getElementById("lblPaymDate" + id).innerText = "วันที่จ่าย";
-
-      let icon = createElement("div", {
-        id: "icon" + id,
-        className: "input-icons"
-      });
-      document.getElementById("colPaymDate" + id).appendChild(icon);
-
-      let fa = createElement("i", {
-        id: "fa" + id,
-        className: "fa fa-calendar icon"
-      });
-      document.getElementById("icon" + id).appendChild(fa);
-
-      let inputDate = createElement("input", {
-        id: "paymDate" + id,
-        type: "text",
-        className: "form-control flatpickr",
-        style: "background-color: white; padding-left: 30px;"
-      });
-      document.getElementById("icon" + id).appendChild(inputDate);
-      //  var elePaymDate = document.getElementById('paymDate' + id);
-      //  elePaymDate.onchange = function() {onchangePaymDate(this.value, id); };
-
-      flatpickr("#paymDate" + id, {
-        locale: "th",
-        dateFormat: "d/m/Y",
-        defaultDate: dateFormatSlace(object.TransDate.substring(0, 10))
-      });
-
-      //---------------------------------------- งวด -------------------------------------------------
-
-      let colinstall = createElement("div", {
-        id: "colinstallment" + id,
-        className: "col-sm-2"
-      });
-      document.getElementById("row" + id).appendChild(colinstall);
-
-      let groupinstall = createElement("div", {
-        id: "groupinstallment" + id,
-        className: "form-group"
-      });
-      document.getElementById("colinstallment" + id).appendChild(groupinstall);
-
-      let lblinstall = createElement("label", { id: "lblinstallment" + id });
-      document.getElementById("groupinstallment" + id).appendChild(lblinstall);
-      document.getElementById("lblinstallment" + id).innerText = "งวด";
-
-      let sInstall = createElement("select", {
-        id: "installment" + id,
-        className: "form-control select2bs4",
-        style: "width: 100%;",
-        value: 0
-      });
-      document.getElementById("groupinstallment" + id).appendChild(sInstall);
-      var eleinstallment = document.getElementById("installment" + id);
-      eleinstallment.onchange = function () {
-        onchangeInstallment(this.value, id);
-      };
-
-      //---------------------------------------- มูลค่า -------------------------------------------------
-
-      let colamount = createElement("div", {
-        id: "colamount" + id,
-        className: "col-sm-3"
-      });
-      document.getElementById("row" + id).appendChild(colamount);
-
-      let groupAmount = createElement("div", {
-        id: "groupAmount" + id,
-        className: "form-group"
-      });
-      document.getElementById("colamount" + id).appendChild(groupAmount);
-
-      let lblAmount = createElement("label", { id: "lblAmount" + id });
-      document.getElementById("groupAmount" + id).appendChild(lblAmount);
-      document.getElementById("lblAmount" + id).innerText = "มูลค่า";
-
-      let inputAmount = createElement("input", {
-        id: "payment" + id,
-        className: "form-control",
-        value: object.Amount,
-        type: "number",
-        min: 0
-      });
-      document.getElementById("groupAmount" + id).appendChild(inputAmount);
-      var elepayment = document.getElementById("payment" + id);
-      elepayment.onchange = function () {
-        onchangePayment(this.value, id);
-      };
-      elepayment.oninput = function () {
-        this.value = Math.abs(this.value);
-      };
-
-      //---------------------------------------- button delete -------------------------------------------------
-
-      let coldelete = createElement("div", {
-        id: "coldelete" + id,
-        className: "col-sm-1"
-      });
-      document.getElementById("row" + id).appendChild(coldelete);
-
-      let groupdelete = createElement("div", {
-        id: "groupdelete" + id,
-        className: "form-group",
-        style: "margin-top: 25px;"
-      });
-      document.getElementById("coldelete" + id).appendChild(groupdelete);
-
-      let linkDelete = createElement("a", {
-        id: "linkDelete" + id,
-        style: "cursor: pointer;"
-      });
-      document.getElementById("groupdelete" + id).appendChild(linkDelete);
-      var elelinkdelete = document.getElementById("linkDelete" + id);
-      elelinkdelete.onclick = function () {
-        deleteGroup(
-          "groupDeposit" + elelinkdelete.id.substring(10, 13),
-          `${object.RecId}`
-        );
-      };
-
-      let imgDelete = createElement("img", {
-        id: "imgDelete" + id,
-        src: "../images/1398920_red circle_close_cross_cancel_remove_icon.png"
-      });
-      document.getElementById("linkDelete" + id).appendChild(imgDelete);
-
-      let linkCancel = createElement("a", {
-        id: "linkCancel" + id,
-        style: "cursor: pointer; display: none;"
-      });
-      document.getElementById("groupdelete" + id).appendChild(linkCancel);
-
-      let imgCancel = createElement("img", {
-        id: "imgCancel" + id,
-        style: "cursor: pointer; with: 48px; height: 48px",
-        src: "../images/vecteezy_cancelled-rubber-stamp-on-white-background-vector-illustration_19495927.jpg"
-      });
-      document.getElementById("groupdelete" + id).appendChild(imgCancel);
-      var eleimgcancel = document.getElementById("imgCancel" + id);
-      eleimgcancel.onclick = function () {
-        detailCancelDeposit(
-          elecancel.id.substring(9, 11),
-          object.CancelDate.substring(0, 10),
-          object.CancelRemark
-        );
-      };
-
-      //---------------------------------------- button print -------------------------------------------------
-
-      let coldprint = createElement("div", {
-        id: "coldprint" + id,
-        className: "col-sm-1"
-      });
-      document.getElementById("row" + id).appendChild(coldprint);
-
-      let groupprint = createElement("div", {
-        id: "groupprint" + id,
-        className: "form-group",
-        style: "margin-top: 35px;"
-      });
-      document.getElementById("coldprint" + id).appendChild(groupprint);
-
-      let linkPrint = createElement("a", {
-        id: "linkPrint" + id,
-        style: "cursor: pointer;"
-      });
-      document.getElementById("groupprint" + id).appendChild(linkPrint);
-      var elelinkprint = document.getElementById("linkPrint" + id);
-      elelinkprint.onclick = function () {
-        printDeposit(object.RecId);
-      };
-
-      let imgPrint = createElement("img", {
-        id: "imgPrint" + id,
-        src: "../images/image_print_outline.png"
-      });
-      document.getElementById("linkPrint" + id).appendChild(imgPrint);
-
-      //---------------------------------------- button cancel -------------------------------------------------
-
-      let colcancel = createElement("div", {
-        id: "colcancel" + id,
-        className: "col-sm-1"
-      });
-      document.getElementById("row" + id).appendChild(colcancel);
-
-      let groupcancel = createElement("div", {
-        id: "groupcancel" + id,
-        className: "form-group",
-        style: "margin-top: 38px;"
-      });
-      document.getElementById("colcancel" + id).appendChild(groupcancel);
-
-      let btnCancel = createElement("button", {
-        id: "btnCancel" + id,
-        className: "btn btn-block btn-outline-info btn-xs",
-        style: "margin-top: 38px;"
-      });
-      document.getElementById("groupcancel" + id).appendChild(btnCancel);
-      var elecancel = document.getElementById("btnCancel" + id);
-      elecancel.onclick = function () {
-        cancelDeposit(elecancel.id.substring(9, 11));
-      };
-      elecancel.innerText = "Cancel";
-
-      //---------------------------------------- remark -------------------------------------------------
-
-      let rowRemark = createElement("div", {
-        id: "rowRemark" + id,
-        className: "row"
-      });
-      document.getElementById("groupDeposit" + id).appendChild(rowRemark);
-
-      let colempty = createElement("div", {
-        id: "colempty" + id,
-        className: "col-sm-1"
-      });
-      document.getElementById("rowRemark" + id).appendChild(colempty);
-
-      let colRemark = createElement("div", {
-        id: "colRemark" + id,
-        className: "col-sm-11"
-      });
-      document.getElementById("rowRemark" + id).appendChild(colRemark);
-
-      let groupRemark = createElement("div", {
-        id: "groupRemark" + id,
-        className: "form-group"
-      });
-      document.getElementById("colRemark" + id).appendChild(groupRemark);
-
-      let inputRemark = createElement("input", {
-        id: "remark" + id,
-        className: "form-control",
-        type: "text",
-        value: object.Remark,
-        placeholder: "หมายเหตุ"
-      });
-      document.getElementById("groupRemark" + id).appendChild(inputRemark);
-      var eleremark = document.getElementById("remark" + id);
-      eleremark.onchange = function () {
-        onchangeRemark(this.value, eleremark.id.substring(6, 8));
-      };
-
-      document.getElementById("countDeposit").value = id;
-      onchangeInstallment(0, id);
-      refreshSequence(`CURRSEQ`);
-
-      checkCancelDeposit(object.Cancel, id);
-      if (object.Cancel == 1) {
-        amountCancel += object.Amount;
-        depositNum++;
-      }
-      //แก้ไข มัดจำ ได้ภายในวันที่สร้างเท่านั้น
-      allowEditDeposit(object.AllowEdit, id);
-      enableControl(id, object.Cancel);
-
-      deposit_arr.push(document.getElementById("cardDeposit").innerHTML);
-    }
-    id++;
-  });
 }
 
 function loadDeposit(recid) {
@@ -1764,8 +1419,93 @@ function getRegion(province) {
 }
 
 //----------------------------- ที่อยู่เริ่มต้น ----------------------------------
+function loadAddress(recid) {
+  const xhttp = new XMLHttpRequest();
+  xhttp.open("GET", API_LOAD_ADDRESS + recid);
+  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhttp.send();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const data = JSON.parse(this.responseText);
 
-function findAddress(value) {
+      data.map((row) => {
+        if (row.Type == 1) {
+          //ที่อยู่ใบกำกับภาษี
+          document.getElementById("cardInvoice").style.display = "block";
+          document.getElementById("rowchkInvoice").style.display = "none";
+
+          loadAddressProvince("addressProvince_inv", row.State);
+          loadAddressCity("addressCity_inv", row.State, row.City);
+          loadAddressDistrict(
+            "addressDistrict_inv",
+            row.State,
+            row.City,
+            row.District
+          );
+          setElementVal("addressStreet_inv", row.Street);
+          setElementVal("addressZipcode_inv", row.Zipcode);
+        }
+        if (row.Type == 2) {
+          //ที่อยู่จัดส่ง
+          document.getElementById("cardDelivery").style.display = "block";
+          document.getElementById("rowchkDelivery").style.display = "none";
+          document.getElementById("chkNewDelivery").checked = true;
+
+          loadAddressProvince("addressProvince_delivery", row.State);
+          loadAddressCity("addressCity_delivery", row.State, row.City);
+          loadAddressDistrict(
+            "addressDistrict_delivery",
+            row.State,
+            row.City,
+            row.District
+          );
+          setElementVal("addressStreet_delivery", row.Street);
+          setElementVal("addressZipcode_delivery", row.Zipcode);
+        }
+        if (row.Type == 3) {
+          // ที่อยู่เริ่มต้น
+          loadAddressProvince("addressProvince", row.State);
+          loadAddressCity("addressCity", row.State, row.City);
+          loadAddressDistrict(
+            "addressDistrict",
+            row.State,
+            row.City,
+            row.District
+          );
+          setElementVal("addressStreet", row.Street);
+          setElementVal("addressZipcode", row.Zipcode);
+        }
+
+        if (row.UseDefaultInvAddress == 1) {
+          chkInvoice(true);
+        }
+        if (row.UseDefaultDeliveryAddress == 1) {
+          chkDelivery(true);
+        }
+      });
+    }
+  };
+}
+
+function findAddress(name, value) {
+  let district = "";
+  let city = "";
+  let province = "";
+
+  if (name == "Default") {
+    district = "addressDistrict";
+    city = "addressCity";
+    province = "addressProvince";
+  } else if (name == "Invoice") {
+    district = "addressDistrict_inv";
+    city = "addressCity_inv";
+    province = "addressProvince_inv";
+  } else if (name == "Delivery") {
+    district = "addressDistrict_delivery";
+    city = "addressCity_delivery";
+    province = "addressProvince_delivery";
+  }
+
   if (value) {
     const xhttp = new XMLHttpRequest();
     xhttp.open("GET", API_ADDRESS_ZIPCODE + value);
@@ -1781,10 +1521,10 @@ function findAddress(value) {
             HTMLDistrict += `<option value="${row.District}">${row.District}</option>`;
           });
 
-          loadAddressProvince(data[0].State);
-          loadAddressCity(data[0].State, data[0].City);
+          loadAddressProvince(province, data[0].State);
+          loadAddressCity(city, data[0].State, data[0].City);
 
-          document.getElementById("addressDistrict").innerHTML = HTMLDistrict;
+          document.getElementById(district).innerHTML = HTMLDistrict;
         } else {
           Swal.fire({
             icon: "warning",
@@ -1795,12 +1535,12 @@ function findAddress(value) {
     };
   } else {
     loadAddressProvince("");
-    document.getElementById("addressCity").innerHTML = ``;
-    document.getElementById("addressDistrict").innerHTML = ``;
+    document.getElementById(city).innerHTML = ``;
+    document.getElementById(district).innerHTML = ``;
   }
 }
 
-function loadAddressProvince(selected) {
+function loadAddressProvince(name, selected) {
   const xhttp = new XMLHttpRequest();
   xhttp.open("GET", API_ADDRESS_PROVINCE);
   xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -1819,12 +1559,12 @@ function loadAddressProvince(selected) {
             HTMLProvince += `<option value="${row.State}">${row.State}</option>`;
         });
       }
-      document.getElementById("addressProvince").innerHTML = HTMLProvince;
+      document.getElementById(name).innerHTML = HTMLProvince; //address province
     }
   };
 }
 
-function loadAddressDistrict(province, city, selected) {
+function loadAddressDistrict(name, province, city, selected) {
   const xhttp = new XMLHttpRequest();
   xhttp.open("GET", API_ADDRESS_DISTRICT + province + "/" + city);
   xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -1845,13 +1585,13 @@ function loadAddressDistrict(province, city, selected) {
             HTML += `<option value="${row.District}">${row.District}</option>`;
         });
 
-        document.getElementById("addressDistrict").innerHTML = HTML;
+        document.getElementById(name).innerHTML = HTML; // address district
       }
     }
   };
 }
 
-function loadAddressCity(province, selected) {
+function loadAddressCity(name, province, selected) {
   const xhttp = new XMLHttpRequest();
   xhttp.open("GET", API_ADDRESS_CITY + province);
   xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -1870,12 +1610,12 @@ function loadAddressCity(province, selected) {
         });
       }
 
-      document.getElementById("addressCity").innerHTML = HTML;
+      document.getElementById(name).innerHTML = HTML; //address city
     }
   };
 }
 
-function loadAddressZipCode(province, city, district) {
+function loadAddressZipCode(name, province, city, district) {
   if (district == "None") {
     loadAddressCity(province, city);
     document.getElementById("addressZipcode").value = "";
@@ -1894,7 +1634,7 @@ function loadAddressZipCode(province, city, district) {
 
         if (data.length > 0) {
           data.map((row) => {
-            document.getElementById("addressZipcode").value = row.Zipcode;
+            document.getElementById(name).value = row.Zipcode;
           });
         }
       }
@@ -1902,8 +1642,115 @@ function loadAddressZipCode(province, city, district) {
   }
 }
 
+function chkInvoice(value) {
+  let display = "none";
+  if (value) {
+    display = "block";
+
+    document.getElementById("chkDefaultInvoice").checked = true;
+    document.getElementById("chkNewInvoice").checked = false;
+
+    let street = document.getElementById("addressStreet").value;
+    let district = document.getElementById("addressDistrict").value;
+    let city = document.getElementById("addressCity").value;
+    let province = document.getElementById("addressProvince").value;
+    let zipcode = document.getElementById("addressZipcode").value;
+
+    document.getElementById("txtDefaultInvoice").value =
+      street +
+      " ตำบล" +
+      district +
+      " \nอำเภอ" +
+      city +
+      " จังหวัด" +
+      province +
+      "\n" +
+      zipcode;
+  }
+
+  document.getElementById("rowchkInvoice").style.display = display;
+  document.getElementById("cardInvoice").style.display = "none";
+}
+
+function chkNewInvoice(value) {
+  if (value) {
+    document.getElementById("cardInvoice").style.display = "block";
+    document.getElementById("rowchkInvoice").style.display = "none";
+    document.getElementById("chkDefaultInvoice").checked = false;
+    loadAddressProvince("addressProvince_inv");
+  } else {
+    document.getElementById("cardInvoice").style.display = "none";
+    document.getElementById("rowchkInvoice").style.display = "none";
+    document.getElementById("chkDefaultInvoice").checked = false;
+
+    document.getElementById("addressZipcode_inv").value = "";
+    document.getElementById("addressProvince_inv").value = "";
+    document.getElementById("addressCity_inv").value = "";
+    document.getElementById("addressDistrict_inv").value = "";
+    document.getElementById("addressStreet_inv").value = "";
+  }
+}
+
+function chkDelivery(value) {
+  let display = "none";
+  if (value) {
+    display = "block";
+
+    document.getElementById("chkDefaultDelivery").checked = true;
+    document.getElementById("chkNewDelivery").checked = false;
+
+    let street = document.getElementById("addressStreet").value;
+    let district = document.getElementById("addressDistrict").value;
+    let city = document.getElementById("addressCity").value;
+    let province = document.getElementById("addressProvince").value;
+    let zipcode = document.getElementById("addressZipcode").value;
+
+    document.getElementById("txtDefaultDelivery").value =
+      street +
+      " ตำบล" +
+      district +
+      " \nอำเภอ" +
+      city +
+      " จังหวัด" +
+      province +
+      "\n" +
+      zipcode;
+  }
+
+  document.getElementById("rowchkDelivery").style.display = display;
+  document.getElementById("cardDelivery").style.display = "none";
+  //document.getElementById("chkNewDelivery").checked = false;
+}
+
+// function addInvoiceAddress() {
+//   document.getElementById("cardInvoice").style.display = "block";
+//   document.getElementById("rowchkInvoice").style.display = "none";
+//   document.getElementById("chkDefaultInvoice").checked = false;
+// }
+
+function chkNewDelivery(value) {
+  if (value) {
+    document.getElementById("cardDelivery").style.display = "block";
+    document.getElementById("rowchkDelivery").style.display = "none";
+    document.getElementById("chkDefaultDelivery").checked = false;
+    loadAddressProvince("addressProvince_delivery");
+  } else {
+    document.getElementById("cardDelivery").style.display = "none";
+    document.getElementById("rowchkDelivery").style.display = "none";
+    document.getElementById("chkDefaultDelivery").checked = false;
+
+    document.getElementById("addressZipcode_delivery").value = "";
+    document.getElementById("addressProvince_delivery").value = "";
+    document.getElementById("addressCity_delivery").value = "";
+    document.getElementById("addressDistrict_delivery").value = "";
+    document.getElementById("addressStreet_delivery").value = "";
+  }
+}
+
+
 //----------------------------- ที่อยู่ใบกำกับภาษี ----------------------------------
 
+function loadAddress_inv() {}
 
 function findAddress_inv(value) {
   if (value) {
@@ -1924,7 +1771,8 @@ function findAddress_inv(value) {
           loadAddressProvince_inv(data[0].State);
           loadAddressCity_inv(data[0].State, data[0].City);
 
-          document.getElementById("addressDistrict_inv").innerHTML = HTMLDistrict;
+          document.getElementById("addressDistrict_inv").innerHTML =
+            HTMLDistrict;
         } else {
           Swal.fire({
             icon: "warning",
@@ -2041,7 +1889,6 @@ function loadAddressZipCode_inv(province, city, district) {
     };
   }
 }
-
 
 //----------------------------- ที่อยู่จัดส่ง ----------------------------------
 
