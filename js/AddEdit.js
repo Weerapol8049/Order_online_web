@@ -19,8 +19,8 @@
 
 // let SERVER_2_ax = 'http://starmark.work/OrderOnline_API_AIF/';//Live
 
-//let SERVER_2_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';
-let SERVER_2_ax = "http://localhost:4377/";
+let SERVER_2_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';
+//let SERVER_2_ax = "http://localhost:4377/";
 
 let API_CREATE = SERVER_2_ax + "api/order/create";
 let API_UPDATE = SERVER_2_ax + "api/order/edit";
@@ -86,7 +86,7 @@ function create() {
           ProvinceId: document.getElementById("province").value,
           CreateBy: localStorage.getItem("username_val"), //from SignIn.js
 
-          ShippingCost: getElementVal("shippingCost"),
+          ShippingCost: document.getElementById("shippingcost").value,
           Discount: getElementVal("discount"),
           InstallTeam: getElementVal("installTeam"),
           Free: getElementVal("free"),
@@ -97,14 +97,14 @@ function create() {
       );
       xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-          //console.log(this.responseText);
-          var trHTML = "";
-
           const objects = JSON.parse(this.responseText);
           if (objects.Status == "OK") {
             createPool(objects.RecId);
             // update invoice and delivery address
-            createAddress(objects.RecId);
+
+            if (document.getElementById("addressProvince").value != "None") {
+              createAddress(objects.RecId);
+            }
 
             Swal.fire(
               "สร้างรายการสำเร็จ",
@@ -281,13 +281,13 @@ function edit() {
           ProvinceId: document.getElementById("province").value,
           CreateBy: "",
 
-          ShippingCost: getElementVal("shippingCost"),
+          ShippingCost: getElementVal("shippingcost"),
           Discount: getElementVal("discount"),
           InstallTeam: getElementVal("installTeam"),
           Free: getElementVal("free"),
           Remark: getElementVal("remark"),
           TaxNum: getElementVal("taxnum"),
-          Phone : getElementVal("phone")
+          Phone: getElementVal("phone")
         })
       );
       xhttp.onreadystatechange = function () {
@@ -295,6 +295,10 @@ function edit() {
           const objects = JSON.parse(this.responseText);
           if (objects.Status == "OK") {
             createPool(objects.RecId);
+
+            if (document.getElementById("addressProvince").value != "None") {
+              createAddress(objects.RecId);
+            }
 
             Swal.fire(
               "บันทึกรายการสำเร็จ",
@@ -323,8 +327,10 @@ function createAddress(recId) {
 
   arrRow.push({
     SalesSoDaily: recId,
-    UseDefaultInvAddress: getElementVal("chkDefaultInvoice"),
-    UseDefaultDeliveryAddress: getElementVal("chkDefaultDelivery"),
+    UseDefaultInvAddress:
+      document.getElementById("chkDefaultInvoice").checked === true ? 1 : 0,
+    UseDefaultDeliveryAddress:
+      document.getElementById("chkDefaultDelivery").checked === true ? 1 : 0,
     Street: getElementVal("addressStreet"),
     District: getElementVal("addressDistrict"),
     City: getElementVal("addressCity"),
@@ -334,7 +340,7 @@ function createAddress(recId) {
     IsPrimary: 1
   });
 
-  if (getElementVal("chkNewInvoice")) {
+  if (document.getElementById("chkNewInvoice").checked) {
     arrRow.push({
       SalesSoDaily: recId,
       Street: getElementVal("addressStreet_inv"),
@@ -345,8 +351,8 @@ function createAddress(recId) {
       Type: 1 //invoice address
     });
   }
-  
-  if (getElementVal("chkNewDelivery")) {
+
+  if (document.getElementById("chkNewDelivery").checked) {
     arrRow.push({
       SalesSoDaily: recId,
       Street: getElementVal("addressStreet_delivery"),
@@ -357,16 +363,34 @@ function createAddress(recId) {
       Type: 2 //delivery address
     });
   }
- 
-  const xhttp = new XMLHttpRequest();
-  xhttp.open("POST", API_ADDRESS_CREATE);
-  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xhttp.send(JSON.stringify(rowsData));
-  xhttp.onreadystatechange = function () {
+
+  const xhttp_del = new XMLHttpRequest();
+  xhttp_del.open("POST", API_ADDRESS_DELETE);
+  xhttp_del.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhttp_del.send(JSON.stringify({ RecId: recId }));
+  xhttp_del.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       const objects = JSON.parse(this.responseText);
       if (objects.Status == "OK") {
-        
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("POST", API_ADDRESS_CREATE);
+        xhttp.setRequestHeader(
+          "Content-Type",
+          "application/json;charset=UTF-8"
+        );
+        xhttp.send(JSON.stringify(rowsData));
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            const objects = JSON.parse(this.responseText);
+            if (objects.Status == "OK") {
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "สร้างที่อยู่ไม่สำเร็จ"
+              });
+            }
+          }
+        };
       } else {
         Swal.fire({
           icon: "error",

@@ -33,8 +33,9 @@ let userAccountType = localStorage.getItem("type_val"); // 2 Manager
 // let SERVER_CB_ax = 'http://starmark.work/OrderOnline_API_AIF/';//Live
 
 let SERVER_CB_order = "http://starmark.work/OrderOnline_API_Order_test/";
-//let SERVER_CB_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';
-let SERVER_CB_ax = "http://localhost:4377/";
+let SERVER_CB_ax = "http://starmark.work/OrderOnline_API_AIF_test/";
+
+//let SERVER_CB_ax = "http://localhost:4377/";
 //let SERVER_CB_order = "http://localhost:54871/";
 
 let API_EMPLOYEE = SERVER_CB_order + "api/order/employee";
@@ -77,17 +78,13 @@ const sessionVal = {
   installment: getValue("installment_val"),
   installAmount: getValue("installAmount_val"),
 
-  AddressStreet: getValue("AddressStreet_val"),
-  AddressDistrict: getValue("AddressDistrict_val"),
-  AddressCity: getValue("AddressCity_val"),
-  AddressState: getValue("AddressState_val"),
-  AddressZipcode: getValue("AddressZipcode_val"),
   ShippingCost: getValue("ShippingCost_val"),
   Discount: getValue("Discount_val"),
   InstallTeam: getValue("InstallTeam_val"),
   Free: getValue("Free_val"),
   Remark: getValue("Remark_val"),
-  TaxNum: getValue("TaxNum_val")
+  TaxNum: getValue("TaxNum_val"),
+  Phone: getValue("Phone_val")
 };
 
 const {
@@ -108,17 +105,13 @@ const {
   paymDate,
   installment,
   installAmount,
-  AddressStreet,
-  AddressDistrict,
-  AddressCity,
-  AddressState,
-  AddressZipcode,
   ShippingCost,
   Discount,
   InstallTeam,
   Free,
   Remark,
-  TaxNum
+  TaxNum,
+  Phone
 } = sessionVal;
 
 var deposit_arr = [];
@@ -138,7 +131,7 @@ window.onload = function () {
     loadPools("AddOrder");
     loadRegion("");
     loadProvince("");
-    loadAddressProvince("");
+    loadAddressProvince("addressProvince");
   } else if (title == "Edit Order") {
     setElementVal("recId", recId);
     setElementVal("qty", qty);
@@ -154,6 +147,7 @@ window.onload = function () {
     setElementVal("free", Free);
     setElementVal("remark", Remark);
     setElementVal("taxnum", TaxNum);
+    setElementVal("phone", Phone);
 
     loadEmployee(userId);
     loadStore(
@@ -827,6 +821,26 @@ function addCardDeposit(event) {
     document.getElementById("countDeposit").value = id;
     onchangeInstallment(0, id);
     refreshSequence(`CURRSEQ`);
+
+    //---------------------------------------- วิธีชำระเงิน -------------------------------------------------
+
+    let rowPaym = createElement("div", {
+      id: "rowPaym" + id,
+      className: "row"
+    });
+    document.getElementById("groupDeposit" + id).appendChild(rowPaym);
+
+    let colPaym = createElement("div", {
+      id: "colPaym" + id,
+      className: "col-sm-4"
+    });
+    document.getElementById("rowPaym" + id).appendChild(colPaym);
+
+    let lbl = createElement("label", {
+      id: "lbl" + id,
+      value: "วิธีชำระเงิน"
+    });
+    document.getElementById("rowPaym" + id).appendChild(colPaym);
   }
 }
 
@@ -1268,7 +1282,6 @@ function loadEmployee(selected) {
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      //console.log(this.responseText);
       var trHTML = "";
       const objects = JSON.parse(this.responseText);
       trHTML += `<option value="" selected="selected">------ None ------</option>`;
@@ -1298,7 +1311,6 @@ function loadStore(selected, user, type) {
   );
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      //console.log(this.responseText);
       var trHTML = "";
 
       const objects = JSON.parse(this.responseText);
@@ -1327,7 +1339,6 @@ function loadPools(selected) {
   );
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      //console.log(this.responseText);
       var trHTML = "";
       const objects = JSON.parse(this.responseText);
       //trHTML += `<option value="" selected="selected">------ None ------</option>`;
@@ -1352,7 +1363,6 @@ function loadRegion(selected) {
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      //console.log(this.responseText);
       var trHTML = "";
       const objects = JSON.parse(this.responseText);
       trHTML += `<option value="" selected="selected">------ None ------</option>`;
@@ -1433,6 +1443,7 @@ function loadAddress(recid) {
           //ที่อยู่ใบกำกับภาษี
           document.getElementById("cardInvoice").style.display = "block";
           document.getElementById("rowchkInvoice").style.display = "none";
+          document.getElementById("chkNewInvoice").checked = true;
 
           loadAddressProvince("addressProvince_inv", row.State);
           loadAddressCity("addressCity_inv", row.State, row.City);
@@ -1447,6 +1458,7 @@ function loadAddress(recid) {
         }
         if (row.Type == 2) {
           //ที่อยู่จัดส่ง
+
           document.getElementById("cardDelivery").style.display = "block";
           document.getElementById("rowchkDelivery").style.display = "none";
           document.getElementById("chkNewDelivery").checked = true;
@@ -1474,15 +1486,49 @@ function loadAddress(recid) {
           );
           setElementVal("addressStreet", row.Street);
           setElementVal("addressZipcode", row.Zipcode);
-        }
 
-        if (row.UseDefaultInvAddress == 1) {
-          chkInvoice(true);
-        }
-        if (row.UseDefaultDeliveryAddress == 1) {
-          chkDelivery(true);
+          if (row.UseDefaultInvAddress == 1) {
+            //chkInvoice(true);
+            document.getElementById("chkDefaultInvoice").checked = true;
+            document.getElementById("chkNewInvoice").checked = false;
+
+            document.getElementById("txtDefaultInvoice").value =
+              row.Street +
+              " ตำบล" +
+              row.District +
+              " \nอำเภอ" +
+              row.City +
+              " จังหวัด" +
+              row.State +
+              "\n" +
+              row.Zipcode;
+
+            document.getElementById("rowchkInvoice").style.display = "block";
+            document.getElementById("cardInvoice").style.display = "none";
+          }
+          if (row.UseDefaultDeliveryAddress == 1) {
+            document.getElementById("chkDefaultDelivery").checked = true;
+            document.getElementById("chkNewDelivery").checked = false;
+
+            document.getElementById("txtDefaultDelivery").value =
+              row.Street +
+              " ตำบล" +
+              row.District +
+              " \nอำเภอ" +
+              row.City +
+              " จังหวัด" +
+              row.State +
+              "\n" +
+              row.Zipcode;
+            document.getElementById("rowchkDelivery").style.display = "block";
+            document.getElementById("cardDelivery").style.display = "none";
+          }
         }
       });
+
+      if (data.length == 0) {
+        loadAddressProvince("addressProvince");
+      }
     }
   };
 }
@@ -1559,6 +1605,7 @@ function loadAddressProvince(name, selected) {
             HTMLProvince += `<option value="${row.State}">${row.State}</option>`;
         });
       }
+
       document.getElementById(name).innerHTML = HTMLProvince; //address province
     }
   };
@@ -1746,7 +1793,6 @@ function chkNewDelivery(value) {
     document.getElementById("addressStreet_delivery").value = "";
   }
 }
-
 
 //----------------------------- ที่อยู่ใบกำกับภาษี ----------------------------------
 

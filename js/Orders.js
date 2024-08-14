@@ -19,10 +19,10 @@
 // let API_CANCEL = SERVER_M + "api/OrderOnline/order/cancel";
 
 //let SERVER_M_order = "https://starmark.work/OrderOnline_API_Orders/"; //Live
-let SERVER_M_ax = "https://starmark.work/OrderOnline_API_AIF/"; //Live
+//let SERVER_M_ax = "https://starmark.work/OrderOnline_API_AIF/"; //Live
 
 let SERVER_M_order = 'http://starmark.work/OrderOnline_API_Order_test/';
-// let SERVER_M_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';
+let SERVER_M_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';
 
 ///let SERVER_M_order = "http://localhost:54871/";
 //let SERVER_M_ax = 'http://localhost:4377/';
@@ -75,6 +75,7 @@ async function load(username, userAccountType, show, RG = "", Year = "") {
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       const data = JSON.parse(this.responseText);
+
       let rowcount = 0;
       let trBody = "";
       let _status = "";
@@ -176,8 +177,7 @@ async function load(username, userAccountType, show, RG = "", Year = "") {
                                                     ,'${row.Amount}','${row.CustName}','${row.Date.toLocaleString()}'
                                                     ,'${row.SalesId}','${row.PurchId}','${row.PersonnelNumber}','${row.RecId}'
                                                     ,'${row.Region}','${row.ProvinceId}','${row.CountPools}'
-                                                    ,'${row.AddressStreet}','${row.AddressDistrict}','${row.AddressCity}','${row.AddressState}','${row.AddressZipcode}'
-                                                    ,'${row.ShippingCost}','${row.Discount}','${row.InstallTeam}','${row.Free}','${row.Remark}','${row.TaxNum}'
+                                                    ,'${row.ShippingCost}','${row.Discount}','${row.InstallTeam}','${row.Free}','${row.Remark}','${row.TaxNum}','${row.Phone}'
                                                     )">
                                                     Edit</button>
                                 </div>
@@ -705,17 +705,13 @@ function clickEdit(
   region,
   provinceId,
   pools,
-  AddressStreet,
-  AddressDistrict,
-  AddressCity,
-  AddressState,
-  AddressZipcode,
   ShippingCost,
   Discount,
   InstallTeam,
   Free,
   Remark,
-  TaxNum
+  TaxNum,
+  phone
 ) {
   setItem("emp_val", emp); //แสดงชื่อที่ผูกกับ personnelNumber
   setItem("store_val", store);
@@ -733,17 +729,13 @@ function clickEdit(
   setItem("provinceId_val", provinceId);
   setItem("pools_val", pools);
 
-  setItem("AddressStreet_val", AddressStreet);
-  setItem("AddressDistrict_val", AddressDistrict);
-  setItem("AddressCity_val", AddressCity);
-  setItem("AddressState_val", AddressState);
-  setItem("AddressZipcode_val", AddressZipcode);
   setItem("ShippingCost_val", ShippingCost);
   setItem("Discount_val", Discount);
   setItem("InstallTeam_val", InstallTeam);
   setItem("Free_val", Free);
   setItem("Remark_val", Remark);
   setItem("TaxNum_val", TaxNum);
+  setItem("Phone_val", phone);
 
   window.location = "OrderEditPage.html";
 }
