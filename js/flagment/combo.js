@@ -78,6 +78,7 @@ const sessionVal = {
   installment: getValue("installment_val"),
   installAmount: getValue("installAmount_val"),
 
+  OrderId: getValue("OrderId_val"),
   ShippingCost: getValue("ShippingCost_val"),
   Discount: getValue("Discount_val"),
   InstallTeam: getValue("InstallTeam_val"),
@@ -105,6 +106,7 @@ const {
   paymDate,
   installment,
   installAmount,
+  OrderId,
   ShippingCost,
   Discount,
   InstallTeam,
@@ -141,6 +143,7 @@ window.onload = function () {
     setElementVal("purchOrder", purchId);
     setElementVal("store", storeId);
 
+    setElementVal("orderId", OrderId);
     setElementVal("shippingcost", ShippingCost);
     setElementVal("discount", Discount);
     setElementVal("installTeam", InstallTeam);
@@ -158,17 +161,10 @@ window.onload = function () {
     loadPools(pool);
     loadRegion(region);
     loadProvince(provinceId);
-    //loadAddress(recId);
     loadDeposit(recId);
     setDatePicker("#salesDate", date);
 
-    // loadAddressProvince(AddressState);
-    // loadAddressCity(AddressState, AddressCity);
-    // loadAddressDistrict(AddressState, AddressCity, AddressDistrict);
-
-    // setElementVal("addressStreet", AddressStreet);
-    // setElementVal("addressZipcode", AddressZipcode);
-
+    calculateTotal();
     loadAddress(recId);
   }
 };
@@ -216,52 +212,50 @@ function loadCardDeposit(data) {
         id: "groupDeposit" + id,
         className: "list-group list-group-flush"
       });
-      document.getElementById("cardDeposit").appendChild(ul);
-
       let row = createElement("div", { id: "row" + id, className: "row" });
-      document.getElementById("groupDeposit" + id).appendChild(row);
-
       let seq = createElement("div", {
         id: "seq" + id,
         className: "col-sm-1",
         style: "text-align: center;"
       });
-      document.getElementById("row" + id).appendChild(seq);
-
       let group = createElement("div", {
         id: "group" + id,
         className: "form-group",
         style: "margin-bottom: 0;"
       });
-      document.getElementById("seq" + id).appendChild(group);
-
-      let label = createElement("label", { id: "label" + id });
-      document.getElementById("group" + id).appendChild(label);
-      document.getElementById("label" + id).innerText = "ลำดับ";
-
+      let label = createElement("label", {
+        id: "label" + id,
+        innerText: "ลำดับ"
+      });
       let group2 = createElement("div", {
         id: "grouplbl" + id,
         className: "form-group"
       });
-      document.getElementById("seq" + id).appendChild(group2);
-
-      let curseq = createElement("label", { id: "CURRSEQ" + id });
-      document.getElementById("grouplbl" + id).appendChild(curseq);
-      document.getElementById("CURRSEQ" + id).innerText = id.toString();
-
+      let curseq = createElement("label", {
+        id: "CURRSEQ" + id,
+        innerText: id.toString()
+      });
       let seq2 = createElement("label", {
         id: "SEQ" + id,
+        innerText: id.toString(),
         style: "display:none;"
       });
-      document.getElementById("grouplbl" + id).appendChild(seq2);
-      document.getElementById("SEQ" + id).innerText = id.toString();
-
       let lblRecId = createElement("label", {
         id: "RECID" + id,
+        innerText: object.RecId,
         style: "display:none;"
       });
-      document.getElementById("grouplbl" + id).appendChild(lblRecId);
-      document.getElementById("RECID" + id).innerText = object.RecId;
+
+      document.getElementById("cardDeposit").appendChild(ul);
+
+      ul.appendChild(row);
+      row.appendChild(seq);
+      seq.appendChild(group);
+      group.appendChild(label);
+      seq.appendChild(group2);
+      group2.appendChild(curseq);
+      group2.appendChild(seq2);
+      group2.appendChild(lblRecId);
 
       //------------------------------- วันที่จ่าย ---------------------------------------------
 
@@ -269,33 +263,30 @@ function loadCardDeposit(data) {
         id: "colPaymDate" + id,
         className: "col-sm-3"
       });
-      document.getElementById("row" + id).appendChild(colPaymDate);
-
-      let lblpaymdate = createElement("label", { id: "lblPaymDate" + id });
-      document.getElementById("colPaymDate" + id).appendChild(lblpaymdate);
-      document.getElementById("lblPaymDate" + id).innerText = "วันที่จ่าย";
-
+      let lblpaymdate = createElement("label", {
+        id: "lblPaymDate" + id,
+        innerText: "วันที่จ่าย"
+      });
       let icon = createElement("div", {
         id: "icon" + id,
         className: "input-icons"
       });
-      document.getElementById("colPaymDate" + id).appendChild(icon);
-
       let fa = createElement("i", {
         id: "fa" + id,
         className: "fa fa-calendar icon"
       });
-      document.getElementById("icon" + id).appendChild(fa);
-
       let inputDate = createElement("input", {
         id: "paymDate" + id,
         type: "text",
         className: "form-control flatpickr",
         style: "background-color: white; padding-left: 30px;"
       });
-      document.getElementById("icon" + id).appendChild(inputDate);
-      //  var elePaymDate = document.getElementById('paymDate' + id);
-      //  elePaymDate.onchange = function() {onchangePaymDate(this.value, id); };
+
+      row.appendChild(colPaymDate);
+      colPaymDate.appendChild(lblpaymdate);
+      colPaymDate.appendChild(icon);
+      icon.appendChild(fa);
+      icon.appendChild(inputDate);
 
       flatpickr("#paymDate" + id, {
         locale: "th",
@@ -309,27 +300,26 @@ function loadCardDeposit(data) {
         id: "colinstallment" + id,
         className: "col-sm-2"
       });
-      document.getElementById("row" + id).appendChild(colinstall);
-
       let groupinstall = createElement("div", {
         id: "groupinstallment" + id,
         className: "form-group"
       });
-      document.getElementById("colinstallment" + id).appendChild(groupinstall);
-
-      let lblinstall = createElement("label", { id: "lblinstallment" + id });
-      document.getElementById("groupinstallment" + id).appendChild(lblinstall);
-      document.getElementById("lblinstallment" + id).innerText = "งวด";
-
+      let lblinstall = createElement("label", {
+        id: "lblinstallment" + id,
+        innerText: "งวด"
+      });
       let sInstall = createElement("select", {
         id: "installment" + id,
         className: "form-control select2bs4",
         style: "width: 100%;",
         value: 0
       });
-      document.getElementById("groupinstallment" + id).appendChild(sInstall);
-      var eleinstallment = document.getElementById("installment" + id);
-      eleinstallment.onchange = function () {
+
+      row.appendChild(colinstall);
+      colinstall.appendChild(groupinstall);
+      groupinstall.appendChild(lblinstall);
+      groupinstall.appendChild(sInstall);
+      sInstall.onchange = function () {
         onchangeInstallment(this.value, id);
       };
 
@@ -339,18 +329,14 @@ function loadCardDeposit(data) {
         id: "colamount" + id,
         className: "col-sm-3"
       });
-      document.getElementById("row" + id).appendChild(colamount);
-
       let groupAmount = createElement("div", {
         id: "groupAmount" + id,
         className: "form-group"
       });
-      document.getElementById("colamount" + id).appendChild(groupAmount);
-
-      let lblAmount = createElement("label", { id: "lblAmount" + id });
-      document.getElementById("groupAmount" + id).appendChild(lblAmount);
-      document.getElementById("lblAmount" + id).innerText = "มูลค่า";
-
+      let lblAmount = createElement("label", {
+        id: "lblAmount" + id,
+        innerText: "มูลค่า"
+      });
       let inputAmount = createElement("input", {
         id: "payment" + id,
         className: "form-control",
@@ -358,12 +344,15 @@ function loadCardDeposit(data) {
         type: "number",
         min: 0
       });
-      document.getElementById("groupAmount" + id).appendChild(inputAmount);
-      var elepayment = document.getElementById("payment" + id);
-      elepayment.onchange = function () {
+
+      row.appendChild(colamount);
+      colamount.appendChild(groupAmount);
+      groupAmount.appendChild(lblAmount);
+      groupAmount.appendChild(inputAmount);
+      inputAmount.onchange = function () {
         onchangePayment(this.value, id);
       };
-      elepayment.oninput = function () {
+      inputAmount.oninput = function () {
         this.value = Math.abs(this.value);
       };
 
@@ -373,48 +362,43 @@ function loadCardDeposit(data) {
         id: "coldelete" + id,
         className: "col-sm-1"
       });
-      document.getElementById("row" + id).appendChild(coldelete);
-
       let groupdelete = createElement("div", {
         id: "groupdelete" + id,
         className: "form-group",
         style: "margin-top: 25px;"
       });
-      document.getElementById("coldelete" + id).appendChild(groupdelete);
-
       let linkDelete = createElement("a", {
         id: "linkDelete" + id,
         style: "cursor: pointer;"
       });
-      document.getElementById("groupdelete" + id).appendChild(linkDelete);
-      var elelinkdelete = document.getElementById("linkDelete" + id);
-      elelinkdelete.onclick = function () {
-        deleteGroup(
-          "groupDeposit" + elelinkdelete.id.substring(10, 13),
-          `${object.RecId}`
-        );
-      };
-
       let imgDelete = createElement("img", {
         id: "imgDelete" + id,
         src: "../images/1398920_red circle_close_cross_cancel_remove_icon.png"
       });
-      document.getElementById("linkDelete" + id).appendChild(imgDelete);
-
       let linkCancel = createElement("a", {
         id: "linkCancel" + id,
         style: "cursor: pointer; display: none;"
       });
-      document.getElementById("groupdelete" + id).appendChild(linkCancel);
-
       let imgCancel = createElement("img", {
         id: "imgCancel" + id,
         style: "cursor: pointer; with: 48px; height: 48px",
         src: "../images/vecteezy_cancelled-rubber-stamp-on-white-background-vector-illustration_19495927.jpg"
       });
-      document.getElementById("groupdelete" + id).appendChild(imgCancel);
-      var eleimgcancel = document.getElementById("imgCancel" + id);
-      eleimgcancel.onclick = function () {
+
+      row.appendChild(coldelete);
+      coldelete.appendChild(groupdelete);
+      groupdelete.appendChild(linkDelete);
+      linkDelete.onclick = function () {
+        deleteGroup(
+          "groupDeposit" + linkDelete.id.substring(10, 13),
+          `${object.RecId}`
+        );
+      };
+
+      linkDelete.appendChild(imgDelete);
+      groupdelete.appendChild(linkCancel);
+      groupdelete.appendChild(imgCancel);
+      imgCancel.onclick = function () {
         detailCancelDeposit(
           elecancel.id.substring(9, 11),
           object.CancelDate.substring(0, 10),
@@ -428,30 +412,27 @@ function loadCardDeposit(data) {
         id: "coldprint" + id,
         className: "col-sm-1"
       });
-      document.getElementById("row" + id).appendChild(coldprint);
-
       let groupprint = createElement("div", {
         id: "groupprint" + id,
         className: "form-group",
         style: "margin-top: 35px;"
       });
-      document.getElementById("coldprint" + id).appendChild(groupprint);
-
       let linkPrint = createElement("a", {
         id: "linkPrint" + id,
         style: "cursor: pointer;"
       });
-      document.getElementById("groupprint" + id).appendChild(linkPrint);
-      var elelinkprint = document.getElementById("linkPrint" + id);
-      elelinkprint.onclick = function () {
-        printDeposit(object.RecId);
-      };
-
       let imgPrint = createElement("img", {
         id: "imgPrint" + id,
         src: "../images/image_print_outline.png"
       });
-      document.getElementById("linkPrint" + id).appendChild(imgPrint);
+
+      row.appendChild(coldprint);
+      coldprint.appendChild(groupprint);
+      groupprint.appendChild(linkPrint);
+      linkPrint.onclick = function () {
+        printDeposit(object.RecId);
+      };
+      linkPrint.appendChild(imgPrint);
 
       //---------------------------------------- button cancel -------------------------------------------------
 
@@ -459,26 +440,24 @@ function loadCardDeposit(data) {
         id: "colcancel" + id,
         className: "col-sm-1"
       });
-      document.getElementById("row" + id).appendChild(colcancel);
-
       let groupcancel = createElement("div", {
         id: "groupcancel" + id,
         className: "form-group",
         style: "margin-top: 38px;"
       });
-      document.getElementById("colcancel" + id).appendChild(groupcancel);
-
       let btnCancel = createElement("button", {
         id: "btnCancel" + id,
         className: "btn btn-block btn-outline-info btn-xs",
+        innerText: "Cancel",
         style: "margin-top: 38px;"
       });
-      document.getElementById("groupcancel" + id).appendChild(btnCancel);
-      var elecancel = document.getElementById("btnCancel" + id);
-      elecancel.onclick = function () {
-        cancelDeposit(elecancel.id.substring(9, 11));
+
+      row.appendChild(colcancel);
+      colcancel.appendChild(groupcancel);
+      groupcancel.appendChild(btnCancel);
+      btnCancel.onclick = function () {
+        cancelDeposit(btnCancel.id.substring(9, 11));
       };
-      elecancel.innerText = "Cancel";
 
       //---------------------------------------- remark -------------------------------------------------
 
@@ -486,26 +465,33 @@ function loadCardDeposit(data) {
         id: "rowRemark" + id,
         className: "row"
       });
-      document.getElementById("groupDeposit" + id).appendChild(rowRemark);
-
       let colempty = createElement("div", {
         id: "colempty" + id,
         className: "col-sm-1"
       });
-      document.getElementById("rowRemark" + id).appendChild(colempty);
-
+      let colDepositId = createElement("div", {
+        id: "colDepositId" + id,
+        className: "col-sm-3"
+      });
+      let groupDepositId = createElement("div", {
+        id: "groupDepositId" + id,
+        className: "form-group"
+      });
+      let inputDepositId = createElement("input", {
+        id: "inputDepositId" + id,
+        className: "form-control",
+        type: "text",
+        value: object.DepositId,
+        disabled: true
+      });
       let colRemark = createElement("div", {
         id: "colRemark" + id,
-        className: "col-sm-11"
+        className: "col-sm-8"
       });
-      document.getElementById("rowRemark" + id).appendChild(colRemark);
-
       let groupRemark = createElement("div", {
         id: "groupRemark" + id,
         className: "form-group"
       });
-      document.getElementById("colRemark" + id).appendChild(groupRemark);
-
       let inputRemark = createElement("input", {
         id: "remark" + id,
         className: "form-control",
@@ -513,10 +499,17 @@ function loadCardDeposit(data) {
         value: object.Remark,
         placeholder: "หมายเหตุ"
       });
-      document.getElementById("groupRemark" + id).appendChild(inputRemark);
-      var eleremark = document.getElementById("remark" + id);
-      eleremark.onchange = function () {
-        onchangeRemark(this.value, eleremark.id.substring(6, 8));
+
+      ul.appendChild(rowRemark);
+      rowRemark.appendChild(colempty);
+      rowRemark.appendChild(colDepositId);
+      colDepositId.appendChild(groupDepositId);
+      groupDepositId.appendChild(inputDepositId);
+      rowRemark.appendChild(colRemark);
+      colRemark.appendChild(groupRemark);
+      groupRemark.appendChild(inputRemark);
+      inputRemark.onchange = function () {
+        onchangeRemark(this.value, inputRemark.id.substring(6, 8));
       };
 
       document.getElementById("countDeposit").value = id;
@@ -532,49 +525,405 @@ function loadCardDeposit(data) {
       allowEditDeposit(object.AllowEdit, id);
       enableControl(id, object.Cancel);
 
-      // flatpickr("#paymDate" + id, {
-      //     locale: 'th',
-      //     dateFormat: "d/m/Y",
-      //     defaultDate : dateFormatSlace(object.TransDate.substring(0,10))
-      //   })
-      //   document.getElementById("paymDate" + id).setAttribute('value', dateFormatSlace(object.TransDate.substring(0,10)));
-
       deposit_arr.push(document.getElementById("cardDeposit").innerHTML);
+
+      //---------------------------------------- วิธีชำระเงิน -------------------------------------------------
+
+      let rowPaym = createElement("div", {
+        className: "row",
+        id: "rowPaym" + id,
+        style: "padding-left: 50px;"
+      });
+      let colPaym = createElement("div", {
+        className: "col-sm-3",
+        id: "colPaym" + id
+      });
+      let lbl = createElement("label", {
+        innerHTML: "วิธีชำระเงิน",
+        style: "font-weight: bold;"
+      });
+      let colPaymCash = createElement("div", {
+        className: "col-sm-3",
+        id: "colPaymCash" + id
+      });
+      let chkPaymCash = createElement("input", {
+        type: "checkbox",
+        id: "chkPaymCash" + id,
+        class: "form-group"
+      });
+      let lblCash = createElement("label", {
+        innerHTML: "เงินสด",
+        style: "padding-left: 5px;"
+      });
+      let colPaymCheque = createElement("div", {
+        className: "col-sm-3",
+        id: "colPaymCheque" + id
+      });
+      let chkPaymCheque = createElement("input", {
+        type: "checkbox",
+        id: "chkPaymCheque" + id,
+        class: "form-group"
+      });
+      let lblCheque = createElement("label", {
+        innerHTML: "เช็คธนาคาร",
+        style: "padding-left: 5px;"
+      });
+      let colPaymCredit = createElement("div", {
+        className: "col-sm-3",
+        id: "colPaymCredit" + id
+      });
+      let chkPaymCredit = createElement("input", {
+        type: "checkbox",
+        id: "chkPaymCredit" + id,
+        class: "form-group"
+      });
+      let lblCredit = createElement("label", {
+        innerHTML: "บัตรเครดิต",
+        style: "padding-left: 5px;"
+      });
+
+      ul.appendChild(rowPaym);
+      rowPaym.appendChild(colPaym);
+      colPaym.appendChild(lbl);
+      rowPaym.appendChild(colPaymCash);
+      colPaymCash.appendChild(chkPaymCash);
+      chkPaymCash.onchange = function () {
+        if (chkPaymCash.checked) {
+          createPaymentCash(chkPaymCash.checked, id);
+        } else {
+        }
+      };
+      colPaymCash.appendChild(lblCash);
+      rowPaym.appendChild(colPaymCheque);
+      colPaymCheque.appendChild(chkPaymCheque);
+      chkPaymCheque.onchange = function () {};
+      colPaymCheque.appendChild(lblCheque);
+      rowPaym.appendChild(colPaymCredit);
+      colPaymCredit.appendChild(chkPaymCredit);
+      chkPaymCredit.onchange = function () {};
+      colPaymCredit.appendChild(lblCredit);
     }
     id++;
   });
 }
 
-function dateFormatSlace(date) {
-  var d = new Date(date);
-  let y = d.getFullYear();
-  let _date =
-    d.getDate().toLocaleString("th-TH", {
-      minimumIntegerDigits: 2,
-      useGrouping: false
-    }) +
-    "/" +
-    (d.getMonth() + 1).toLocaleString("th-TH", {
-      minimumIntegerDigits: 2,
-      useGrouping: false
-    }) +
-    "/" +
-    y;
-  return _date;
-}
+function addCardDeposit(event) {
+  let cardHTML = "";
+  let id = parseInt(document.getElementById("countDeposit").value) + 1;
+  let id2 = parseInt(document.getElementById("countDepositBox").value) + 1;
 
-function enableControl(id, cancel) {
-  //2 Manager, 3 Area
-  if (userAccountType > 1) {
-    if (cancel == 0)
-      document.getElementById("btnCancel" + id).style.display = "block";
-    else document.getElementById("btnCancel" + id).style.display = "none";
-  } else {
-    document.getElementById("btnCancel" + id).style.display = "none";
+  if (onchangePayment("btnAddEdit", 0) == false) return;
+
+  if (id2 <= depositNum) {
+    if (id2 == 1)
+      document.getElementById("cardDeposit").style.display = "block";
+
+    let ul = createElement("ul", {
+      id: "groupDeposit" + id,
+      className: "list-group list-group-flush"
+    });
+    let row = createElement("div", { id: "row" + id, className: "row" });
+    let seq = createElement("div", {
+      id: "seq" + id,
+      className: "col-sm-1",
+      style: "text-align: center;"
+    });
+    let group = createElement("div", {
+      id: "group" + id,
+      className: "form-group",
+      style: "margin-bottom: 0;"
+    });
+    let label = createElement("label", {
+      id: "label" + id,
+      innerText: "ลำดับ"
+    });
+    let group2 = createElement("div", {
+      id: "grouplbl" + id,
+      className: "form-group"
+    });
+    let curseq = createElement("label", {
+      id: "CURRSEQ" + id,
+      innerText: id.toString()
+    });
+    let seq2 = createElement("label", {
+      id: "SEQ" + id,
+      innerText: id.toString(),
+      style: "display:none;"
+    });
+    let lblRecId = createElement("label", {
+      id: "RECID" + id,
+      innerText: 0,
+      style: "display:none;"
+    });
+
+    document.getElementById("cardDeposit").appendChild(ul);
+    ul.appendChild(row);
+    row.appendChild(seq);
+    seq.appendChild(group);
+    group.appendChild(label);
+    seq.appendChild(group2);
+    group2.appendChild(curseq);
+    group2.appendChild(seq2);
+    group2.appendChild(lblRecId);
+
+    //------------------------------- วันที่จ่าย ---------------------------------------------
+
+    let colPaymDate = createElement("div", {
+      id: "colPaymDate" + id,
+      className: "col-sm-3"
+    });
+    let lblpaymdate = createElement("label", {
+      id: "lblPaymDate" + id,
+      innerText: "วันที่จ่าย"
+    });
+    let icon = createElement("div", {
+      id: "icon" + id,
+      className: "input-icons"
+    });
+    let fa = createElement("i", {
+      id: "fa" + id,
+      className: "fa fa-calendar icon"
+    });
+    let inputDate = createElement("input", {
+      id: "paymDate" + id,
+      type: "text",
+      className: "form-control flatpickr",
+      style: "background-color: white; padding-left: 30px;"
+    });
+
+    row.appendChild(colPaymDate);
+    colPaymDate.appendChild(lblpaymdate);
+    colPaymDate.appendChild(icon);
+    icon.appendChild(fa);
+    icon.appendChild(inputDate);
+    inputDate.onchange = function () {
+      onchangePaymDate(this.value, id);
+    };
+
+    flatpickr("#paymDate" + id, {
+      locale: "th",
+      dateFormat: "d/m/Y"
+      //defaultDate : '09/09/2023'
+    });
+
+    //---------------------------------------- งวด -------------------------------------------------
+
+    let colinstall = createElement("div", {
+      id: "colinstallment" + id,
+      className: "col-sm-2"
+    });
+    let groupinstall = createElement("div", {
+      id: "groupinstallment" + id,
+      className: "form-group"
+    });
+    let lblinstall = createElement("label", {
+      id: "lblinstallment" + id,
+      innerText: "งวด"
+    });
+    let sInstall = createElement(
+      "select",
+      {
+        id: "installment" + id,
+        className: "form-control select2bs4",
+        style: "width: 100%;",
+        value: 0
+      },
+      [
+        {
+          event: "onchange",
+          f: function () {
+            onchangeInstallment(this.value, id);
+          }
+        }
+      ]
+    );
+
+    row.appendChild(colinstall);
+    colinstall.appendChild(groupinstall);
+    groupinstall.appendChild(lblinstall);
+    groupinstall.appendChild(sInstall);
+    sInstall.disabled = true;
+
+    //---------------------------------------- มูลค่า -------------------------------------------------
+
+    let colamount = createElement("div", {
+      id: "colamount" + id,
+      className: "col-sm-3"
+    });
+    let groupAmount = createElement("div", {
+      id: "groupAmount" + id,
+      className: "form-group"
+    });
+    let lblAmount = createElement("label", {
+      id: "lblAmount" + id,
+      innerText: "มูลค่า"
+    });
+    let inputAmount = createElement("input", {
+      id: "payment" + id,
+      className: "form-control",
+      type: "number",
+      min: 0
+    });
+
+    row.appendChild(colamount);
+    colamount.appendChild(groupAmount);
+    groupAmount.appendChild(lblAmount);
+    groupAmount.appendChild(inputAmount);
+    inputAmount.onchange = function () {
+      onchangePayment(this.value, id);
+    };
+    inputAmount.oninput = function () {
+      this.value = Math.abs(this.value);
+    };
+
+    //---------------------------------------- button delete -------------------------------------------------
+
+    let coldelete = createElement("div", {
+      id: "coldelete" + id,
+      className: "col-sm-1"
+    });
+    let groupdelete = createElement("div", {
+      id: "groupdelete" + id,
+      className: "form-group",
+      style: "margin-top: 25px;"
+    });
+    let linkDelete = createElement("a", {
+      id: "linkDelete" + id,
+      style: "cursor: pointer;"
+    });
+    let imgDelete = createElement("img", {
+      id: "imgDelete" + id,
+      src: "../images/1398920_red circle_close_cross_cancel_remove_icon.png"
+    });
+
+    row.appendChild(coldelete);
+    coldelete.appendChild(groupdelete);
+    groupdelete.appendChild(linkDelete);
+    linkDelete.onclick = function () {
+      deleteGroup("groupDeposit" + linkDelete.id.substring(10, 13));
+    };
+    linkDelete.appendChild(imgDelete);
+
+    //---------------------------------------- remark -------------------------------------------------
+
+    let rowRemark = createElement("div", {
+      id: "rowRemark" + id,
+      className: "row"
+    });
+    document.getElementById("groupDeposit" + id).appendChild(rowRemark);
+
+    let colempty = createElement("div", {
+      id: "colempty" + id,
+      className: "col-sm-1"
+    });
+    document.getElementById("rowRemark" + id).appendChild(colempty);
+
+    let colRemark = createElement("div", {
+      id: "colRemark" + id,
+      className: "col-sm-11"
+    });
+    document.getElementById("rowRemark" + id).appendChild(colRemark);
+
+    let groupRemark = createElement("div", {
+      id: "groupRemark" + id,
+      className: "form-group"
+    });
+    document.getElementById("colRemark" + id).appendChild(groupRemark);
+
+    let inputRemark = createElement("input", {
+      id: "remark" + id,
+      className: "form-control",
+      type: "text",
+      placeholder: "หมายเหตุ"
+    });
+    document.getElementById("groupRemark" + id).appendChild(inputRemark);
+    var eleremark = document.getElementById("remark" + id);
+    eleremark.onchange = function () {
+      onchangeRemark(this.value, id);
+    };
+
+    document.getElementById("countDeposit").value = id;
+    onchangeInstallment(0, id);
+    refreshSequence(`CURRSEQ`);
+
+    //---------------------------------------- วิธีชำระเงิน -------------------------------------------------
+
+    let rowPaym = createElement("div", {
+      className: "row",
+      id: "rowPaym" + id,
+      style: "padding-left: 50px;"
+    });
+    let colPaym = createElement("div", {
+      className: "col-sm-3",
+      id: "colPaym" + id
+    });
+    let lbl = createElement("label", {
+      innerHTML: "วิธีชำระเงิน",
+      style: "font-weight: bold;"
+    });
+    let colPaymCash = createElement("div", {
+      className: "col-sm-3",
+      id: "colPaymCash" + id
+    });
+    let chkPaymCash = createElement("input", {
+      type: "checkbox",
+      id: "chkPaymCash" + id,
+      class: "form-group"
+    });
+    let lblCash = createElement("label", {
+      innerHTML: "เงินสด",
+      style: "padding-left: 5px;"
+    });
+    let colPaymCheque = createElement("div", {
+      className: "col-sm-3",
+      id: "colPaymCheque" + id
+    });
+    let chkPaymCheque = createElement("input", {
+      type: "checkbox",
+      id: "chkPaymCheque" + id,
+      class: "form-group"
+    });
+    let lblCheque = createElement("label", {
+      innerHTML: "เช็คธนาคาร",
+      style: "padding-left: 5px;"
+    });
+    let colPaymCredit = createElement("div", {
+      className: "col-sm-3",
+      id: "colPaymCredit" + id
+    });
+    let chkPaymCredit = createElement("input", {
+      type: "checkbox",
+      id: "chkPaymCredit" + id,
+      class: "form-group"
+    });
+    let lblCredit = createElement("label", {
+      innerHTML: "บัตรเครดิต",
+      style: "padding-left: 5px;"
+    });
+
+    ul.appendChild(rowPaym);
+    rowPaym.appendChild(colPaym);
+    colPaym.appendChild(lbl);
+    rowPaym.appendChild(colPaymCash);
+    colPaymCash.appendChild(chkPaymCash);
+    chkPaymCash.onchange = function () {
+      if (chkPaymCash.checked) {
+        createPaymentCash(chkPaymCash.checked, id);
+      } else {
+      }
+    };
+    colPaymCash.appendChild(lblCash);
+    rowPaym.appendChild(colPaymCheque);
+    colPaymCheque.appendChild(chkPaymCheque);
+    chkPaymCheque.onchange = function () {};
+    colPaymCheque.appendChild(lblCheque);
+    rowPaym.appendChild(colPaymCredit);
+    colPaymCredit.appendChild(chkPaymCredit);
+    chkPaymCredit.onchange = function () {};
+    colPaymCredit.appendChild(lblCredit);
   }
 }
-
-function addCardDeposit(event) {
+function addCardDeposit_original(event) {
   let cardHTML = "";
   let id = parseInt(document.getElementById("countDeposit").value) + 1;
   let id2 = parseInt(document.getElementById("countDepositBox").value) + 1;
@@ -825,22 +1174,799 @@ function addCardDeposit(event) {
     //---------------------------------------- วิธีชำระเงิน -------------------------------------------------
 
     let rowPaym = createElement("div", {
+      className: "row",
       id: "rowPaym" + id,
-      className: "row"
+      style: "padding-left: 50px;"
     });
     document.getElementById("groupDeposit" + id).appendChild(rowPaym);
 
     let colPaym = createElement("div", {
-      id: "colPaym" + id,
-      className: "col-sm-4"
+      className: "col-sm-3",
+      id: "colPaym" + id
     });
-    document.getElementById("rowPaym" + id).appendChild(colPaym);
+    document.getElementById(rowPaym.id).appendChild(colPaym);
 
     let lbl = createElement("label", {
-      id: "lbl" + id,
-      value: "วิธีชำระเงิน"
+      innerHTML: "วิธีชำระเงิน",
+      style: "font-weight: bold;"
     });
-    document.getElementById("rowPaym" + id).appendChild(colPaym);
+    document.getElementById(colPaym.id).appendChild(lbl);
+
+    /// เงินสด
+    let colPaymCash = createElement("div", {
+      className: "col-sm-3",
+      id: "colPaymCash" + id
+    });
+    document.getElementById(rowPaym.id).appendChild(colPaymCash);
+
+    let chkPaymCash = createElement("input", {
+      type: "checkbox",
+      id: "chkPaymCash" + id,
+      class: "form-group"
+    });
+    document.getElementById(colPaymCash.id).appendChild(chkPaymCash);
+    chkPaymCash.onchange = function () {
+      createPaymentCash(chkPaymCash.checked, id);
+    };
+
+    let lblCash = createElement("label", {
+      innerHTML: "เงินสด",
+      style: "padding-left: 5px;"
+    });
+    document.getElementById(colPaymCash.id).appendChild(lblCash);
+
+    /// เช็คธนาคาร
+    let colPaymCheque = createElement("div", {
+      className: "col-sm-3",
+      id: "colPaymCheque" + id
+    });
+    document.getElementById(rowPaym.id).appendChild(colPaymCheque);
+
+    let chkPaymCheque = createElement("input", {
+      type: "checkbox",
+      id: "chkPaymCheque" + id,
+      class: "form-group"
+    });
+    document.getElementById(colPaymCheque.id).appendChild(chkPaymCheque);
+    chkPaymCheque.onchange = function () {
+      createPaymentCheque(chkPaymCheque.checked, id);
+    };
+
+    let lblCheque = createElement("label", {
+      innerHTML: "เช็คธนาคาร",
+      style: "padding-left: 5px;"
+    });
+    document.getElementById(colPaymCheque.id).appendChild(lblCheque);
+
+    /// บัตรเครดิต
+    let colPaymCredit = createElement("div", {
+      className: "col-sm-3",
+      id: "colPaymCredit" + id
+    });
+    document.getElementById(rowPaym.id).appendChild(colPaymCredit);
+
+    let chkPaymCredit = createElement("input", {
+      type: "checkbox",
+      id: "chkPaymCredit" + id,
+      class: "form-group"
+    });
+    document.getElementById(colPaymCredit.id).appendChild(chkPaymCredit);
+    chkPaymCredit.onchange = function () {
+      createPaymentCreditCard(chkPaymCredit.checked, id);
+    };
+
+    let lblCredit = createElement("label", {
+      innerHTML: "บัตรเครดิต",
+      style: "padding-left: 5px;"
+    });
+    document.getElementById(colPaymCredit.id).appendChild(lblCredit);
+  }
+}
+function loadCardDeposit_original(data) {
+  let id = 1;
+
+  data.map((object) => {
+    if (id <= depositNum) {
+      if (id == 1)
+        document.getElementById("cardDeposit").style.display = "block";
+
+      let ul = createElement("ul", {
+        id: "groupDeposit" + id,
+        className: "list-group list-group-flush"
+      });
+      document.getElementById("cardDeposit").appendChild(ul);
+
+      let row = createElement("div", { id: "row" + id, className: "row" });
+      document.getElementById(ul.id).appendChild(row);
+
+      let seq = createElement("div", {
+        id: "seq" + id,
+        className: "col-sm-1",
+        style: "text-align: center;"
+      });
+      document.getElementById(row.id).appendChild(seq);
+
+      let group = createElement("div", {
+        id: "group" + id,
+        className: "form-group",
+        style: "margin-bottom: 0;"
+      });
+      document.getElementById(seq.id).appendChild(group);
+
+      let label = createElement("label", {
+        id: "label" + id,
+        innerText: "ลำดับ"
+      });
+      document.getElementById(group.id).appendChild(label);
+
+      let group2 = createElement("div", {
+        id: "grouplbl" + id,
+        className: "form-group"
+      });
+      document.getElementById(seq.id).appendChild(group2);
+
+      let curseq = createElement("label", {
+        id: "CURRSEQ" + id,
+        innerText: id.toString()
+      });
+      document.getElementById(group2.id).appendChild(curseq);
+
+      let seq2 = createElement("label", {
+        id: "SEQ" + id,
+        innerText: id.toString(),
+        style: "display:none;"
+      });
+      document.getElementById(group2.id).appendChild(seq2);
+
+      let lblRecId = createElement("label", {
+        id: "RECID" + id,
+        innerText: object.RecId,
+        style: "display:none;"
+      });
+      document.getElementById(group2.id).appendChild(lblRecId);
+
+      //------------------------------- วันที่จ่าย ---------------------------------------------
+
+      let colPaymDate = createElement("div", {
+        id: "colPaymDate" + id,
+        className: "col-sm-3"
+      });
+      document.getElementById(row.id).appendChild(colPaymDate);
+
+      let lblpaymdate = createElement("label", {
+        id: "lblPaymDate" + id,
+        innerText: "วันที่จ่าย"
+      });
+      document.getElementById(colPaymDate.id).appendChild(lblpaymdate);
+
+      let icon = createElement("div", {
+        id: "icon" + id,
+        className: "input-icons"
+      });
+      document.getElementById(colPaymDate.id).appendChild(icon);
+
+      let fa = createElement("i", {
+        id: "fa" + id,
+        className: "fa fa-calendar icon"
+      });
+      document.getElementById(icon.id).appendChild(fa);
+
+      let inputDate = createElement("input", {
+        id: "paymDate" + id,
+        type: "text",
+        className: "form-control flatpickr",
+        style: "background-color: white; padding-left: 30px;"
+      });
+      document.getElementById(icon.id).appendChild(inputDate);
+
+      flatpickr("#paymDate" + id, {
+        locale: "th",
+        dateFormat: "d/m/Y",
+        defaultDate: dateFormatSlace(object.TransDate.substring(0, 10))
+      });
+
+      //---------------------------------------- งวด -------------------------------------------------
+
+      let colinstall = createElement("div", {
+        id: "colinstallment" + id,
+        className: "col-sm-2"
+      });
+      document.getElementById(row.id).appendChild(colinstall);
+
+      let groupinstall = createElement("div", {
+        id: "groupinstallment" + id,
+        className: "form-group"
+      });
+      document.getElementById(colinstall.id).appendChild(groupinstall);
+
+      let lblinstall = createElement("label", {
+        id: "lblinstallment" + id,
+        innerText: "งวด"
+      });
+      document.getElementById(groupinstall.id).appendChild(lblinstall);
+
+      let sInstall = createElement("select", {
+        id: "installment" + id,
+        className: "form-control select2bs4",
+        style: "width: 100%;",
+        value: 0
+      });
+      document.getElementById(groupinstall.id).appendChild(sInstall);
+      sInstall.onchange = function () {
+        onchangeInstallment(this.value, id);
+      };
+
+      //---------------------------------------- มูลค่า -------------------------------------------------
+
+      let colamount = createElement("div", {
+        id: "colamount" + id,
+        className: "col-sm-3"
+      });
+      document.getElementById(row.id).appendChild(colamount);
+
+      let groupAmount = createElement("div", {
+        id: "groupAmount" + id,
+        className: "form-group"
+      });
+      document.getElementById(colamount.id).appendChild(groupAmount);
+
+      let lblAmount = createElement("label", {
+        id: "lblAmount" + id,
+        innerText: "มูลค่า"
+      });
+      document.getElementById(groupAmount.id).appendChild(lblAmount);
+
+      let inputAmount = createElement("input", {
+        id: "payment" + id,
+        className: "form-control",
+        value: object.Amount,
+        type: "number",
+        min: 0
+      });
+      document.getElementById(groupAmount.id).appendChild(inputAmount);
+      inputAmount.onchange = function () {
+        onchangePayment(this.value, id);
+      };
+      inputAmount.oninput = function () {
+        this.value = Math.abs(this.value);
+      };
+
+      //---------------------------------------- button delete -------------------------------------------------
+
+      let coldelete = createElement("div", {
+        id: "coldelete" + id,
+        className: "col-sm-1"
+      });
+      document.getElementById(row.id).appendChild(coldelete);
+
+      let groupdelete = createElement("div", {
+        id: "groupdelete" + id,
+        className: "form-group",
+        style: "margin-top: 25px;"
+      });
+      document.getElementById(coldelete.id).appendChild(groupdelete);
+
+      let linkDelete = createElement("a", {
+        id: "linkDelete" + id,
+        style: "cursor: pointer;"
+      });
+      document.getElementById(groupdelete.id).appendChild(linkDelete);
+      linkDelete.onclick = function () {
+        deleteGroup(
+          "groupDeposit" + linkDelete.id.substring(10, 13),
+          `${object.RecId}`
+        );
+      };
+
+      let imgDelete = createElement("img", {
+        id: "imgDelete" + id,
+        src: "../images/1398920_red circle_close_cross_cancel_remove_icon.png"
+      });
+      document.getElementById(linkDelete.id).appendChild(imgDelete);
+
+      let linkCancel = createElement("a", {
+        id: "linkCancel" + id,
+        style: "cursor: pointer; display: none;"
+      });
+      document.getElementById(groupdelete.id).appendChild(linkCancel);
+
+      let imgCancel = createElement("img", {
+        id: "imgCancel" + id,
+        style: "cursor: pointer; with: 48px; height: 48px",
+        src: "../images/vecteezy_cancelled-rubber-stamp-on-white-background-vector-illustration_19495927.jpg"
+      });
+      document.getElementById(groupdelete.id).appendChild(imgCancel);
+      imgCancel.onclick = function () {
+        detailCancelDeposit(
+          elecancel.id.substring(9, 11),
+          object.CancelDate.substring(0, 10),
+          object.CancelRemark
+        );
+      };
+
+      //---------------------------------------- button print -------------------------------------------------
+
+      let coldprint = createElement("div", {
+        id: "coldprint" + id,
+        className: "col-sm-1"
+      });
+      document.getElementById(row.id).appendChild(coldprint);
+
+      let groupprint = createElement("div", {
+        id: "groupprint" + id,
+        className: "form-group",
+        style: "margin-top: 35px;"
+      });
+      document.getElementById(coldprint.id).appendChild(groupprint);
+
+      let linkPrint = createElement("a", {
+        id: "linkPrint" + id,
+        style: "cursor: pointer;"
+      });
+      document.getElementById(groupprint.id).appendChild(linkPrint);
+      linkPrint.onclick = function () {
+        printDeposit(object.RecId);
+      };
+
+      let imgPrint = createElement("img", {
+        id: "imgPrint" + id,
+        src: "../images/image_print_outline.png"
+      });
+      document.getElementById(linkPrint.id).appendChild(imgPrint);
+
+      //---------------------------------------- button cancel -------------------------------------------------
+
+      let colcancel = createElement("div", {
+        id: "colcancel" + id,
+        className: "col-sm-1"
+      });
+      document.getElementById(row.id).appendChild(colcancel);
+
+      let groupcancel = createElement("div", {
+        id: "groupcancel" + id,
+        className: "form-group",
+        style: "margin-top: 38px;"
+      });
+      document.getElementById(colcancel.id).appendChild(groupcancel);
+
+      let btnCancel = createElement("button", {
+        id: "btnCancel" + id,
+        className: "btn btn-block btn-outline-info btn-xs",
+        innerText: "Cancel",
+        style: "margin-top: 38px;"
+      });
+      document.getElementById(groupcancel.id).appendChild(btnCancel);
+      btnCancel.onclick = function () {
+        cancelDeposit(btnCancel.id.substring(9, 11));
+      };
+
+      //---------------------------------------- remark -------------------------------------------------
+
+      let rowRemark = createElement("div", {
+        id: "rowRemark" + id,
+        className: "row"
+      });
+      document.getElementById(ul.id).appendChild(rowRemark);
+
+      let colempty = createElement("div", {
+        id: "colempty" + id,
+        className: "col-sm-1"
+      });
+      document.getElementById(rowRemark.id).appendChild(colempty);
+
+      //------------------------------
+
+      let colDepositId = createElement("div", {
+        id: "colDepositId" + id,
+        className: "col-sm-3"
+      });
+      document.getElementById(rowRemark.id).appendChild(colDepositId);
+
+      let groupDepositId = createElement("div", {
+        id: "groupDepositId" + id,
+        className: "form-group"
+      });
+      document.getElementById(colDepositId.id).appendChild(groupDepositId);
+
+      let inputDepositId = createElement("input", {
+        id: "inputDepositId" + id,
+        className: "form-control",
+        type: "text",
+        value: object.DepositId,
+        disabled: true
+      });
+      document.getElementById(groupDepositId.id).appendChild(inputDepositId);
+
+      //------------------------------
+
+      let colRemark = createElement("div", {
+        id: "colRemark" + id,
+        className: "col-sm-8"
+      });
+      document.getElementById(rowRemark.id).appendChild(colRemark);
+
+      let groupRemark = createElement("div", {
+        id: "groupRemark" + id,
+        className: "form-group"
+      });
+      document.getElementById(colRemark.id).appendChild(groupRemark);
+
+      let inputRemark = createElement("input", {
+        id: "remark" + id,
+        className: "form-control",
+        type: "text",
+        value: object.Remark,
+        placeholder: "หมายเหตุ"
+      });
+      document.getElementById(groupRemark.id).appendChild(inputRemark);
+      inputRemark.onchange = function () {
+        onchangeRemark(this.value, inputRemark.id.substring(6, 8));
+      };
+
+      document.getElementById("countDeposit").value = id;
+      onchangeInstallment(0, id);
+      refreshSequence(`CURRSEQ`);
+
+      checkCancelDeposit(object.Cancel, id);
+      if (object.Cancel == 1) {
+        amountCancel += object.Amount;
+        depositNum++;
+      }
+      //แก้ไข มัดจำ ได้ภายในวันที่สร้างเท่านั้น
+      allowEditDeposit(object.AllowEdit, id);
+      enableControl(id, object.Cancel);
+
+      deposit_arr.push(document.getElementById("cardDeposit").innerHTML);
+
+      //---------------------------------------- วิธีชำระเงิน -------------------------------------------------
+
+      let rowPaym = createElement("div", {
+        className: "row",
+        id: "rowPaym" + id,
+        style: "padding-left: 50px;"
+      });
+      document.getElementById(ul.id).appendChild(rowPaym);
+
+      let colPaym = createElement("div", {
+        className: "col-sm-3",
+        id: "colPaym" + id
+      });
+      document.getElementById(rowPaym.id).appendChild(colPaym);
+
+      let lbl = createElement("label", {
+        innerHTML: "วิธีชำระเงิน",
+        style: "font-weight: bold;"
+      });
+      document.getElementById(colPaym.id).appendChild(lbl);
+
+      /// เงินสด
+      let colPaymCash = createElement("div", {
+        className: "col-sm-3",
+        id: "colPaymCash" + id
+      });
+      document.getElementById(rowPaym.id).appendChild(colPaymCash);
+
+      let chkPaymCash = createElement("input", {
+        type: "checkbox",
+        id: "chkPaymCash" + id,
+        class: "form-group"
+      });
+      document.getElementById(colPaymCash.id).appendChild(chkPaymCash);
+      chkPaymCash.onchange = function () {
+        if (chkPaymCash.checked) {
+          createPaymentCash(chkPaymCash.checked, id);
+        } else {
+        }
+      };
+
+      let lblCash = createElement("label", {
+        innerHTML: "เงินสด",
+        style: "padding-left: 5px;"
+      });
+      document.getElementById(colPaymCash.id).appendChild(lblCash);
+
+      /// เช็คธนาคาร
+      let colPaymCheque = createElement("div", {
+        className: "col-sm-3",
+        id: "colPaymCheque" + id
+      });
+      document.getElementById(rowPaym.id).appendChild(colPaymCheque);
+
+      let chkPaymCheque = createElement("input", {
+        type: "checkbox",
+        id: "chkPaymCheque" + id,
+        class: "form-group"
+      });
+      document.getElementById(colPaymCheque.id).appendChild(chkPaymCheque);
+      chkPaymCheque.onchange = function () {};
+
+      let lblCheque = createElement("label", {
+        innerHTML: "เช็คธนาคาร",
+        style: "padding-left: 5px;"
+      });
+      document.getElementById(colPaymCheque.id).appendChild(lblCheque);
+
+      /// บัตรเครดิต
+      let colPaymCredit = createElement("div", {
+        className: "col-sm-3",
+        id: "colPaymCredit" + id
+      });
+      document.getElementById(rowPaym.id).appendChild(colPaymCredit);
+
+      let chkPaymCredit = createElement("input", {
+        type: "checkbox",
+        id: "chkPaymCredit" + id,
+        class: "form-group"
+      });
+      document.getElementById(colPaymCredit.id).appendChild(chkPaymCredit);
+      chkPaymCredit.onchange = function () {};
+
+      let lblCredit = createElement("label", {
+        innerHTML: "บัตรเครดิต",
+        style: "padding-left: 5px;"
+      });
+      document.getElementById(colPaymCredit.id).appendChild(lblCredit);
+    }
+    id++;
+  });
+}
+function dateFormatSlace(date) {
+  var d = new Date(date);
+  let y = d.getFullYear();
+  let _date =
+    d.getDate().toLocaleString("th-TH", {
+      minimumIntegerDigits: 2,
+      useGrouping: false
+    }) +
+    "/" +
+    (d.getMonth() + 1).toLocaleString("th-TH", {
+      minimumIntegerDigits: 2,
+      useGrouping: false
+    }) +
+    "/" +
+    y;
+  return _date;
+}
+
+function enableControl(id, cancel) {
+  //2 Manager, 3 Area
+  if (userAccountType > 1) {
+    if (cancel == 0)
+      document.getElementById("btnCancel" + id).style.display = "block";
+    else document.getElementById("btnCancel" + id).style.display = "none";
+  } else {
+    document.getElementById("btnCancel" + id).style.display = "none";
+  }
+}
+
+function createPaymentCash(checked, id) {
+  if (checked) {
+    var element = document.getElementById("cash" + id);
+    if (typeof element != "undefined" && element != null) {
+      //Exists element
+      element.remove();
+    }
+    document.getElementById("chkPaymCredit" + id).checked = false;
+    document.getElementById("chkPaymCheque" + id).checked = false;
+
+    let rowCash = createElement("div", {
+      className: "row",
+      id: "cash" + id,
+      style: "margin-left: 50px; display: block;"
+    });
+    document.getElementById("groupDeposit" + id).appendChild(rowCash);
+
+    let _colCash = createElement("div", {
+      className: "col-sm-12",
+      id: "_colCash" + id
+    });
+
+    let card = createElement("div", { className: "card", id: "card" + id });
+    let rowcard = createElement("div", {
+      className: "row",
+      id: "rowcard" + id,
+      style: "padding: 10px"
+    });
+    let colCardCash = createElement("div", {
+      className: "col-sm-4",
+      id: "colCardCash" + id
+    });
+    let colGroup = createElement("div", {
+      className: "form-group",
+      id: "colGroup" + id
+    });
+    let lblCash = createElement("label", {
+      id: "lblCash" + id,
+      innerHTML: "ชื่อธนาคาร "
+    });
+    let bankCash = createElement("input", {
+      id: "bankCash" + id,
+      class: "form-control",
+      type: "text"
+    });
+    let colCardBranch = createElement("div", {
+      className: "col-sm-4",
+      id: "colCardBranch" + id,
+      style: "padding-left: 10px;"
+    });
+    let colGroupBranch = createElement("div", {
+      className: "form-group",
+      id: "colGroupBranch" + id
+    });
+    let lblbranch = createElement("label", {
+      id: "lblbranch" + id,
+      innerHTML: "สาขา ",
+      for: "bankBranch" + id
+    });
+    let bankBranch = createElement("input", {
+      id: "bankBranch" + id,
+      class: "form-control",
+      type: "text"
+    });
+
+    rowCash.appendChild(_colCash);
+    _colCash.appendChild(card);
+    card.appendChild(rowcard);
+    rowcard.appendChild(colCardCash);
+    colCardCash.appendChild(colGroup);
+    colGroup.appendChild(lblCash);
+    colGroup.appendChild(bankCash);
+    rowcard.appendChild(colCardBranch);
+    colCardBranch.appendChild(colGroupBranch);
+    colGroupBranch.appendChild(lblbranch);
+    colGroupBranch.appendChild(bankBranch);
+  } else {
+    document.getElementById("cash" + id).remove();
+  }
+}
+
+function createPaymentCheque(checked, id) {
+  if (checked) {
+    var element = document.getElementById("cash" + id);
+    if (typeof element != "undefined" && element != null) {
+      //Exists element
+      element.remove();
+    }
+
+    document.getElementById("chkPaymCredit" + id).checked = false;
+    document.getElementById("chkPaymCash" + id).checked = false;
+
+    let rowCash = createElement("div", {
+      className: "row",
+      id: "cash" + id,
+      style: "margin-left: 50px; display: block;"
+    });
+    document.getElementById("groupDeposit" + id).appendChild(rowCash);
+
+    let _colCash = createElement("div", {
+      className: "col-sm-12",
+      id: "_colCash" + id
+    });
+    let card = createElement("div", { className: "card", id: "card" + id });
+    let rowcard = createElement("div", {
+      className: "row",
+      id: "rowcard" + id,
+      style: "padding: 10px"
+    });
+    let colCardCash = createElement("div", {
+      className: "col-sm-4",
+      id: "colCardCash" + id
+    });
+    let colGroup = createElement("div", {
+      className: "form-group",
+      id: "colGroup" + id
+    });
+    let lblCash = createElement("label", {
+      id: "lblCash" + id,
+      innerHTML: "เลขที่เช็ค "
+    });
+    let bankCash = createElement("input", {
+      id: "bankCash" + id,
+      class: "form-control",
+      type: "text"
+    });
+    let colCardBranch = createElement("div", {
+      className: "col-sm-4",
+      id: "colCardBranch" + id,
+      style: "padding-left: 10px;"
+    });
+    let colGroupBranch = createElement("div", {
+      className: "form-group",
+      id: "colGroupBranch" + id
+    });
+
+    rowCash.appendChild(_colCash);
+    _colCash.appendChild(card);
+    card.appendChild(rowcard);
+    rowcard.appendChild(colCardCash);
+    colCardCash.appendChild(colGroup);
+    colGroup.appendChild(lblCash);
+    colGroup.appendChild(bankCash);
+    rowcard.appendChild(colCardBranch);
+    colCardBranch.appendChild(colGroupBranch);
+  } else {
+    document.getElementById("cash" + id).remove();
+  }
+}
+
+function createPaymentCreditCard(checked, id) {
+  if (checked) {
+    var element = document.getElementById("cash" + id);
+    if (typeof element != "undefined" && element != null) {
+      //Exists element
+      element.remove();
+    }
+
+    document.getElementById("chkPaymCheque" + id).checked = false;
+    document.getElementById("chkPaymCash" + id).checked = false;
+
+    let rowCash = createElement("div", {
+      className: "row",
+      id: "cash" + id,
+      style: "margin-left: 50px; display: block;"
+    });
+    let _colCash = createElement("div", {
+      className: "col-sm-12",
+      id: "_colCash" + id
+    });
+    let card = createElement("div", { className: "card", id: "card" + id });
+    let rowcard = createElement("div", {
+      className: "row",
+      id: "rowcard" + id,
+      style: "padding: 10px"
+    });
+    let colCardCash = createElement("div", {
+      className: "col-sm-4",
+      id: "colCardCash" + id
+    });
+    let colGroup = createElement("div", {
+      className: "form-group",
+      id: "colGroup" + id
+    });
+    let lblCash = createElement("label", {
+      id: "lblCash" + id,
+      innerHTML: "ชื่อธนาคาร "
+    });
+    let bankCash = createElement("input", {
+      id: "bankCash" + id,
+      class: "form-control",
+      type: "text"
+    });
+    let colCardBranch = createElement("div", {
+      className: "col-sm-4",
+      id: "colCardBranch" + id,
+      style: "padding-left: 10px;"
+    });
+    let colGroupBranch = createElement("div", {
+      className: "form-group",
+      id: "colGroupBranch" + id
+    });
+    let lblbranch = createElement("label", {
+      id: "lblbranch" + id,
+      innerHTML: "เลขที่บัตร ",
+      for: "bankBranch" + id
+    });
+    let bankBranch = createElement("input", {
+      id: "bankBranch" + id,
+      class: "form-control",
+      type: "text"
+    });
+
+    document.getElementById("groupDeposit" + id).appendChild(rowCash);
+
+    rowCash.appendChild(_colCash);
+    _colCash.appendChild(card);
+    card.appendChild(rowcard);
+    rowcard.appendChild(colCardCash);
+    colCardCash.appendChild(colGroup);
+    colGroup.appendChild(lblCash);
+    colGroup.appendChild(bankCash);
+    rowcard.appendChild(colCardBranch);
+    colCardBranch.appendChild(colGroupBranch);
+    colGroupBranch.appendChild(lblbranch);
+    colGroupBranch.appendChild(bankBranch);
+  } else {
+    document.getElementById("cash" + id).remove();
   }
 }
 
@@ -856,118 +1982,6 @@ function createElement(el, options, listen = []) {
     });
   }
   return element;
-}
-
-function addCardDeposit2(event) {
-  let cardHTML = "";
-  let id = parseInt(document.getElementById("countDeposit").value) + 1;
-  let id2 = parseInt(document.getElementById("countDepositBox").value) + 1;
-
-  if (onchangePayment("btnAddEdit", 0) == false) return;
-
-  if (id2 <= depositNum) {
-    if (id2 == 1)
-      document.getElementById("cardDeposit").style.display = "block";
-
-    //cardHTML += document.getElementById("cardDeposit").innerHTML;
-    cardHTML += `
-                            <ul class="list-group list-group-flush" id="groupDeposit${id}">
-                                <div class="row">
-                    
-                                    <div class="col-sm-1" style="text-align: center;">
-                                        <div class="form-group" style="margin-bottom: 0;">
-                                            <label>ลำดับ</label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label id="CURRSEQ${id}">${id}</label>
-                                            <label id="SEQ${id}" style="display:none;">${id}</label>
-                                            <label id="RECID${id}" style="display:none;">0</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="paymDate${id}">วันที่จ่าย</label>
-                                            <div class="input-icons">
-                                                <i class="fa fa-calendar icon"></i>
-                                                <input type="text" id="paymDate${id}" class="form-control flatpickr"
-                                                    style="background-color: white; padding-left: 30px;" 
-                                                    onchange="onchangePaymDate(this.value, ${id});">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <div class="form-group">
-                                            <label for="installment${id}">งวด</label>
-                                            <select id="installment${id}" class="form-control select2bs4" 
-                                            style="width: 100%;" value="0" disabled
-                                            onchange="onchangeInstallment(this.value, ${id});"
-                                            >
-                                              
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <div class="form-group">
-                                            <label for="payment${id}">มูลค่า</label>
-                                            <input type="number" id="payment${id}" class="form-control" min="0" oninput="this.value = Math.abs(this.value)"
-                                            onchange="onchangePayment(this.value, ${id})">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <div class="form-group" style="margin-top: 25px;">
-                                            <a id="linkDelete${id}" style="cursor: pointer; " 
-                                                onclick="deleteGroup('groupDeposit${id}')">
-                                                <img src="../images/1398920_red circle_close_cross_cancel_remove_icon.png" alt="Cancel deposit" >
-                                            </a>
-                                            <!-- <a style="cursor: pointer; with: 64px; height: 64px" onclick="deleteGroup('groupDeposit${id}')">
-                                                <img style="cursor: pointer; with: 64px; height: 64px" src="../images/vecteezy_canceled-stamp-in-rubber-style-red-round-grunge-canceled_6566276.jpg" alt="Cancel deposit" >
-                                            </a> -->
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-1"></div>
-                                    <div class="col-sm-11">
-                                        <div class="form-group">
-                                            <input type="text" id="remark${id}" class="form-control" placeholder="หมายเหตุ"
-                                            onchange="onchangeRemark(this.value, ${id})">
-                                        </div>
-                                    </div>
-                                </div>
-                            </ul>
-                            </div>
-    
-                            <div id="groupDepositCancel${id}" ></div>
-                            `;
-    deposit_arr.push(cardHTML);
-
-    document.getElementById("cardDeposit").innerHTML = [...deposit_arr];
-    document.getElementById("countDeposit").value = id;
-    onchangeInstallment(0, id);
-    refreshSequence(`CURRSEQ`);
-
-    const elements = document.querySelectorAll(`[id^="paymDate"]`);
-    elements.forEach((element) => {
-      let date = document.getElementById(element.id).value;
-
-      if (date == "") {
-      } else {
-        flatpickr(element.id, {
-          locale: "th",
-          dateFormat: "d/m/Y",
-          defaultDate: date
-        });
-        document.getElementById(element.id).setAttribute("value", date);
-      }
-    });
-
-    flatpickr("paymDate" + id, {
-      locale: "th",
-      dateFormat: "d/m/Y",
-      defaultDate: "09/09/2023"
-    });
-  }
 }
 
 function refreshSequence(name) {
@@ -1769,12 +2783,6 @@ function chkDelivery(value) {
   //document.getElementById("chkNewDelivery").checked = false;
 }
 
-// function addInvoiceAddress() {
-//   document.getElementById("cardInvoice").style.display = "block";
-//   document.getElementById("rowchkInvoice").style.display = "none";
-//   document.getElementById("chkDefaultInvoice").checked = false;
-// }
-
 function chkNewDelivery(value) {
   if (value) {
     document.getElementById("cardDelivery").style.display = "block";
@@ -1793,150 +2801,6 @@ function chkNewDelivery(value) {
     document.getElementById("addressStreet_delivery").value = "";
   }
 }
-
-//----------------------------- ที่อยู่ใบกำกับภาษี ----------------------------------
-
-function loadAddress_inv() {}
-
-function findAddress_inv(value) {
-  if (value) {
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", API_ADDRESS_ZIPCODE + value);
-    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.send();
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        const data = JSON.parse(this.responseText);
-        let HTMLDistrict;
-        if (data.length > 0) {
-          HTMLDistrict += `<option value="None"></option>`;
-          data.map((row) => {
-            HTMLDistrict += `<option value="${row.District}">${row.District}</option>`;
-          });
-
-          loadAddressProvince_inv(data[0].State);
-          loadAddressCity_inv(data[0].State, data[0].City);
-
-          document.getElementById("addressDistrict_inv").innerHTML =
-            HTMLDistrict;
-        } else {
-          Swal.fire({
-            icon: "warning",
-            title: "ไม่พบข้อมูล"
-          });
-        }
-      }
-    };
-  } else {
-    loadAddressProvince_inv("");
-    document.getElementById("addressCity_inv").innerHTML = ``;
-    document.getElementById("addressDistrict_inv").innerHTML = ``;
-  }
-}
-
-function loadAddressProvince_inv(selected) {
-  const xhttp = new XMLHttpRequest();
-  xhttp.open("GET", API_ADDRESS_PROVINCE);
-  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xhttp.send();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      var HTMLProvince = "";
-      const data = JSON.parse(this.responseText);
-
-      if (data.length > 0) {
-        HTMLProvince += `<option value="None"></option>`;
-        data.map((row) => {
-          if (selected == row.State)
-            HTMLProvince += `<option value="${row.State}" selected>${row.State}</option>`;
-          else
-            HTMLProvince += `<option value="${row.State}">${row.State}</option>`;
-        });
-      }
-      document.getElementById("addressProvince_inv").innerHTML = HTMLProvince;
-    }
-  };
-}
-
-function loadAddressDistrict_inv(province, city, selected) {
-  const xhttp = new XMLHttpRequest();
-  xhttp.open("GET", API_ADDRESS_DISTRICT + province + "/" + city);
-  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xhttp.send();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      var HTML = "";
-      const data = JSON.parse(this.responseText);
-
-      if (data.length > 0) {
-        //document.getElementById("addressZipcode").value = "";
-        HTML += `<option value="None"></option>`;
-
-        data.map((row) => {
-          if (selected == row.District)
-            HTML += `<option value="${row.District}" selected>${row.District}</option>`;
-          else
-            HTML += `<option value="${row.District}">${row.District}</option>`;
-        });
-
-        document.getElementById("addressDistrict_inv").innerHTML = HTML;
-      }
-    }
-  };
-}
-
-function loadAddressCity_inv(province, selected) {
-  const xhttp = new XMLHttpRequest();
-  xhttp.open("GET", API_ADDRESS_CITY + province);
-  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xhttp.send();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      var HTML = "";
-      const data = JSON.parse(this.responseText);
-
-      if (data.length > 0) {
-        HTML += `<option value="None"></option>`;
-        data.map((row) => {
-          if (selected == row.City)
-            HTML += `<option value="${row.City}" selected>${row.City}</option>`;
-          else HTML += `<option value="${row.City}">${row.City}</option>`;
-        });
-      }
-
-      document.getElementById("addressCity_inv").innerHTML = HTML;
-    }
-  };
-}
-
-function loadAddressZipCode_inv(province, city, district) {
-  if (district == "None") {
-    loadAddressCity_inv(province, city);
-    document.getElementById("addressZipcode_inv").value = "";
-    document.getElementById("addressCity_inv").value = city;
-  } else {
-    const xhttp = new XMLHttpRequest();
-    xhttp.open(
-      "GET",
-      API_ADDRESS_DISTRICT + province + "/" + city + "/" + district
-    );
-    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.send();
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        const data = JSON.parse(this.responseText);
-
-        if (data.length > 0) {
-          data.map((row) => {
-            document.getElementById("addressZipcode_inv").value = row.Zipcode;
-          });
-        }
-      }
-    };
-  }
-}
-
-//----------------------------- ที่อยู่จัดส่ง ----------------------------------
 
 function getValue(element) {
   return sessionStorage.getItem(element);

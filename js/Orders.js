@@ -1,4 +1,3 @@
-
 //S009 rcd@1019
 //let SERVER_M = 'http://localhost:4462/';
 //let SERVER_M = 'http://starmark.work/retailsov2_api/';//Old
@@ -21,8 +20,8 @@
 //let SERVER_M_order = "https://starmark.work/OrderOnline_API_Orders/"; //Live
 //let SERVER_M_ax = "https://starmark.work/OrderOnline_API_AIF/"; //Live
 
-let SERVER_M_order = 'http://starmark.work/OrderOnline_API_Order_test/';
-let SERVER_M_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';
+let SERVER_M_order = "http://starmark.work/OrderOnline_API_Order_test/";
+let SERVER_M_ax = "http://starmark.work/OrderOnline_API_AIF_test/";
 
 ///let SERVER_M_order = "http://localhost:54871/";
 //let SERVER_M_ax = 'http://localhost:4377/';
@@ -175,7 +174,7 @@ async function load(username, userAccountType, show, RG = "", Year = "") {
                                     style="display: ${display}"
                                     onclick="clickEdit('${row.EmpName}','${row.StoreId}','${row.Pool}','${row.Qty}'
                                                     ,'${row.Amount}','${row.CustName}','${row.Date.toLocaleString()}'
-                                                    ,'${row.SalesId}','${row.PurchId}','${row.PersonnelNumber}','${row.RecId}'
+                                                    ,'${row.SalesId}','${row.PurchId}','${row.PersonnelNumber}','${row.RecId}','${row.OrderId}'
                                                     ,'${row.Region}','${row.ProvinceId}','${row.CountPools}'
                                                     ,'${row.ShippingCost}','${row.Discount}','${row.InstallTeam}','${row.Free}','${row.Remark}','${row.TaxNum}','${row.Phone}'
                                                     )">
@@ -702,6 +701,7 @@ function clickEdit(
   purch,
   num,
   recId,
+  orderId,
   region,
   provinceId,
   pools,
@@ -729,6 +729,7 @@ function clickEdit(
   setItem("provinceId_val", provinceId);
   setItem("pools_val", pools);
 
+  setItem("OrderId_val", orderId);
   setItem("ShippingCost_val", ShippingCost);
   setItem("Discount_val", Discount);
   setItem("InstallTeam_val", InstallTeam);

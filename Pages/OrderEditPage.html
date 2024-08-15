@@ -143,14 +143,14 @@
                     <div class="form-group">
                       <label for="qty">จำนวน</label>
                       <input type="number" id="qty" class="form-control" min="0"
-                        oninput="this.value = Math.abs(this.value)">
+                        oninput="this.value = Math.abs(this.value)" onkeypress="calculateTotal()">
                     </div>
                   </div>
                   <div class="col-sm-6">
                     <div class="form-group">
                       <label for="amount">ยอดเงินรวม</label>
                       <input type="number" id="amount" class="form-control" min="0"
-                        oninput="this.value = Math.abs(this.value)">
+                        oninput="this.value = Math.abs(this.value)" onkeypress="calculateTotal()">
                     </div>
                   </div>
                 </div>
@@ -163,7 +163,7 @@
                       <label for="discount">ส่วนลด</label>
                       <input type="number" id="discount" class="form-control" min="0" step=".01" value="0.00"
                         data-decimal="2" oninput="enforceNumberValidation(this)"
-                        oninput="this.value = Math.abs(this.value)">
+                        oninput="this.value = Math.abs(this.value)" onkeypress="calculateTotal()">
                     </div>
                   </div>
                   <div class="col-sm-4">
@@ -171,15 +171,14 @@
                       <label for="shippingcost">ค่าขนส่ง</label>
                       <input type="number" id="shippingcost" class="form-control" min="0" step=".01" value="0.00"
                         data-decimal="2" oninput="enforceNumberValidation(this)"
-                        oninput="this.value = Math.abs(this.value)">
+                        oninput="this.value = Math.abs(this.value)" onkeypress="calculateTotal()">
                     </div>
                   </div>
                   <div class="col-sm-4">
                     <div class="form-group">
                       <label for="totalAmount">ยอดสุทธิ</label>
                       <input type="number" id="totalAmount" class="form-control" min="0" step=".01" value="0.00"
-                        disabled
-                        data-decimal="2" oninput="enforceNumberValidation(this)"
+                        disabled data-decimal="2" oninput="enforceNumberValidation(this)"
                         oninput="this.value = Math.abs(this.value)">
                     </div>
                   </div>
@@ -210,9 +209,6 @@
                   </div>
                 </div>
               </div>
-
-
-
             </div>
             <!-- /.card-body -->
           </div>
@@ -246,7 +242,6 @@
                     </div>
                   </div>
                 </div>
-
 
                 <div class="row">
                   <div class="col-sm-6">
@@ -304,9 +299,26 @@
                 <!-- ------------------------------------------------------------------------------ -->
                 <div id="divDeposit">
                   <div class="card" id="cardDeposit" style="display: none; padding: 10px;">
-
                   </div>
+                </div>
 
+                <div class="row" id="paymCash" style="margin-left: 50px; display: none;">
+                  <div class="col-sm-12">
+                    <div class="card">
+                      <div class="row" style="padding: 10px">
+                        <div class="col-sm-4">
+                          <label> ชื่อธนาคาร </label>
+                          <input type="text" class="form-control" id="bankCash">
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group">
+                            <label for="bankBranch"> สาขา </label>
+                            <input type="text" class="form-control" id="bankBranch">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
               </div>

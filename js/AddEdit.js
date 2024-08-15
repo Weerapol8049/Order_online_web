@@ -177,8 +177,9 @@ function createDeposit(recId) {
         Installment: document.getElementById("installment" + id).value,
         Amount: document.getElementById("payment" + id).value,
         SalesSoDaily: recId,
-        Remark: document.getElementById("remark" + id).value
-        //Cancel:  document.getElementById("checkCancel" + id).checked
+        Remark: document.getElementById("remark" + id).value,
+        
+
       });
     } else {
       arrRowUpdate.push({
@@ -399,6 +400,16 @@ function createAddress(recId) {
       }
     }
   };
+}
+
+function calculateTotal() {
+  var qty = document.getElementById("qty").value;
+  var amount = document.getElementById("amount").value;
+  var discount = document.getElementById("discount").value;
+  var shippingcost = document.getElementById("shippingcost").value;
+  var total = ((parseFloat(qty) * parseFloat(amount)) + parseFloat(shippingcost)) - parseFloat(discount) ;
+
+  document.getElementById("totalAmount").value = total;
 }
 
 function getElementVal(element) {
