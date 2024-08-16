@@ -19,7 +19,7 @@
 
 // let SERVER_2_ax = 'http://starmark.work/OrderOnline_API_AIF/';//Live
 
-let SERVER_2_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';
+let SERVER_2_ax = "http://starmark.work/OrderOnline_API_AIF_test/";
 //let SERVER_2_ax = "http://localhost:4377/";
 
 let API_CREATE = SERVER_2_ax + "api/order/create";
@@ -56,6 +56,26 @@ function create() {
     return;
   }
 
+  let chkInvDelivery = document.getElementById("chkDefaultDelivery").checked;
+  let chkNewDelivery = document.getElementById("chkNewDelivery").checked;
+  let province = "",
+    zone = "";
+  if (chkInvDelivery) {
+    province = document.getElementById("addressProvince_inv_id").value;
+    zone = document.getElementById("addressZone_inv_id").value;
+  } else {
+    province = document.getElementById("addressProvince_delivery_id").value;
+    zone = document.getElementById("addressZone_inv_id").value;
+  }
+
+  if (!chkInvDelivery && !chkNewDelivery) {
+    warning_message(
+      "โปรดระบุที่อยู่จัดส่ง",
+      "กรุณาระบุที่อยู่สำหรับจัดส่งสินค้าก่อนทำการสร้าง"
+    );
+    return;
+  }
+
   Swal.fire({
     title: "ยืนยันการสร้างรายการ",
     //text: "You won't be able to revert this!",
@@ -81,9 +101,10 @@ function create() {
           Pool: pools, //getElementVal('pool'),
           Qty: getElementVal("qty"),
           Amount: getElementVal("amount"),
-          Region: getElementVal("region"),
-
-          ProvinceId: document.getElementById("province").value,
+          // Region: getElementVal("region"),
+          // ProvinceId: document.getElementById("province").value,
+          Region: zone,
+          ProvinceId: province,
           CreateBy: localStorage.getItem("username_val"), //from SignIn.js
 
           ShippingCost: document.getElementById("shippingcost").value,
@@ -102,7 +123,9 @@ function create() {
             createPool(objects.RecId);
             // update invoice and delivery address
 
-            if (document.getElementById("addressProvince").value != "None") {
+            if (
+              document.getElementById("addressProvince_inv").value != "None"
+            ) {
               createAddress(objects.RecId);
             }
 
@@ -170,6 +193,27 @@ function createDeposit(recId) {
     id = parseInt(document.getElementById(element.id).innerText);
     let _recid = parseInt(document.getElementById("RECID" + id).innerText);
 
+    let bank = "";
+    let branch = "";
+    let num = "";
+    let type = 0;
+    let chkCash = document.getElementById("chkPaymCash" + id).checked;
+    let chkCheque = document.getElementById("chkPaymCheque" + id).checked;
+    let chkCredit = document.getElementById("chkPaymCredit" + id).checked;
+
+    if (chkCash) {
+      type = 1;//เงินสด
+      bank = document.getElementById("bankCash" + id).value;
+      branch = document.getElementById("bankBranch" + id).value;
+    } else if (chkCheque) {
+      type = 2;//เช็ค
+      bank = document.getElementById("bankCash" + id).value;
+    } else if (chkCredit) {
+      type = 3;//เคดิต
+      bank = document.getElementById("bankCash" + id).value;
+      num = document.getElementById("bankBranch" + id).value;
+    }
+
     //รายการที่เพิ่มงวดมัดจำใหม่
     if (_recid == 0) {
       arrRow.push({
@@ -178,32 +222,27 @@ function createDeposit(recId) {
         Amount: document.getElementById("payment" + id).value,
         SalesSoDaily: recId,
         Remark: document.getElementById("remark" + id).value,
-        
-
+        PaymType: type,
+        PaymBank: bank,
+        PaymBankBranch: branch,
+        PaymNum: num,
+        PaymRemark: document.getElementById("inputPaymRemark" + id).value
       });
     } else {
       arrRowUpdate.push({
         RecId: _recid,
         TransDate: dateFormat(document.getElementById("paymDate" + id).value),
         Amount: document.getElementById("payment" + id).value,
-        Remark: document.getElementById("remark" + id).value
+        Remark: document.getElementById("remark" + id).value,
+        PaymType: type,
+        PaymBank: bank,
+        PaymBankBranch: branch,
+        PaymNum: num,
+        PaymRemark: document.getElementById("inputPaymRemark" + id).value
       });
     }
   });
 
-  // const elements_cancel = document.querySelectorAll(`[id^="SEQCANCEL"]`);
-  // elements_cancel.forEach(element => {
-  //     id = parseInt(document.getElementById(element.id).innerText);
-  //     console.log(id);
-  //     arrRow.push({
-  //         TransDate: document.getElementById("paymDate-cancel" + id).value,
-  //         Installment: document.getElementById("installment-cancel" + id).value,
-  //         Amount: document.getElementById("payment-cancel" + id).value,
-  //         SalesSoDaily: recId,
-  //         Remark: document.getElementById("remark-cancel" + id).value,
-  //         Cancel:  true
-  //       });
-  // });
   if (arrRow.length > 0) {
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", API_DEPOSIT_CREATE);
@@ -252,6 +291,26 @@ function edit() {
   });
   const pools = _morePool.slice(0, -1);
 
+  let chkInvDelivery = document.getElementById("chkDefaultDelivery").checked;
+  let chkNewDelivery = document.getElementById("chkNewDelivery").checked;
+  let province = "",
+    zone = "";
+  if (chkInvDelivery) {
+    province = document.getElementById("addressProvince_inv_id").value;
+    zone = document.getElementById("addressZone_inv_id").value;
+  } else {
+    province = document.getElementById("addressProvince_delivery_id").value;
+    zone = document.getElementById("addressZone_inv_id").value;
+  }
+
+  if (!chkInvDelivery && !chkNewDelivery) {
+    warning_message(
+      "โปรดระบุที่อยู่จัดส่ง",
+      "กรุณาระบุที่อยู่สำหรับจัดส่งสินค้าก่อนทำการสร้าง"
+    );
+    return;
+  }
+
   Swal.fire({
     title: "ยืนยันบันทึกรายการ",
     text: "คุณต้องการบันทึกรายการที่แก้ไขนี้หรือไม่",
@@ -278,8 +337,10 @@ function edit() {
           Pool: pools,
           Qty: getElementVal("qty"),
           Amount: getElementVal("amount"),
-          Region: getElementVal("region"),
-          ProvinceId: document.getElementById("province").value,
+          Region: zone,
+          ProvinceId: province,
+          //Region: getElementVal("region"),
+          //ProvinceId: document.getElementById("province").value,
           CreateBy: "",
 
           ShippingCost: getElementVal("shippingcost"),
@@ -328,30 +389,17 @@ function createAddress(recId) {
 
   arrRow.push({
     SalesSoDaily: recId,
-    UseDefaultInvAddress:
-      document.getElementById("chkDefaultInvoice").checked === true ? 1 : 0,
+    UseDefaultInvAddress: 0,
     UseDefaultDeliveryAddress:
       document.getElementById("chkDefaultDelivery").checked === true ? 1 : 0,
-    Street: getElementVal("addressStreet"),
-    District: getElementVal("addressDistrict"),
-    City: getElementVal("addressCity"),
-    State: getElementVal("addressProvince"),
-    Zipcode: getElementVal("addressZipcode"),
-    Type: 3, //default address
+    Street: getElementVal("addressStreet_inv"),
+    District: getElementVal("addressDistrict_inv"),
+    City: getElementVal("addressCity_inv"),
+    State: getElementVal("addressProvince_inv"),
+    Zipcode: getElementVal("addressZipcode_inv"),
+    Type: 1, //invoice address
     IsPrimary: 1
   });
-
-  if (document.getElementById("chkNewInvoice").checked) {
-    arrRow.push({
-      SalesSoDaily: recId,
-      Street: getElementVal("addressStreet_inv"),
-      District: getElementVal("addressDistrict_inv"),
-      City: getElementVal("addressCity_inv"),
-      State: getElementVal("addressProvince_inv"),
-      Zipcode: getElementVal("addressZipcode_inv"),
-      Type: 1 //invoice address
-    });
-  }
 
   if (document.getElementById("chkNewDelivery").checked) {
     arrRow.push({
@@ -407,7 +455,10 @@ function calculateTotal() {
   var amount = document.getElementById("amount").value;
   var discount = document.getElementById("discount").value;
   var shippingcost = document.getElementById("shippingcost").value;
-  var total = ((parseFloat(qty) * parseFloat(amount)) + parseFloat(shippingcost)) - parseFloat(discount) ;
+  var total =
+    parseFloat(qty) * parseFloat(amount) +
+    parseFloat(shippingcost) -
+    parseFloat(discount);
 
   document.getElementById("totalAmount").value = total;
 }

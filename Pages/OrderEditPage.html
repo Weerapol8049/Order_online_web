@@ -160,7 +160,7 @@
                 <div class="row">
                   <div class="col-sm-4">
                     <div class="form-group">
-                      <label for="discount">ส่วนลด</label>
+                      <label for="discount">ส่วนลดท้ายบิล</label>
                       <input type="number" id="discount" class="form-control" min="0" step=".01" value="0.00"
                         data-decimal="2" oninput="enforceNumberValidation(this)"
                         oninput="this.value = Math.abs(this.value)" onkeypress="calculateTotal()">
@@ -259,7 +259,7 @@
                 </div>
 
                 <div class="row">
-                  <div class="col-sm-4">
+                  <!-- <div class="col-sm-4">
                     <div class="form-group">
                       <label for="province">จังหวัด ติดตั้ง</label>
                       <select id="province" class="form-control select2bs4" style="width: 100%;"
@@ -274,7 +274,7 @@
 
                       </select>
                     </div>
-                  </div>
+                  </div> -->
 
                   <div class="col-sm-4">
                     <div class="form-group">
@@ -345,22 +345,25 @@
                 <div>
                   <div class="row">
                     <div class="col-sm-4">
-                      <label for="" style="font-weight: bold;">ที่อยู่เริ่มต้น</label>
+                      <label for="" style="font-weight: bold;">ที่อยู่ใบกำกับภาษี</label>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-sm-4">
                       <div class="form-group">
-                        <label for="addressZipcode">รหัสไปรษณีย์</label>
-                        <input type="text" id="addressZipcode" class="form-control">
+                        <label for="addressZipcode_inv">รหัสไปรษณีย์</label>
+                        <input type="text" id="addressZipcode_inv" class="form-control">
                       </div>
                     </div>
                     <div class="col-sm-8">
                       <div class="form-group">
-                        <label for="addressProvince">จังหวัด</label>
-                        <select id="addressProvince" class="form-control select2bs4" style="width: 100%;"
-                          onchange="loadAddressCity('addressCity',document.getElementById('addressProvince').value)">
+                        <label for="addressProvince_inv">จังหวัด</label>
+                        <select id="addressProvince_inv" class="form-control select2bs4" style="width: 100%;"
+                          onchange="loadAddressCity('addressCity_inv',document.getElementById('addressProvince_inv').value)">
                         </select>
+
+                        <input type="text" id="addressProvince_inv_id" style="display: none;">
+                        <input type="text" id="addressZone_inv_id" style="display: none;">
                       </div>
                     </div>
                   </div>
@@ -368,25 +371,25 @@
                   <div class="row">
                     <div class="col-sm-6">
                       <div class="form-group">
-                        <label for="addressCity">อำเภอ/เขต</label>
-                        <select id="addressCity" class="form-control select2bs4" style="width: 100%;"
-                          onchange="loadAddressDistrict('addressDistrict', document.getElementById('addressProvince').value, document.getElementById('addressCity').value)">
+                        <label for="addressCity_inv">อำเภอ/เขต</label>
+                        <select id="addressCity_inv" class="form-control select2bs4" style="width: 100%;"
+                          onchange="loadAddressDistrict('addressDistrict_inv', document.getElementById('addressProvince_inv').value, document.getElementById('addressCity_inv').value)">
                         </select>
                       </div>
                     </div>
                     <div class="col-sm-6">
                       <div class="form-group">
-                        <label for="addressDistrict">ตำบล/แขวง</label>
-                        <select id="addressDistrict" class="form-control select2bs4" style="width: 100%;"
-                          onchange="loadAddressZipCode('addressZipcode', document.getElementById('addressProvince').value, document.getElementById('addressCity').value, document.getElementById('addressDistrict').value)">
+                        <label for="addressDistrict_inv">ตำบล/แขวง</label>
+                        <select id="addressDistrict_inv" class="form-control select2bs4" style="width: 100%;"
+                          onchange="loadAddressZipCode('addressZipcode_inv', document.getElementById('addressProvince_inv').value, document.getElementById('addressCity_inv').value, document.getElementById('addressDistrict_inv').value)">
                         </select>
                       </div>
                     </div>
                   </div>
 
                   <div class="form-group">
-                    <label for="addressStreet">ที่อยู่ปัจจุบัน</label>
-                    <textarea type="text" id="addressStreet" class="form-control" multiple> </textarea>
+                    <label for="addressStreet_inv">ที่อยู่ปัจจุบัน</label>
+                    <textarea type="text" id="addressStreet_inv" class="form-control" multiple> </textarea>
                   </div>
 
                 </div>
@@ -394,7 +397,7 @@
                 <hr>
                 <!-- ------------------------ที่อยู่ใบกำกับภาษี---------------------- -->
                 <div>
-                  <div class="row">
+                  <!-- <div class="row">
                     <div class="col-sm-4">
                       <label for="" style="font-weight: bold">ที่อยู่ใบกำกับภาษี</label>
                     </div>
@@ -410,12 +413,6 @@
                         onchange="chkNewInvoice(this.checked)">
                       <label for="r1"> ที่อยู่ใหม่</label>
                     </div>
-                    <!-- <div class="col-xs-2">
-                      <button type="button" class="btn btn-block btn-outline-success btn-xs"
-                        onclick="addInvoiceAddress()">
-                        <i class="fas fa-plus nav-icon"></i>
-                        เพิ่มที่อยู่ </button>
-                    </div> -->
                   </div>
 
 
@@ -472,7 +469,7 @@
                     </ul>
                   </div>
 
-                  <hr>
+                  <hr> -->
                   <!-- ------------------------ที่อยู่จัดส่ง---------------------- -->
                   <div>
                     <div class="row">
@@ -481,10 +478,10 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-3" style="padding-left: 50px;">
+                      <div class="col-sm-4" style="padding-left: 50px;">
                         <input type="checkbox" class="form-group" id="chkDefaultDelivery"
                           onchange="chkDelivery(this.checked)">
-                        <label for="r1"> ใช้ที่อยู่เริ่มต้น</label>
+                        <label for="r1"> ใช้ที่อยู่ตามใบกำกับภาษี</label>
                       </div>
 
                       <div class="col-sm-3" style="padding-left: 50px;">
@@ -517,6 +514,9 @@
                               <select id="addressProvince_delivery" class="form-control select2bs4" style="width: 100%;"
                                 onchange="loadAddressCity('addressCity_delivery', document.getElementById('addressProvince_delivery').value)">
                               </select>
+
+                              <input type="text" id="addressProvince_delivery_id" style="display: none;">
+                              <input type="text" id="addressZone_delivery_id" style="display: none;">
                             </div>
                           </div>
                         </div>

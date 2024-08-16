@@ -131,9 +131,9 @@ window.onload = function () {
       localStorage.getItem("type_val")
     );
     loadPools("AddOrder");
-    loadRegion("");
-    loadProvince("");
-    loadAddressProvince("addressProvince");
+    //loadRegion("");
+    //loadProvince("");
+    loadAddressProvince("addressProvince_inv");
   } else if (title == "Edit Order") {
     setElementVal("recId", recId);
     setElementVal("qty", qty);
@@ -159,8 +159,8 @@ window.onload = function () {
       localStorage.getItem("type_val")
     );
     loadPools(pool);
-    loadRegion(region);
-    loadProvince(provinceId);
+    //loadRegion(region);
+    //loadProvince(provinceId);
     loadDeposit(recId);
     setDatePicker("#salesDate", date);
 
@@ -527,88 +527,103 @@ function loadCardDeposit(data) {
 
       deposit_arr.push(document.getElementById("cardDeposit").innerHTML);
 
-      //---------------------------------------- วิธีชำระเงิน -------------------------------------------------
+      // //---------------------------------------- วิธีชำระเงิน -------------------------------------------------
+      // let chkCash = false;
+      // let chkCheque = false;
+      // let chkCredit = false;
 
-      let rowPaym = createElement("div", {
-        className: "row",
-        id: "rowPaym" + id,
-        style: "padding-left: 50px;"
-      });
-      let colPaym = createElement("div", {
-        className: "col-sm-3",
-        id: "colPaym" + id
-      });
-      let lbl = createElement("label", {
-        innerHTML: "วิธีชำระเงิน",
-        style: "font-weight: bold;"
-      });
-      let colPaymCash = createElement("div", {
-        className: "col-sm-3",
-        id: "colPaymCash" + id
-      });
-      let chkPaymCash = createElement("input", {
-        type: "checkbox",
-        id: "chkPaymCash" + id,
-        class: "form-group"
-      });
-      let lblCash = createElement("label", {
-        innerHTML: "เงินสด",
-        style: "padding-left: 5px;"
-      });
-      let colPaymCheque = createElement("div", {
-        className: "col-sm-3",
-        id: "colPaymCheque" + id
-      });
-      let chkPaymCheque = createElement("input", {
-        type: "checkbox",
-        id: "chkPaymCheque" + id,
-        class: "form-group"
-      });
-      let lblCheque = createElement("label", {
-        innerHTML: "เช็คธนาคาร",
-        style: "padding-left: 5px;"
-      });
-      let colPaymCredit = createElement("div", {
-        className: "col-sm-3",
-        id: "colPaymCredit" + id
-      });
-      let chkPaymCredit = createElement("input", {
-        type: "checkbox",
-        id: "chkPaymCredit" + id,
-        class: "form-group"
-      });
-      let lblCredit = createElement("label", {
-        innerHTML: "บัตรเครดิต",
-        style: "padding-left: 5px;"
-      });
+      // if  (object.PaymType == 1) {
+      //   chkCash = true;
+      // }
+      // else if  (object.PaymType == 2) {
+      //   chkCheque = true;
+      // }
+      // else if  (object.PaymType == 3) {
+      //   chkCredit = true;
+      // }
 
-      ul.appendChild(rowPaym);
-      rowPaym.appendChild(colPaym);
-      colPaym.appendChild(lbl);
-      rowPaym.appendChild(colPaymCash);
-      colPaymCash.appendChild(chkPaymCash);
-      chkPaymCash.onchange = function () {
-        if (chkPaymCash.checked) {
-          createPaymentCash(chkPaymCash.checked, id);
-        } else {
-        }
-      };
-      colPaymCash.appendChild(lblCash);
-      rowPaym.appendChild(colPaymCheque);
-      colPaymCheque.appendChild(chkPaymCheque);
-      chkPaymCheque.onchange = function () {};
-      colPaymCheque.appendChild(lblCheque);
-      rowPaym.appendChild(colPaymCredit);
-      colPaymCredit.appendChild(chkPaymCredit);
-      chkPaymCredit.onchange = function () {};
-      colPaymCredit.appendChild(lblCredit);
+      // let rowPaym = createElement("div", {
+      //   className: "row",
+      //   id: "rowPaym" + id,
+      //   style: "padding-left: 50px;"
+      // });
+      // let colPaym = createElement("div", {
+      //   className: "col-sm-3",
+      //   id: "colPaym" + id
+      // });
+      // let lbl = createElement("label", {
+      //   innerHTML: "วิธีชำระเงิน",
+      //   style: "font-weight: bold;"
+      // });
+      // let colPaymCash = createElement("div", {
+      //   className: "col-sm-3",
+      //   id: "colPaymCash" + id
+      // });
+      // let chkPaymCash = createElement("input", {
+      //   type: "checkbox",
+      //   id: "chkPaymCash" + id,
+      //   checked : chkCash,
+      //   class: "form-group"
+      // });
+      // let lblCash = createElement("label", {
+      //   innerHTML: "เงินสด",
+      //   style: "padding-left: 5px;"
+      // });
+      // let colPaymCheque = createElement("div", {
+      //   className: "col-sm-3",
+      //   id: "colPaymCheque" + id
+      // });
+      // let chkPaymCheque = createElement("input", {
+      //   type: "checkbox",
+      //   id: "chkPaymCheque" + id,
+      //   checked : chkCheque,
+      //   class: "form-group"
+      // });
+      // let lblCheque = createElement("label", {
+      //   innerHTML: "เช็คธนาคาร",
+      //   style: "padding-left: 5px;"
+      // });
+      // let colPaymCredit = createElement("div", {
+      //   className: "col-sm-3",
+      //   id: "colPaymCredit" + id
+      // });
+      // let chkPaymCredit = createElement("input", {
+      //   type: "checkbox",
+      //   id: "chkPaymCredit" + id,
+      //   checked : chkCredit,
+      //   class: "form-group"
+      // });
+      // let lblCredit = createElement("label", {
+      //   innerHTML: "บัตรเครดิต",
+      //   style: "padding-left: 5px;"
+      // });
+
+      // ul.appendChild(rowPaym);
+      // rowPaym.appendChild(colPaym);
+      // colPaym.appendChild(lbl);
+      // rowPaym.appendChild(colPaymCash);
+      // colPaymCash.appendChild(chkPaymCash);
+      // chkPaymCash.onchange = function () {
+      //   if (chkPaymCash.checked) {
+      //     createPaymentCash(chkPaymCash.checked, id);
+      //   } else {
+      //   }
+      // };
+      // colPaymCash.appendChild(lblCash);
+      // rowPaym.appendChild(colPaymCheque);
+      // colPaymCheque.appendChild(chkPaymCheque);
+      // chkPaymCheque.onchange = function () {};
+      // colPaymCheque.appendChild(lblCheque);
+      // rowPaym.appendChild(colPaymCredit);
+      // colPaymCredit.appendChild(chkPaymCredit);
+      // chkPaymCredit.onchange = function () {};
+      // colPaymCredit.appendChild(lblCredit);
     }
     id++;
   });
 }
 
-function addCardDeposit(event) {
-  let cardHTML = "";
+function addCardDeposit_original(event) {
   let id = parseInt(document.getElementById("countDeposit").value) + 1;
   let id2 = parseInt(document.getElementById("countDepositBox").value) + 1;
 
@@ -923,7 +938,7 @@ function addCardDeposit(event) {
     colPaymCredit.appendChild(lblCredit);
   }
 }
-function addCardDeposit_original(event) {
+function addCardDeposit(event) {
   let cardHTML = "";
   let id = parseInt(document.getElementById("countDeposit").value) + 1;
   let id2 = parseInt(document.getElementById("countDepositBox").value) + 1;
@@ -1129,6 +1144,40 @@ function addCardDeposit_original(event) {
     });
     document.getElementById("linkDelete" + id).appendChild(imgDelete);
 
+    //---------------------------------------- ชำระค่า -------------------------------------------------
+
+    let rowPaymRemark = createElement("div", {
+      id: "rowPaymRemark" + id,
+      className: "row"
+    });
+    document.getElementById("groupDeposit" + id).appendChild(rowPaymRemark);
+
+    let colPaymEmpty = createElement("div", {
+      id: "colPaymEmpty" + id,
+      className: "col-sm-1"
+    });
+    rowPaymRemark.appendChild(colPaymEmpty);
+
+    let colPaymRemark = createElement("div", {
+      id: "colPaymRemark" + id,
+      className: "col-sm-11"
+    });
+    rowPaymRemark.appendChild(colPaymRemark);
+
+    let groupPaymRemark = createElement("div", {
+      id: "groupPaymRemark" + id,
+      className: "form-group"
+    });
+    colPaymRemark.appendChild(groupPaymRemark);
+
+    let inputPaymRemark = createElement("input", {
+      id: "inputPaymRemark" + id,
+      className: "form-control",
+      type: "text",
+      placeholder: "ชำระค่า"
+    });
+    groupPaymRemark.appendChild(inputPaymRemark);
+
     //---------------------------------------- remark -------------------------------------------------
 
     let rowRemark = createElement("div", {
@@ -1141,19 +1190,19 @@ function addCardDeposit_original(event) {
       id: "colempty" + id,
       className: "col-sm-1"
     });
-    document.getElementById("rowRemark" + id).appendChild(colempty);
+    rowRemark.appendChild(colempty);
 
     let colRemark = createElement("div", {
       id: "colRemark" + id,
       className: "col-sm-11"
     });
-    document.getElementById("rowRemark" + id).appendChild(colRemark);
+    rowRemark.appendChild(colRemark);
 
     let groupRemark = createElement("div", {
       id: "groupRemark" + id,
       className: "form-group"
     });
-    document.getElementById("colRemark" + id).appendChild(groupRemark);
+    colRemark.appendChild(groupRemark);
 
     let inputRemark = createElement("input", {
       id: "remark" + id,
@@ -1161,9 +1210,8 @@ function addCardDeposit_original(event) {
       type: "text",
       placeholder: "หมายเหตุ"
     });
-    document.getElementById("groupRemark" + id).appendChild(inputRemark);
-    var eleremark = document.getElementById("remark" + id);
-    eleremark.onchange = function () {
+    groupRemark.appendChild(inputRemark);
+    inputRemark.onchange = function () {
       onchangeRemark(this.value, id);
     };
 
@@ -2370,28 +2418,28 @@ function loadPools(selected) {
   };
 }
 
-function loadRegion(selected) {
-  const xhttp = new XMLHttpRequest();
-  xhttp.open("GET", API_REGION);
-  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xhttp.send();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      var trHTML = "";
-      const objects = JSON.parse(this.responseText);
-      trHTML += `<option value="" selected="selected">------ None ------</option>`;
-      for (let object of objects) {
-        let _id = object["RegionId"];
-        let _name = object["Name"];
+// function loadRegion(selected) {
+//   const xhttp = new XMLHttpRequest();
+//   xhttp.open("GET", API_REGION);
+//   xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+//   xhttp.send();
+//   xhttp.onreadystatechange = function () {
+//     if (this.readyState == 4 && this.status == 200) {
+//       var trHTML = "";
+//       const objects = JSON.parse(this.responseText);
+//       trHTML += `<option value="" selected="selected">------ None ------</option>`;
+//       for (let object of objects) {
+//         let _id = object["RegionId"];
+//         let _name = object["Name"];
 
-        if (selected == _id)
-          trHTML += `<option value="${_id}" selected>${_name}</option>`;
-        else trHTML += `<option value="${_id}">${_name}</option>`;
-      }
-      document.getElementById("region").innerHTML = trHTML;
-    }
-  };
-}
+//         if (selected == _id)
+//           trHTML += `<option value="${_id}" selected>${_name}</option>`;
+//         else trHTML += `<option value="${_id}">${_name}</option>`;
+//       }
+//       document.getElementById("region").innerHTML = trHTML;
+//     }
+//   };
+// }
 
 function loadProvince(selected) {
   const xhttp = new XMLHttpRequest();
@@ -2455,10 +2503,6 @@ function loadAddress(recid) {
       data.map((row) => {
         if (row.Type == 1) {
           //ที่อยู่ใบกำกับภาษี
-          document.getElementById("cardInvoice").style.display = "block";
-          document.getElementById("rowchkInvoice").style.display = "none";
-          document.getElementById("chkNewInvoice").checked = true;
-
           loadAddressProvince("addressProvince_inv", row.State);
           loadAddressCity("addressCity_inv", row.State, row.City);
           loadAddressDistrict(
@@ -2469,6 +2513,24 @@ function loadAddress(recid) {
           );
           setElementVal("addressStreet_inv", row.Street);
           setElementVal("addressZipcode_inv", row.Zipcode);
+
+          if (row.UseDefaultDeliveryAddress == 1) {
+            document.getElementById("chkDefaultDelivery").checked = true;
+            document.getElementById("chkNewDelivery").checked = false;
+
+            document.getElementById("txtDefaultDelivery").value =
+              row.Street +
+              " ตำบล" +
+              row.District +
+              " \nอำเภอ" +
+              row.City +
+              " จังหวัด" +
+              row.State +
+              "\n" +
+              row.Zipcode;
+            document.getElementById("rowchkDelivery").style.display = "block";
+            document.getElementById("cardDelivery").style.display = "none";
+          }
         }
         if (row.Type == 2) {
           //ที่อยู่จัดส่ง
@@ -2487,56 +2549,6 @@ function loadAddress(recid) {
           );
           setElementVal("addressStreet_delivery", row.Street);
           setElementVal("addressZipcode_delivery", row.Zipcode);
-        }
-        if (row.Type == 3) {
-          // ที่อยู่เริ่มต้น
-          loadAddressProvince("addressProvince", row.State);
-          loadAddressCity("addressCity", row.State, row.City);
-          loadAddressDistrict(
-            "addressDistrict",
-            row.State,
-            row.City,
-            row.District
-          );
-          setElementVal("addressStreet", row.Street);
-          setElementVal("addressZipcode", row.Zipcode);
-
-          if (row.UseDefaultInvAddress == 1) {
-            //chkInvoice(true);
-            document.getElementById("chkDefaultInvoice").checked = true;
-            document.getElementById("chkNewInvoice").checked = false;
-
-            document.getElementById("txtDefaultInvoice").value =
-              row.Street +
-              " ตำบล" +
-              row.District +
-              " \nอำเภอ" +
-              row.City +
-              " จังหวัด" +
-              row.State +
-              "\n" +
-              row.Zipcode;
-
-            document.getElementById("rowchkInvoice").style.display = "block";
-            document.getElementById("cardInvoice").style.display = "none";
-          }
-          if (row.UseDefaultDeliveryAddress == 1) {
-            document.getElementById("chkDefaultDelivery").checked = true;
-            document.getElementById("chkNewDelivery").checked = false;
-
-            document.getElementById("txtDefaultDelivery").value =
-              row.Street +
-              " ตำบล" +
-              row.District +
-              " \nอำเภอ" +
-              row.City +
-              " จังหวัด" +
-              row.State +
-              "\n" +
-              row.Zipcode;
-            document.getElementById("rowchkDelivery").style.display = "block";
-            document.getElementById("cardDelivery").style.display = "none";
-          }
         }
       });
 
@@ -2613,9 +2625,13 @@ function loadAddressProvince(name, selected) {
       if (data.length > 0) {
         HTMLProvince += `<option value="None"></option>`;
         data.map((row) => {
-          if (selected == row.State)
+          if (selected == row.State) {
             HTMLProvince += `<option value="${row.State}" selected>${row.State}</option>`;
-          else
+
+            document.getElementById("addressProvince_inv_id").value =
+              row.StateId;
+            document.getElementById("addressZone_inv_id").value = row.Zone;
+          } else
             HTMLProvince += `<option value="${row.State}">${row.State}</option>`;
         });
       }
@@ -2660,17 +2676,24 @@ function loadAddressCity(name, province, selected) {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       var HTML = "";
+      let stateId = "",
+        zone = "";
       const data = JSON.parse(this.responseText);
 
       if (data.length > 0) {
         HTML += `<option value="None"></option>`;
         data.map((row) => {
-          if (selected == row.City)
+          stateId = row.StateId;
+          zone = row.Zone;
+
+          if (selected == row.City) {
             HTML += `<option value="${row.City}" selected>${row.City}</option>`;
-          else HTML += `<option value="${row.City}">${row.City}</option>`;
+          } else HTML += `<option value="${row.City}">${row.City}</option>`;
         });
       }
 
+      document.getElementById("addressProvince_inv_id").value = stateId;
+      document.getElementById("addressZone_inv_id").value = zone;
       document.getElementById(name).innerHTML = HTML; //address city
     }
   };
@@ -2760,11 +2783,11 @@ function chkDelivery(value) {
     document.getElementById("chkDefaultDelivery").checked = true;
     document.getElementById("chkNewDelivery").checked = false;
 
-    let street = document.getElementById("addressStreet").value;
-    let district = document.getElementById("addressDistrict").value;
-    let city = document.getElementById("addressCity").value;
-    let province = document.getElementById("addressProvince").value;
-    let zipcode = document.getElementById("addressZipcode").value;
+    let street = document.getElementById("addressStreet_inv").value;
+    let district = document.getElementById("addressDistrict_inv").value;
+    let city = document.getElementById("addressCity_inv").value;
+    let province = document.getElementById("addressProvince_inv").value;
+    let zipcode = document.getElementById("addressZipcode_inv").value;
 
     document.getElementById("txtDefaultDelivery").value =
       street +
