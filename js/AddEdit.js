@@ -61,11 +61,9 @@ function create() {
   let province = "",
     zone = "";
   if (chkInvDelivery) {
-    province = document.getElementById("addressProvince_inv_id").value;
-    zone = document.getElementById("addressZone_inv_id").value;
+    province = document.getElementById("addressProvince_inv").value;
   } else {
-    province = document.getElementById("addressProvince_delivery_id").value;
-    zone = document.getElementById("addressZone_inv_id").value;
+    province = document.getElementById("addressProvince_delivery").value;
   }
 
   if (!chkInvDelivery && !chkNewDelivery) {
@@ -84,7 +82,7 @@ function create() {
     confirmButtonColor: "#41BD23",
     cancelButtonColor: "#CFCECE",
     confirmButtonText: "สร้าง",
-    cancelButtonText: "ยกเลิก"
+    cancelButtonText: "ยกเลิก",
   }).then((result) => {
     if (result.isConfirmed) {
       const xhttp = new XMLHttpRequest();
@@ -103,7 +101,7 @@ function create() {
           Amount: getElementVal("amount"),
           // Region: getElementVal("region"),
           // ProvinceId: document.getElementById("province").value,
-          Region: zone,
+          //Region: zone,
           ProvinceId: province,
           CreateBy: localStorage.getItem("username_val"), //from SignIn.js
 
@@ -113,7 +111,7 @@ function create() {
           Free: getElementVal("free"),
           Remark: getElementVal("remark"),
           TaxNum: getElementVal("taxnum"),
-          Phone: getElementVal("phone")
+          Phone: getElementVal("phone"),
         })
       );
       xhttp.onreadystatechange = function () {
@@ -139,7 +137,7 @@ function create() {
           } else {
             Swal.fire({
               icon: "error",
-              title: objects.Status
+              title: objects.Status,
               //text: 'Something went wrong!',
             });
           }
@@ -157,7 +155,7 @@ function createPool(recId) {
   morePool.forEach((pool) => {
     arrRow.push({
       PoolId: pool,
-      SalesSoDaily: recId
+      SalesSoDaily: recId,
     });
   });
 
@@ -173,7 +171,7 @@ function createPool(recId) {
       } else {
         Swal.fire({
           icon: "error",
-          title: objects.Status
+          title: objects.Status,
         });
       }
     }
@@ -202,14 +200,14 @@ function createDeposit(recId) {
     let chkCredit = document.getElementById("chkPaymCredit" + id).checked;
 
     if (chkCash) {
-      type = 1;//เงินสด
+      type = 1; //เงินสด
       bank = document.getElementById("bankCash" + id).value;
       branch = document.getElementById("bankBranch" + id).value;
     } else if (chkCheque) {
-      type = 2;//เช็ค
+      type = 2; //เช็ค
       bank = document.getElementById("bankCash" + id).value;
     } else if (chkCredit) {
-      type = 3;//เคดิต
+      type = 3; //เคดิต
       bank = document.getElementById("bankCash" + id).value;
       num = document.getElementById("bankBranch" + id).value;
     }
@@ -226,7 +224,7 @@ function createDeposit(recId) {
         PaymBank: bank,
         PaymBankBranch: branch,
         PaymNum: num,
-        PaymRemark: document.getElementById("inputPaymRemark" + id).value
+        //PaymRemark: document.getElementById("inputPaymRemark" + id).value
       });
     } else {
       arrRowUpdate.push({
@@ -238,11 +236,12 @@ function createDeposit(recId) {
         PaymBank: bank,
         PaymBankBranch: branch,
         PaymNum: num,
-        PaymRemark: document.getElementById("inputPaymRemark" + id).value
+        //PaymRemark: document.getElementById("inputPaymRemark" + id).value
       });
     }
   });
-
+  console.log(arrRow);
+  console.log(arrRowUpdate);
   if (arrRow.length > 0) {
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", API_DEPOSIT_CREATE);
@@ -255,7 +254,7 @@ function createDeposit(recId) {
         } else {
           Swal.fire({
             icon: "error",
-            title: objects.Status
+            title: objects.Status,
           });
         }
       }
@@ -274,7 +273,7 @@ function createDeposit(recId) {
         } else {
           Swal.fire({
             icon: "error",
-            title: objects.Status
+            title: objects.Status,
           });
         }
       }
@@ -296,11 +295,9 @@ function edit() {
   let province = "",
     zone = "";
   if (chkInvDelivery) {
-    province = document.getElementById("addressProvince_inv_id").value;
-    zone = document.getElementById("addressZone_inv_id").value;
+    province = document.getElementById("addressProvince_inv").value;
   } else {
-    province = document.getElementById("addressProvince_delivery_id").value;
-    zone = document.getElementById("addressZone_inv_id").value;
+    province = document.getElementById("addressProvince_delivery").value;
   }
 
   if (!chkInvDelivery && !chkNewDelivery) {
@@ -319,7 +316,7 @@ function edit() {
     confirmButtonColor: "#41BD23",
     cancelButtonColor: "#CFCECE",
     confirmButtonText: "บันทึก",
-    cancelButtonText: "ยกเลิก"
+    cancelButtonText: "ยกเลิก",
   }).then((result) => {
     if (result.isConfirmed) {
       const xhttp = new XMLHttpRequest();
@@ -337,7 +334,7 @@ function edit() {
           Pool: pools,
           Qty: getElementVal("qty"),
           Amount: getElementVal("amount"),
-          Region: zone,
+          //Region: zone,
           ProvinceId: province,
           //Region: getElementVal("region"),
           //ProvinceId: document.getElementById("province").value,
@@ -349,7 +346,7 @@ function edit() {
           Free: getElementVal("free"),
           Remark: getElementVal("remark"),
           TaxNum: getElementVal("taxnum"),
-          Phone: getElementVal("phone")
+          Phone: getElementVal("phone"),
         })
       );
       xhttp.onreadystatechange = function () {
@@ -358,7 +355,9 @@ function edit() {
           if (objects.Status == "OK") {
             createPool(objects.RecId);
 
-            if (document.getElementById("addressProvince").value != "None") {
+            if (
+              document.getElementById("addressProvince_inv").value != "None"
+            ) {
               createAddress(objects.RecId);
             }
 
@@ -372,7 +371,7 @@ function edit() {
           } else {
             Swal.fire({
               icon: "error",
-              title: objects.Status
+              title: objects.Status,
               //text: 'Something went wrong!',
             });
           }
@@ -398,7 +397,7 @@ function createAddress(recId) {
     State: getElementVal("addressProvince_inv"),
     Zipcode: getElementVal("addressZipcode_inv"),
     Type: 1, //invoice address
-    IsPrimary: 1
+    IsPrimary: 1,
   });
 
   if (document.getElementById("chkNewDelivery").checked) {
@@ -409,7 +408,7 @@ function createAddress(recId) {
       City: getElementVal("addressCity_delivery"),
       State: getElementVal("addressProvince_delivery"),
       Zipcode: getElementVal("addressZipcode_delivery"),
-      Type: 2 //delivery address
+      Type: 2, //delivery address
     });
   }
 
@@ -435,7 +434,7 @@ function createAddress(recId) {
             } else {
               Swal.fire({
                 icon: "error",
-                title: "สร้างที่อยู่ไม่สำเร็จ"
+                title: "สร้างที่อยู่ไม่สำเร็จ",
               });
             }
           }
@@ -443,7 +442,7 @@ function createAddress(recId) {
       } else {
         Swal.fire({
           icon: "error",
-          title: "สร้างที่อยู่ไม่สำเร็จ"
+          title: "สร้างที่อยู่ไม่สำเร็จ",
         });
       }
     }
@@ -476,7 +475,7 @@ function dateFormat(date) {
     "-" +
     (d.getMonth() + 1).toLocaleString("th-TH", {
       minimumIntegerDigits: 2,
-      useGrouping: false
+      useGrouping: false,
     }) +
     "-" +
     d
