@@ -23,7 +23,7 @@
 let SERVER_M_order = "http://starmark.work/OrderOnline_API_Order_test/";
 let SERVER_M_ax = "http://starmark.work/OrderOnline_API_AIF_test/";
 
-///let SERVER_M_order = "http://localhost:54871/";
+//let SERVER_M_order = "http://localhost:54871/";
 //let SERVER_M_ax = 'http://localhost:4377/';
 
 let API_LOAD = SERVER_M_order + "api/order/load";
@@ -713,6 +713,7 @@ function clickEdit(
   TaxNum,
   phone
 ) {
+  console.log(qty, amount);
   setItem("emp_val", emp); //แสดงชื่อที่ผูกกับ personnelNumber
   setItem("store_val", store);
   setItem("pool_val", pool);

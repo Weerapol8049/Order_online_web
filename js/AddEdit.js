@@ -82,7 +82,7 @@ function create() {
     confirmButtonColor: "#41BD23",
     cancelButtonColor: "#CFCECE",
     confirmButtonText: "สร้าง",
-    cancelButtonText: "ยกเลิก",
+    cancelButtonText: "ยกเลิก"
   }).then((result) => {
     if (result.isConfirmed) {
       const xhttp = new XMLHttpRequest();
@@ -111,7 +111,7 @@ function create() {
           Free: getElementVal("free"),
           Remark: getElementVal("remark"),
           TaxNum: getElementVal("taxnum"),
-          Phone: getElementVal("phone"),
+          Phone: getElementVal("phone")
         })
       );
       xhttp.onreadystatechange = function () {
@@ -137,7 +137,7 @@ function create() {
           } else {
             Swal.fire({
               icon: "error",
-              title: objects.Status,
+              title: objects.Status
               //text: 'Something went wrong!',
             });
           }
@@ -155,7 +155,7 @@ function createPool(recId) {
   morePool.forEach((pool) => {
     arrRow.push({
       PoolId: pool,
-      SalesSoDaily: recId,
+      SalesSoDaily: recId
     });
   });
 
@@ -171,7 +171,7 @@ function createPool(recId) {
       } else {
         Swal.fire({
           icon: "error",
-          title: objects.Status,
+          title: objects.Status
         });
       }
     }
@@ -224,7 +224,7 @@ function createDeposit(recId) {
         PaymBank: bank,
         PaymBankBranch: branch,
         PaymNum: num,
-        //PaymRemark: document.getElementById("inputPaymRemark" + id).value
+        PaymRemark: document.getElementById("inputPaymRemark" + id).value
       });
     } else {
       arrRowUpdate.push({
@@ -236,12 +236,11 @@ function createDeposit(recId) {
         PaymBank: bank,
         PaymBankBranch: branch,
         PaymNum: num,
-        //PaymRemark: document.getElementById("inputPaymRemark" + id).value
+        PaymRemark: document.getElementById("inputPaymRemark" + id).value
       });
     }
   });
-  console.log(arrRow);
-  console.log(arrRowUpdate);
+
   if (arrRow.length > 0) {
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", API_DEPOSIT_CREATE);
@@ -254,7 +253,7 @@ function createDeposit(recId) {
         } else {
           Swal.fire({
             icon: "error",
-            title: objects.Status,
+            title: objects.Status
           });
         }
       }
@@ -273,7 +272,7 @@ function createDeposit(recId) {
         } else {
           Swal.fire({
             icon: "error",
-            title: objects.Status,
+            title: objects.Status
           });
         }
       }
@@ -316,7 +315,7 @@ function edit() {
     confirmButtonColor: "#41BD23",
     cancelButtonColor: "#CFCECE",
     confirmButtonText: "บันทึก",
-    cancelButtonText: "ยกเลิก",
+    cancelButtonText: "ยกเลิก"
   }).then((result) => {
     if (result.isConfirmed) {
       const xhttp = new XMLHttpRequest();
@@ -346,7 +345,7 @@ function edit() {
           Free: getElementVal("free"),
           Remark: getElementVal("remark"),
           TaxNum: getElementVal("taxnum"),
-          Phone: getElementVal("phone"),
+          Phone: getElementVal("phone")
         })
       );
       xhttp.onreadystatechange = function () {
@@ -371,7 +370,7 @@ function edit() {
           } else {
             Swal.fire({
               icon: "error",
-              title: objects.Status,
+              title: objects.Status
               //text: 'Something went wrong!',
             });
           }
@@ -397,7 +396,7 @@ function createAddress(recId) {
     State: getElementVal("addressProvince_inv"),
     Zipcode: getElementVal("addressZipcode_inv"),
     Type: 1, //invoice address
-    IsPrimary: 1,
+    IsPrimary: 1
   });
 
   if (document.getElementById("chkNewDelivery").checked) {
@@ -408,7 +407,7 @@ function createAddress(recId) {
       City: getElementVal("addressCity_delivery"),
       State: getElementVal("addressProvince_delivery"),
       Zipcode: getElementVal("addressZipcode_delivery"),
-      Type: 2, //delivery address
+      Type: 2 //delivery address
     });
   }
 
@@ -434,7 +433,7 @@ function createAddress(recId) {
             } else {
               Swal.fire({
                 icon: "error",
-                title: "สร้างที่อยู่ไม่สำเร็จ",
+                title: "สร้างที่อยู่ไม่สำเร็จ"
               });
             }
           }
@@ -442,7 +441,7 @@ function createAddress(recId) {
       } else {
         Swal.fire({
           icon: "error",
-          title: "สร้างที่อยู่ไม่สำเร็จ",
+          title: "สร้างที่อยู่ไม่สำเร็จ"
         });
       }
     }
@@ -475,7 +474,7 @@ function dateFormat(date) {
     "-" +
     (d.getMonth() + 1).toLocaleString("th-TH", {
       minimumIntegerDigits: 2,
-      useGrouping: false,
+      useGrouping: false
     }) +
     "-" +
     d

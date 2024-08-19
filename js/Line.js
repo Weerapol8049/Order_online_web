@@ -1,4 +1,3 @@
-
 //let SERVER_L = 'http://localhost:4462/';
 //let SERVER_L = 'http://starmark.work/retailsov2_api/';
 //let SERVER_L = 'http://starmark.work/order_online_api_test/';
@@ -11,35 +10,35 @@
 // let API_LOAD_LINE = SERVER_L + 'api/OrderOnline/line/load';
 // let API_DELETE_LINE = SERVER_L + "api/OrderOnline/line/delete";
 
-// let SERVER_L_order = 'http://starmark.work/OrderOnline_API_Orders/';//Live
-// let SERVER_L_ax = 'http://starmark.work/OrderOnline_API_AIF/';//Live
+let SERVER_L_order = "http://starmark.work/OrderOnline_API_Order_test/"; //Live
+let SERVER_L_ax = "http://starmark.work/OrderOnline_API_AIF_test/"; //Live
 
-//let SERVER_L_order = 'http://starmark.work/OrderOnline_API_Order_test/';//Live
-//let SERVER_L_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';//Live
-let SERVER_L_ax = 'http://localhost:4377/';
-let SERVER_L_order = 'http://localhost:54871/';
+// let SERVER_L_order = 'http://starmark.work/OrderOnline_API_Order_test/';//Live
+// let SERVER_L_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';//Live
+// let SERVER_L_ax = 'http://localhost:4377/';
 
-let API_LOAD_LINE = SERVER_L_order + 'api/line/load';
+let API_LOAD_LINE = SERVER_L_order + "api/line/load";
 let API_DELETE_LINE = SERVER_L_ax + "api/line/delete";
 
 loadHeader();
 load();
 
 function load() {
-
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("POST",API_LOAD_LINE);
-    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.send(JSON.stringify({
-        "recid" : sessionStorage.getItem("recId_val")
-    }));
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) { 
-            const objects = JSON.parse(this.responseText);
-            let rowcount = 1;
-            let trBody = "";
-            document.getElementById("body").innerHTML = "";
-            trBody += `<a class="btn btn-app bg-success" onclick="createline()">
+  const xhttp = new XMLHttpRequest();
+  xhttp.open("POST", API_LOAD_LINE);
+  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhttp.send(
+    JSON.stringify({
+      recid: sessionStorage.getItem("recId_val")
+    })
+  );
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const objects = JSON.parse(this.responseText);
+      let rowcount = 1;
+      let trBody = "";
+      document.getElementById("body").innerHTML = "";
+      trBody += `<a class="btn btn-app bg-success" onclick="createline()">
                             <i class="fas fa-plus"></i> Add order line
                         </a>
                         <table id="example1" class="table table-bordered table-hover" >
@@ -69,28 +68,28 @@ function load() {
                         <tbody id="body-data" >
                         `;
 
-            for (let row of objects) {
-                let _no = row["No"];
-                let _date = row["Date"].toLocaleString('en-US');
-                let _confdate = row["ConfirmDate"].toLocaleString('en-US');
-                let _series = row["Series"];
-                let _model = row["Model"];
-                let _sink = row["Sink"];
-                let _top = row["Top"];
-                let _qty = row["Qty"];
-                let _amount = row["Amount"];
-                let _recid = row["RecId"];
-                let _itemid = row["ItemId"];
-                let _size = row["Size"];
-                let _sizeName = row["SizeName"];
-                let _bookId = row["BookingId"];
-                let _timePeriod = row["TimePeriod"];
+      for (let row of objects) {
+        let _no = row["No"];
+        let _date = row["Date"].toLocaleString("en-US");
+        let _confdate = row["ConfirmDate"].toLocaleString("en-US");
+        let _series = row["Series"];
+        let _model = row["Model"];
+        let _sink = row["Sink"];
+        let _top = row["Top"];
+        let _qty = row["Qty"];
+        let _amount = row["Amount"];
+        let _recid = row["RecId"];
+        let _itemid = row["ItemId"];
+        let _size = row["Size"];
+        let _sizeName = row["SizeName"];
+        let _bookId = row["BookingId"];
+        let _timePeriod = row["TimePeriod"];
 
-                if (row["ConfirmDate"] == "1900-01-01T00:00:00") {
-                    _confdate = "-";
-                }
-                if (_no > 0) {
-                    trBody += `<tr>
+        if (row["ConfirmDate"] == "1900-01-01T00:00:00") {
+          _confdate = "-";
+        }
+        if (_no > 0) {
+          trBody += `<tr>
                                     <td>${rowcount}</td>
                                     <td style="align-items: center;">
                                         <div class="col-sm-12">
@@ -123,9 +122,9 @@ function load() {
                                     </td>
                                 </tr>
                                 `;
-                    rowcount++;
-                } else {
-                    trBody += `</tbody>
+          rowcount++;
+        } else {
+          trBody += `</tbody>
                                 <tfoot>
                                     <th colspan="7">รวม</th>
                                     <th style=" text-align: right;">
@@ -138,43 +137,47 @@ function load() {
                                     </th>
                                   
                                     <th></th>`;
-                }
-            }
-
-            trBody += `</tfoot>
-                    </table>`;
-            document.getElementById("body").innerHTML = trBody; 
-        
-            $("#example1").DataTable({
-                "responsive": true, 
-                "lengthChange": false, 
-                "autoWidth": false,
-                "searching": false, 
-                "paging" : true,
-                "info": true,
-                "ordering": true
-            })
-            .buttons()
-            .container()
-            .appendTo('#example1_wrapper .col-md-6:eq(0)');             
         }
+      }
+
+      trBody += `</tfoot>
+                    </table>`;
+      document.getElementById("body").innerHTML = trBody;
+
+      $("#example1")
+        .DataTable({
+          responsive: true,
+          lengthChange: false,
+          autoWidth: false,
+          searching: false,
+          paging: true,
+          info: true,
+          ordering: true
+        })
+        .buttons()
+        .container()
+        .appendTo("#example1_wrapper .col-md-6:eq(0)");
     }
-  }
+  };
+}
 
 function loadHeader() {
-    var _qty = numberFormat(getItem("qty_val"));
-    var _amount = numberFormat(getItem("amount_val"));
+  var _qty = numberFormat(getItem("qty_val"));
+  var _amount = numberFormat(getItem("amount_val"));
 
-    let provinceName = getItem("regionName_val");
+  let provinceName = getItem("regionName_val");
 
-   
-    document.getElementById("header").innerHTML = "";
-    let _header =  `<div class="invoice p-3 mb-3" style="background-color:#EFEFEF;">
+  document.getElementById("header").innerHTML = "";
+  let _header = `<div class="invoice p-3 mb-3" style="background-color:#EFEFEF;">
                         <div class="row">
                         <div class="col-12">
                             <h4>
-                            <i class="fas fa-user"></i> ${getItem("custName_val")}
-                            <small class="float-right">วันที่ขาย: ${dateFormat(getItem("date_val"))}</small>
+                            <i class="fas fa-user"></i> ${getItem(
+                              "custName_val"
+                            )}
+                            <small class="float-right">วันที่ขาย: ${dateFormat(
+                              getItem("date_val")
+                            )}</small>
                             </h4>
                         </div>
                         <!-- /.col -->
@@ -189,10 +192,14 @@ function loadHeader() {
                         <div class="col-sm-4 invoice-col">
                             <b>Sales order:</b> ${getItem("salesId_val")}<br>
                             <b>Purch order:</b> ${getItem("purchId_val")}<br>
-                            <b>ภูมิภาค:</b> ${getItem("provinceName_val")} ${provinceName}
+                            <b>ภูมิภาค:</b> ${getItem(
+                              "provinceName_val"
+                            )} ${provinceName}
                         </div>
                         <div class="col-sm-4 invoice-col">
-                            <!-- <b>วันที่ติดตั้ง : ${dateFormat(getItem("confirmdate_val"))}</b><br> -->
+                            <!-- <b>วันที่ติดตั้ง : ${dateFormat(
+                              getItem("confirmdate_val")
+                            )}</b><br> -->
                             <b>จำนวน:</b> ${_qty}<br>
                             <b>ยอดเงินรวม:</b> ${_amount}<br>
                         </div>
@@ -200,109 +207,131 @@ function loadHeader() {
                     </div>
     `;
 
-    document.getElementById("header").innerHTML = _header; 
-
+  document.getElementById("header").innerHTML = _header;
 }
 
 function getItem(key) {
-    return sessionStorage.getItem(key);
-  }
+  return sessionStorage.getItem(key);
+}
 
 function dateFormat(date) {
-    if  (date == '-') {
-        return date;
-    }else {
-        var d = new Date(date);
-        let y = d.getFullYear() + 543;
-        let _date = d.getDate().toLocaleString('th-TH', {minimumIntegerDigits: 2, useGrouping:false}) + '/' +
-                (d.getMonth() + 1).toLocaleString('th-TH', {minimumIntegerDigits: 2, useGrouping:false}) + '/' +
-                y ;
-        return _date;
+  if (date == "-") {
+    return date;
+  } else {
+    var d = new Date(date);
+    let y = d.getFullYear() + 543;
+    let _date =
+      d
+        .getDate()
+        .toLocaleString("th-TH", {
+          minimumIntegerDigits: 2,
+          useGrouping: false
+        }) +
+      "/" +
+      (d.getMonth() + 1).toLocaleString("th-TH", {
+        minimumIntegerDigits: 2,
+        useGrouping: false
+      }) +
+      "/" +
+      y;
+    return _date;
+  }
+}
+
+function onDelete(_recid, bookId, qty) {
+  const xhttp = new XMLHttpRequest();
+  xhttp.open("POST", API_DELETE_LINE);
+  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhttp.send(
+    JSON.stringify({
+      recid: _recid,
+      BookingId: bookId,
+      Qty: qty
+    })
+  );
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const objects = JSON.parse(this.responseText);
+      if (objects.Status == "OK") {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "ลบรายการสำเร็จ",
+          showConfirmButton: false,
+          timer: 1500
+        }).then(() => {
+          window.location = "LinePage.html";
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: objects.Status
+          //text: 'Something went wrong!',
+        });
+      }
     }
+  };
 }
 
-function onDelete(_recid, bookId, qty)
-{
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("POST",API_DELETE_LINE);
-    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.send(JSON.stringify({
-        "recid" : _recid,
-        "BookingId" : bookId,
-        "Qty": qty
-    }));
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            
-            const objects = JSON.parse(this.responseText);
-            if (objects.Status == "OK") {
-              Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'ลบรายการสำเร็จ',
-                showConfirmButton: false,
-                timer: 1500
-              }).then(() => {
-                    window.location = 'LinePage.html';
-              });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: objects.Status ,
-                    //text: 'Something went wrong!',
-                  })
-            }
-        }
-    }
+function createline() {
+  setItem("action_line", "add");
+  location.href = "LineAddPage.html";
 }
 
-function createline()
-{
-    setItem("action_line", "add");
-    location.href='LineAddPage.html';
-}
+function clickLineEdit(
+  date,
+  confDate,
+  series,
+  model,
+  sink,
+  top,
+  qty,
+  amount,
+  recid,
+  itemId,
+  size,
+  bookingId,
+  timePeriod
+) {
+  // setItem("action_line", action);
+  setItem("series_val", series);
+  setItem("model_val", model);
+  setItem("qty_line_val", qty);
+  setItem("amount_line_val", amount);
+  setItem("date_line_val", date.substring(0, 10));
+  setItem("confDate_line_val", confDate.substring(0, 10));
+  setItem("sink_val", sink);
+  setItem("top_val", top);
+  setItem("recId_line_val", recid);
+  setItem("itemId_line_val", itemId);
+  setItem("size_val", size);
+  setItem("bookId_val", bookingId);
+  setItem("timePeriod_val", timePeriod);
 
-function clickLineEdit(date, confDate, series, model, sink, top, qty, amount, recid, itemId, size, bookingId, timePeriod) {
-    // setItem("action_line", action);
-    setItem("series_val", series);
-    setItem("model_val", model);
-    setItem("qty_line_val", qty);
-    setItem("amount_line_val", amount);
-    setItem("date_line_val", date.substring(0,10));
-    setItem("confDate_line_val", confDate.substring(0,10));
-    setItem("sink_val", sink);
-    setItem("top_val", top);
-    setItem("recId_line_val", recid);
-    setItem("itemId_line_val", itemId);
-    setItem("size_val", size);
-    setItem("bookId_val", bookingId);
-    setItem("timePeriod_val", timePeriod);
-
-    window.location = 'LineEditPage.html';
+  window.location = "LineEditPage.html";
 }
 
 function clickLineDelete(recid, bookId, qty) {
-    Swal.fire({
-        title: 'ยืนยันลบรายการ',
-        text: "คุณต้องการลบรายการนี้หรือไม่ ถ้าลบรายการนี้แล้วจะไม่สามารถเรียกคืนได้",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#CFCECE',
-        confirmButtonText: 'YES',
-        cancelButtonText: 'CANCEL'
-      }).then((result) => {
-        
-        if (result.isConfirmed) {
-          onDelete(recid, bookId, qty);
-        }
-      })
+  Swal.fire({
+    title: "ยืนยันลบรายการ",
+    text: "คุณต้องการลบรายการนี้หรือไม่ ถ้าลบรายการนี้แล้วจะไม่สามารถเรียกคืนได้",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#CFCECE",
+    confirmButtonText: "YES",
+    cancelButtonText: "CANCEL"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      onDelete(recid, bookId, qty);
+    }
+  });
 }
 
 function setItem(key, val) {
-    sessionStorage.setItem(key, val);
+  sessionStorage.setItem(key, val);
 }
 
 function numberFormat(val) {
-    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
