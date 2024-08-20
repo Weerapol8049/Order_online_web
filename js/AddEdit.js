@@ -205,12 +205,14 @@ function createDeposit(recId) {
       branch = document.getElementById("bankBranch" + id).value;
     } else if (chkCheque) {
       type = 2; //เช็ค
-      bank = document.getElementById("bankCash" + id).value;
+      bank = document.getElementById("chequeNum" + id).value;
     } else if (chkCredit) {
       type = 3; //เคดิต
-      bank = document.getElementById("bankCash" + id).value;
-      num = document.getElementById("bankBranch" + id).value;
+      bank = document.getElementById("bankCredit" + id).value;
+      num = document.getElementById("bankCreditNum" + id).value;
     }
+
+    console.log(bank);
 
     //รายการที่เพิ่มงวดมัดจำใหม่
     if (_recid == 0) {
@@ -449,16 +451,32 @@ function createAddress(recId) {
 }
 
 function calculateTotal() {
-  var qty = document.getElementById("qty").value;
-  var amount = document.getElementById("amount").value;
-  var discount = document.getElementById("discount").value;
-  var shippingcost = document.getElementById("shippingcost").value;
-  var total =
-    parseFloat(qty) * parseFloat(amount) +
-    parseFloat(shippingcost) -
-    parseFloat(discount);
+  const qty = parseFloat(
+    document.getElementById("qty").value == ""
+      ? 0
+      : document.getElementById("qty").value
+  );
+  const amount = parseFloat(
+    document.getElementById("amount").value == ""
+      ? 0
+      : document.getElementById("amount").value
+  );
+  const discount = parseFloat(
+    document.getElementById("discount").value == ""
+      ? 0
+      : document.getElementById("discount").value
+  );
+  const shippingcost = parseFloat(
+    document.getElementById("shippingcost").value == ""
+      ? 0
+      : document.getElementById("shippingcost").value
+  );
 
-  document.getElementById("totalAmount").value = total;
+  const total = qty * amount - discount;
+  const vat = (total * 7) / 100;
+
+  document.getElementById("vat7").value = vat;
+  document.getElementById("totalAmount").value = total + vat + shippingcost;
 }
 
 function getElementVal(element) {

@@ -14,8 +14,8 @@ let API_REGION = SERVER_CB_order + "api/order/region";
 let API_PROVINCE = SERVER_CB_order + "api/order/province";
 let API_GETREGION = SERVER_CB_order + "api/order/findRegion";
 let API_DEPOSIT = SERVER_CB_order + "api/order/deposit";
-let API_DEPOSIT_DELETE = SERVER_CB_ax + "api/order/deposit/delete";
-let API_DEPOSIT_CANCEL = SERVER_CB_ax + "api/order/deposit/cancel";
+let API_DEPOSIT_DELETE = SERVER_CB_ax + "api/deposit/delete";
+let API_DEPOSIT_CANCEL = SERVER_CB_ax + "api/deposit/cancel";
 
 let API_LOAD_ADDRESS = SERVER_CB_order + "api/address/order/load/";
 
@@ -1711,7 +1711,7 @@ function loadCardDeposit_original(data) {
       document.getElementById(colPaymCash.id).appendChild(chkPaymCash);
       chkPaymCash.onchange = function () {
         if (chkPaymCash.checked) {
-          createPaymentCash(chkPaymCash.checked, id);
+          createPaymentCash(chkPaymCash.checked, id, null);
         } else {
         }
       };
@@ -1800,10 +1800,11 @@ function createPaymentCash(checked, id, value = null) {
   if (checked) {
     let bank = "",
       branch = "";
-    if (value) {
+    if (value && value.PaymType == 1) {
       bank = value.PaymBank;
       branch = value.PaymBankBranch;
     }
+    console.log(bank);
     var element = document.getElementById("cash" + id);
     if (typeof element != "undefined" && element != null) {
       //Exists element
@@ -1847,12 +1848,12 @@ function createPaymentCash(checked, id, value = null) {
       id: "lblCash" + id,
       innerHTML: "ชื่อธนาคาร "
     });
-    let bankCash = createElement("input", {
-      id: "bankCash" + id,
-      class: "form-control",
-      type: "text",
-      value: bank
-    });
+    // let bankCash = createElement("input", {
+    //   id: "bankCash" + id,
+    //   class: "form-control",
+    //   type: "text",
+    //   value: bank
+    // });
     let colCardBranch = createElement("div", {
       className: "col-sm-4",
       id: "colCardBranch" + id,
@@ -1874,6 +1875,46 @@ function createPaymentCash(checked, id, value = null) {
       type: "text",
       value: branch
     });
+
+    let bankCash = createElement("select", {
+      className: "form-control select2bs4",
+      id: "bankCash" + id
+    });
+
+    var bankName = new Array(
+      "",
+      "กรุงเทพ",
+      "กสิกรไทย",
+      "กรุงไทย",
+      "ทีทีบี",
+      "ออมสิน",
+      "กรุงศรีอยุธยา",
+      "เกียรตินาคิน",
+      "ซีไอเอ็มบีไทย",
+      "ทิสโก้",
+      "ซิตี้แบงค์",
+      "ธนาคารยูโอบี",
+      "แลนด์แอนด์เฮาส์ ",
+      "ไอซีบีซี",
+      "เอชเอสบีซี",
+      "อาคารสงเคราะห์",
+      "อิสลามแห่งประเทศไทย",
+      "มิซูโฮ",
+      "สแตนดาร์ดชาร์เตอร์ด",
+      "ซูมิโตโม",
+      "ไทยเครดิต"
+    );
+
+    for (var i = 0; i < bankName.length; ++i) {
+      var option = document.createElement("option");
+      option.value = bankName[i];
+      option.text = bankName[i];
+    
+      if (bank == bankName[i]) {
+        option.selected = true;
+      }
+      bankCash.appendChild(option);
+    }
 
     rowCash.appendChild(_colCash);
     _colCash.appendChild(card);
@@ -1901,7 +1942,7 @@ function createPaymentCheque(checked, id, value = null) {
     }
 
     let bankNum = "";
-    if (value) {
+    if (value && value.PaymType == 2) {
       bankNum = value.PaymNum;
     }
 
@@ -1919,6 +1960,7 @@ function createPaymentCheque(checked, id, value = null) {
       className: "col-sm-12",
       id: "_colCash" + id
     });
+
     let card = createElement("div", { className: "card", id: "card" + id });
     let rowcard = createElement("div", {
       className: "row",
@@ -1938,7 +1980,7 @@ function createPaymentCheque(checked, id, value = null) {
       innerHTML: "เลขที่เช็ค "
     });
     let bankCash = createElement("input", {
-      id: "bankCash" + id,
+      id: "chequeNum" + id,
       class: "form-control",
       type: "text",
       value: bankNum
@@ -1977,7 +2019,7 @@ function createPaymentCreditCard(checked, id, value = null) {
 
     let bank = "",
       bankNum = "";
-    if (value) {
+    if (value && value.PaymType == 3) {
       bank = value.PaymBank;
       bankNum = value.PaymNum;
     }
@@ -2012,12 +2054,12 @@ function createPaymentCreditCard(checked, id, value = null) {
       id: "lblCash" + id,
       innerHTML: "ชื่อธนาคาร "
     });
-    let bankCash = createElement("input", {
-      id: "bankCash" + id,
-      class: "form-control",
-      type: "text",
-      value: bank
-    });
+    // let bankCash = createElement("input", {
+    //   id: "bankCredit" + id,
+    //   class: "form-control",
+    //   type: "text",
+    //   value: bank
+    // });
     let colCardBranch = createElement("div", {
       className: "col-sm-4",
       id: "colCardBranch" + id,
@@ -2030,14 +2072,47 @@ function createPaymentCreditCard(checked, id, value = null) {
     let lblbranch = createElement("label", {
       id: "lblbranch" + id,
       innerHTML: "เลขที่บัตร ",
-      for: "bankBranch" + id
+      for: "bankCreditNum" + id
     });
     let bankBranch = createElement("input", {
-      id: "bankBranch" + id,
+      id: "bankCreditNum" + id,
       class: "form-control",
       type: "text",
       value: bankNum
     });
+
+    let bankCash = createElement("select", {
+      className: "form-control select2bs4",
+      id: "bankCredit" + id
+    });
+
+    var bankName = new Array(
+      "",
+      "กรุงเทพ",
+      "กสิกรไทย",
+      "กรุงไทย",
+      "ทีทีบี",
+      "ออมสิน",
+      "กรุงศรีอยุธยา",
+      "เกียรตินาคิน",
+      "ซีไอเอ็มบีไทย",
+      "ทิสโก้",
+      "ซิตี้แบงค์",
+      "ธนาคารยูโอบี",
+      "แลนด์แอนด์เฮาส์ ",
+      "ไอซีบีซี",
+      "เอชเอสบีซี",
+      "อาคารสงเคราะห์",
+      "อิสลามแห่งประเทศไทย",
+      "มิซูโฮ",
+      "สแตนดาร์ดชาร์เตอร์ด",
+      "ซูมิโตโม",
+      "ไทยเครดิต"
+    );
+
+    for (var i = 0; i < bankName.length; ++i) {
+      bankCash[bankCash.length] = new Option(bankName[i], bankName[i]);
+    }
 
     document.getElementById("groupDeposit" + id).appendChild(rowCash);
 
@@ -2242,7 +2317,7 @@ function deleteGroup(name, recid) {
   Swal.fire({
     title: "ยืนยันลบรายการ",
     html: `<label>คุณต้องการลบรายการเงินมัดจำนี้หรือไม่?</label> <br> 
-        <input type="text" id="recid-delete" class="form-control" style="display:none;" value="${recid}">`,
+        <input type="text" id="recid-delete" class="form-control" style="display:block;" value="${recid}">`,
     text: "คุณต้องการลบงวดมัดจำหรือไม่",
     focusConfirm: false,
     icon: "info",
@@ -2554,7 +2629,6 @@ function loadAddress(recid) {
           setElementVal("addressZipcode_inv", row.Zipcode);
 
           if (row.UseDefaultDeliveryAddress == 1) {
-        
             document.getElementById("chkDefaultDelivery").checked = true;
             document.getElementById("chkNewDelivery").checked = false;
 
