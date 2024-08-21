@@ -135,8 +135,51 @@ window.onload = function () {
 
     calculateTotal();
     loadAddress(recId);
+    
+    
+  // Example usage
+  const filePath = "2405150002_HPCMH_1.xml";
+
+
   }
 };
+
+
+function openFile(fileupload) {
+  let input = fileupload;
+  console.log(input);
+  for (var index = 0; index < input.files.length; index++) {
+      let reader = new FileReader();
+      reader.onload = () => {
+          // this 'text' is the content of the file
+          var text = reader.result;
+          console.log(text);
+      }
+      reader.readAsText(input.files[index]);
+  };
+}
+
+
+function readXMLFile(filePath) {
+  return new Promise((resolve, reject) => {
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", filePath, true);
+    xmlhttp.onload = function () {
+      if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
+        // Parse the XML response
+        const xmlDoc = new DOMParser().parseFromString(xmlhttp.response, "text/xml");
+        resolve(xmlDoc);
+      } else {
+        reject(new Error("Error loading XML file"));
+      }
+    };
+    xmlhttp.onerror = function () {
+      reject(new Error("Error loading XML file"));
+    };
+    xmlhttp.send();
+  });
+}
+
 
 function setTwoNumberDecimal(event) {
   this.value = parseFloat(this.value).toFixed(2);
@@ -1894,7 +1937,7 @@ function createPaymentCash(checked, id, value = null) {
       "ทิสโก้",
       "ซิตี้แบงค์",
       "ธนาคารยูโอบี",
-      "แลนด์แอนด์เฮาส์ ",
+      "แลนด์แอนด์เฮาส์",
       "ไอซีบีซี",
       "เอชเอสบีซี",
       "อาคารสงเคราะห์",
@@ -1909,7 +1952,7 @@ function createPaymentCash(checked, id, value = null) {
       var option = document.createElement("option");
       option.value = bankName[i];
       option.text = bankName[i];
-    
+
       if (bank == bankName[i]) {
         option.selected = true;
       }
@@ -2099,7 +2142,7 @@ function createPaymentCreditCard(checked, id, value = null) {
       "ทิสโก้",
       "ซิตี้แบงค์",
       "ธนาคารยูโอบี",
-      "แลนด์แอนด์เฮาส์ ",
+      "แลนด์แอนด์เฮาส์",
       "ไอซีบีซี",
       "เอชเอสบีซี",
       "อาคารสงเคราะห์",

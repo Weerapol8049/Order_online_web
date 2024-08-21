@@ -150,7 +150,7 @@
                         <div class="col-sm-8">
                           <div class="form-group">
                             <input type="number" id="qty" class="form-control" min="0"
-                            oninput="this.value = Math.abs(this.value)" onkeypress="calculateTotal()">
+                            disabled oninput="this.value = Math.abs(this.value)" onkeypress="calculateTotal()">
                           </div>
                         </div>
                       </div>
@@ -159,7 +159,7 @@
                         <div class="col-sm-8">
                           <div class="form-group">
                             <input type="number" id="amount" class="form-control" min="0" step=".01" value="0.00"
-                            data-decimal="2" onkeypress="calculateTotal()" oninput="enforceNumberValidation(this)"
+                            disabled data-decimal="2" onkeypress="calculateTotal()" oninput="enforceNumberValidation(this)"
                             oninput="this.value = Math.abs(this.value)">
                           </div>
                         </div>
