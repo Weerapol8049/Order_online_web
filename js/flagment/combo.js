@@ -135,29 +135,9 @@ window.onload = function () {
 
     calculateTotal();
     loadAddress(recId);
-    
-    
-  // Example usage
-  const filePath = "2405150002_HPCMH_1.xml";
-
 
   }
 };
-
-
-function openFile(fileupload) {
-  let input = fileupload;
-  console.log(input);
-  for (var index = 0; index < input.files.length; index++) {
-      let reader = new FileReader();
-      reader.onload = () => {
-          // this 'text' is the content of the file
-          var text = reader.result;
-          console.log(text);
-      }
-      reader.readAsText(input.files[index]);
-  };
-}
 
 
 function readXMLFile(filePath) {
@@ -167,7 +147,10 @@ function readXMLFile(filePath) {
     xmlhttp.onload = function () {
       if (xmlhttp.status >= 200 && xmlhttp.status < 300) {
         // Parse the XML response
-        const xmlDoc = new DOMParser().parseFromString(xmlhttp.response, "text/xml");
+        const xmlDoc = new DOMParser().parseFromString(
+          xmlhttp.response,
+          "text/xml"
+        );
         resolve(xmlDoc);
       } else {
         reject(new Error("Error loading XML file"));
@@ -179,7 +162,6 @@ function readXMLFile(filePath) {
     xmlhttp.send();
   });
 }
-
 
 function setTwoNumberDecimal(event) {
   this.value = parseFloat(this.value).toFixed(2);

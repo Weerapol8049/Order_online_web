@@ -10,6 +10,9 @@ https://colorlib.com/etc/lf/Login_v4/index.html
 Download free vector art, stock photos & videos.
 https://www.vecteezy.com/
 
+Upload file
+https://www.youtube.com/watch?v=lniUevJnEa4
+
 ก่อน deploy API
 - สลับ config Service AX STD66  to LIVE
 - สลับ AxConnectionString in Web.config
@@ -19,7 +22,6 @@ https://www.vecteezy.com/
 AX 
 STM_SM_BookingOrder
 - StmSalesSoDailyLine.ItemId
-
 
 แก้
 - create Header ยังไม่ต้องจอง [เสร็จ]

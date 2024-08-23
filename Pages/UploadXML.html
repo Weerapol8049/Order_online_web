@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Upload XML</title>
+
+        <!-- Google Font: Source Sans Pro -->
+        <link rel="stylesheet" href="../css/fonts.css">
+        <link rel="stylesheet" href="../css/xmlFile.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+            integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../css/adminlte.min.css">
+        <!-- Select2 -->
+        <link rel="stylesheet" href="../plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" href="../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.24/dist/sweetalert2.all.min.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_green.css">
+        <script type='text/javascript' src="https://npmcdn.com/flatpickr/dist/flatpickr.min.js"></script>
+        <script type='text/javascript' src="https://npmcdn.com/flatpickr/dist/l10n/th.js"></script>
+
+    </head>
+
+    <body >
+        <!-- <div class="content-wrapper">
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Upload XML</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Upload XML</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content">
+                <input type="file" accept="text/xml" onchange="openFile(this)">
+            </section>
+        </div> -->
+
+        <div class="container">
+            <div class="header-section">
+                <h1>Upload Files</h1>
+                <p>Upload files you want to share with your team members.</p>
+                <p>PDF, Images & Videos are allowed.</p>
+            </div>
+            <div class="drop-section">
+                <div class="col">
+                    <div class="cloud-icon">
+                        <img src="../images/icons/cloud.png" alt="cloud">
+                    </div>
+                    <span>Drag & Drop your files here</span>
+                    <span>OR</span>
+                    <button class="file-selector">Browse Files</button>
+                    <input type="file" class="file-selector-input" multiple>
+                </div>
+                <div class="col">
+                    <div class="drop-here">Drop Here</div>
+                </div>
+            </div>
+            <div class="list-section">
+                <div class="list-title">Uploaded Files</div>
+                <div class="list"></div>
+            </div>
+        </div>
+
+        <script src="../js/xmlFile.js"></script>
+        <script>
+            const dropArea = document.querySelector('.drop-section')
+            const fileSelector = document.querySelector('.file-selector')
+            const fileSelectorInput = document.querySelector('.file-selector-input')
+            // upload files with browse button
+
+            fileSelector.onclick = () => fileSelectorInput.click()
+            fileSelectorInput.onchange = () =>
+            {
+                console.log("1122");
+                [...fileSelectorInput.files].forEach((file) =>
+                {
+                    console.log(file);
+                    if (typeValidation(file.type))
+                    {
+                        console.log("5555");
+                        uploadFile(file)
+                    }
+                })
+            }
+
+            // when file is over the drag area
+            dropArea.ondragover = (e) =>
+            {
+                e.preventDefault();
+                [...e.dataTransfer.items].forEach((item) =>
+                {
+                    if (typeValidation(item.type))
+                    {
+                        dropArea.classList.add('drag-over-effect')
+                    }
+                })
+            }
+            // when file leave the drag area
+            dropArea.ondragleave = () =>
+            {
+                dropArea.classList.remove('drag-over-effect')
+            }
+            // when file drop on the drag area
+            dropArea.ondrop = (e) =>
+            {
+                e.preventDefault();
+                dropArea.classList.remove('drag-over-effect')
+                if (e.dataTransfer.items)
+                {
+                    [...e.dataTransfer.items].forEach((item) =>
+                    {
+                        if (item.kind === 'file')
+                        {
+                            const file = item.getAsFile();
+                            if (typeValidation(file.type))
+                            {
+                                uploadFile(file)
+                            }
+                        }
+                    })
+                } else
+                {
+                    [...e.dataTransfer.files].forEach((file) =>
+                    {
+                        if (typeValidation(file.type))
+                        {
+                            uploadFile(file)
+                        }
+                    })
+                }
+            }
+        </script>
+        
+
+    </body>
+    <footer class="main-footer" style="margin-left: 0;">
+        <div class="float-right d-none d-lg-block">
+            <b>Version</b> 3.2.0
+        </div>
+    </footer>
+
+</html>
