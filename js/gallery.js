@@ -13,16 +13,15 @@
 // let API_UPLOAD_IMAGE = SERVER_upload + 'api/image/upload';
 // let API_DELETE_IMAGE = SERVER_upload + 'api/image/delete';
 
-// let SERVER_CB_order = 'http://starmark.work/OrderOnline_API_Orders/';//Live
-// let SERVER_CB_ax = 'http://starmark.work/OrderOnline_API_AIF/';//Live
+let SERVER_CB_order = 'https://starmark.work/OrderOnline_API_Orders/';//Live
+let SERVER_CB_ax = 'https://starmark.work/OrderOnline_API_AIF/';//Live
 
-//let SERVER_CB_order = 'http://starmark.work/OrderOnline_API_Order_test/';
-//let SERVER_CB_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';
-let SERVER_CB_order = 'http://localhost:54871/';
-let SERVER_CB_ax = 'http://localhost:4377/';
-
-let API_LOAD_IMAGE = SERVER_CB_order + "api/order/images/load";
-let API_UPLOAD_IMAGE = SERVER_CB_ax + 'api/order/images/upload';
+ //let SERVER_CB_order = 'http://starmark.work/OrderOnline_API_Img/';
+// let SERVER_CB_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';
+// let SERVER_CB_ax = 'http://localhost:4377/';
+let API_LOAD_IMAGE_V2 = SERVER_CB_order + 'api/order/images/load';
+//let API_LOAD_IMAGE_V2 = SERVER_CB_order + 'api/order/images/load/';
+let API_ALL_UPLOAD_IMAGE = SERVER_CB_ax + 'api/order/images/upload';
 let API_DELETE_IMAGE = SERVER_CB_ax + 'api/order/images/delete';
 
 loadImage();
@@ -34,12 +33,18 @@ function loadImage() {
     document.getElementById("btnUpload").style.display = "none";
   }
   else 
-    document.getElementById("btnUpload").style.display = "block";
-      
+    if (existsControl("btnUpload")){
+      document.getElementById("btnUpload").style.display = "block";
+    }
     const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", API_LOAD_IMAGE + sessionStorage.getItem("recId_img_val") + "/" + localStorage.getItem("usr_val"));
+    //xhttp.open("GET", API_LOAD_IMAGE_V2 + sessionStorage.getItem("recId_img_val") + "/" + localStorage.getItem("usr_val"));
+    xhttp.open("POST", API_LOAD_IMAGE_V2);
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.send();
+	//xhttp.send();
+    xhttp.send(JSON.stringify({
+      "recid" : sessionStorage.getItem("recId_img_val"),
+      "username" : localStorage.getItem("usr_val")
+    }));
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var trHTML = '';
@@ -51,7 +56,7 @@ function loadImage() {
                 let _recid = object['RecId'];
                 let _imgName = object['ImageName'];
                 let _base64 = object['Base64'];
-                
+
                 trHTML += `<div class="card" style="width: 14rem; margin: 10px">
                                 <a href="${_base64}" data-toggle="lightbox" data-title="${_imgName}" data-gallery="gallery">
                                   <img class="card-img-top" src="${_base64}" alt="Card image cap" style="border-radius: 5px;
@@ -104,9 +109,12 @@ function onDeleteImg(recId) {
   }).then((result) => {
     if (result.isConfirmed) {
       const xhttp = new XMLHttpRequest();
-      xhttp.open("GET", API_DELETE_IMAGE + recId);
+      //xhttp.open("GET", API_DELETE_IMAGE + recId);
+      xhttp.open("POST", API_DELETE_IMAGE);
       xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-      xhttp.send();
+      xhttp.send(JSON.stringify({
+        "recid" : recId
+      }));
       xhttp.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
             const objects = JSON.parse(this.responseText);
@@ -132,7 +140,14 @@ function onDeleteImg(recId) {
     }
   })
 }
-
+function existsControl(value) {
+    let bool = false;
+    var element = document.getElementById(value);
+    if (typeof element != "undefined" && element != null) {
+      bool = true;
+    }
+    return bool;
+  }
 function clickBrowsImg() {
 
     // const { value: file } = await Swal.fire({
@@ -203,7 +218,7 @@ function clickBrowsImg() {
           method : "POST"
         };
   
-        return fetch(API_UPLOAD_IMAGE, othePram)
+        return fetch(API_ALL_UPLOAD_IMAGE, othePram)
               .then(data => {
                 //console.log(data);
                 if (data.status == 200) {

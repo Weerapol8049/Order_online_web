@@ -32,7 +32,7 @@ function load() {
       recid: sessionStorage.getItem("recId_val")
     })
   );
-  xhttp.onreadystatechange = function () {
+  xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       const objects = JSON.parse(this.responseText);
       let rowcount = 1;
@@ -67,58 +67,41 @@ function load() {
                         </thead>
                         <tbody id="body-data" >
                         `;
-
-      for (let row of objects) {
-        let _no = row["No"];
-        let _date = row["Date"].toLocaleString("en-US");
-        let _confdate = row["ConfirmDate"].toLocaleString("en-US");
-        let _series = row["Series"];
-        let _model = row["Model"];
-        let _sink = row["Sink"];
-        let _top = row["Top"];
-        let _qty = row["Qty"];
-        let _amount = row["Amount"];
-        let _recid = row["RecId"];
-        let _itemid = row["ItemId"];
-        let _size = row["Size"];
-        let _sizeName = row["SizeName"];
-        let _bookId = row["BookingId"];
-        let _timePeriod = row["TimePeriod"];
-
-        if (row["ConfirmDate"] == "1900-01-01T00:00:00") {
+      objects.map(row => {
+        if (row.ConfirmDate == "1900-01-01T00:00:00") {
           _confdate = "-";
         }
-        if (_no > 0) {
+        if (row.No > 0) {
           trBody += `<tr>
                                     <td>${rowcount}</td>
                                     <td style="align-items: center;">
                                         <div class="col-sm-12">
-                                        ${dateFormat(_date)}
+                                        ${dateFormat(row.Date.toLocaleString("en-US"))}
                                         </div>
                                         <div class="col-sm-12">
-                                        ${dateFormat(_confdate)}
+                                        ${dateFormat(row.ConfirmDate.toLocaleString("en-US"))}
                                         </div>
                                     </td>
-                                    <td>${_series}</td>
-                                    <td>${_model}</td>
-                                    <td>${_itemid}</td>
-                                    <td><a href="#">${_bookId}</a></td>
-                                    <!-- <td>${_sink}</td>
-                                    <td>${_top}</td> -->
-                                    <td>${_sizeName}</td>
+                                    <td>${row.Series}</td>
+                                    <td>${row.Model}</td>
+                                    <td>${row.ItemId}</td>
+                                    <td><a href="#">${row.BookingId}</a></td>
+                                    <!-- <td>${row.Sink}</td>
+                                    <td>${row.Top}</td> -->
+                                    <td>${row.SizeName}</td>
                                     <td style=" text-align: right;">
                                         <div class="col-sm-12">
-                                        ${numberFormat(_qty)}
+                                        ${numberFormat(row.Qty)}
                                         </div>
                                         <div class="col-sm-12">
-                                        ${numberFormat(_amount)}
+                                        ${numberFormat(row.Amount)}
                                         </div>
                                     </td>
                                   
                                     <td>
                                     <button type="button" class="btn btn-block btn-outline-success btn-xs" 
-                                        onclick="clickLineEdit('${_date}','${_confdate}','${_series}','${_model}','${_sink}','${_top}','${_qty}','${_amount}','${_recid}','${_itemid}','${_size}','${_bookId}','${_timePeriod}')">Edit</button>
-                                        <button type="button" class="btn btn-block btn-outline-danger btn-xs" onclick="clickLineDelete('${_recid}','${_bookId}','${_qty}')">Delete</button>
+                                        onclick="clickLineEdit('${row.Date.toLocaleString("en-US")}','${row.ConfirmDate.toLocaleString("en-US")}','${row.Series}','${row.Model}','${row.Sink}','${row.Top}','${row.Qty}','${row.Amount}','${row.RecId}','${row.ItemId}','${row.ItemName}','${row.Size}','${row.BookingId}','${row.TimePeriod}')">Edit</button>
+                                        <button type="button" class="btn btn-block btn-outline-danger btn-xs" onclick="clickLineDelete('${row.RecId}','${row.BookingId}','${row.Qty}')">Delete</button>
                                     </td>
                                 </tr>
                                 `;
@@ -129,16 +112,16 @@ function load() {
                                     <th colspan="7">รวม</th>
                                     <th style=" text-align: right;">
                                         <div class="col-sm-12">
-                                            ${numberFormat(_qty)}
+                                            ${numberFormat(row.Qty)}
                                         </div>
                                         <div class="col-sm-12">
-                                            ${numberFormat(_amount)}
+                                            ${numberFormat(row.Amount)}
                                         </div>
                                     </th>
                                   
                                     <th></th>`;
         }
-      }
+      });
 
       trBody += `</tfoot>
                     </table>`;
@@ -221,12 +204,10 @@ function dateFormat(date) {
     var d = new Date(date);
     let y = d.getFullYear() + 543;
     let _date =
-      d
-        .getDate()
-        .toLocaleString("th-TH", {
-          minimumIntegerDigits: 2,
-          useGrouping: false
-        }) +
+      d.getDate().toLocaleString("th-TH", {
+        minimumIntegerDigits: 2,
+        useGrouping: false
+      }) +
       "/" +
       (d.getMonth() + 1).toLocaleString("th-TH", {
         minimumIntegerDigits: 2,
@@ -249,7 +230,7 @@ function onDelete(_recid, bookId, qty) {
       Qty: qty
     })
   );
-  xhttp.onreadystatechange = function () {
+  xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       const objects = JSON.parse(this.responseText);
       if (objects.Status == "OK") {
@@ -289,6 +270,7 @@ function clickLineEdit(
   amount,
   recid,
   itemId,
+  itemName,
   size,
   bookingId,
   timePeriod
@@ -304,6 +286,7 @@ function clickLineEdit(
   setItem("top_val", top);
   setItem("recId_line_val", recid);
   setItem("itemId_line_val", itemId);
+  setItem("itemName_line_val", itemName);
   setItem("size_val", size);
   setItem("bookId_val", bookingId);
   setItem("timePeriod_val", timePeriod);
@@ -314,14 +297,15 @@ function clickLineEdit(
 function clickLineDelete(recid, bookId, qty) {
   Swal.fire({
     title: "ยืนยันลบรายการ",
-    text: "คุณต้องการลบรายการนี้หรือไม่ ถ้าลบรายการนี้แล้วจะไม่สามารถเรียกคืนได้",
+    text:
+      "คุณต้องการลบรายการนี้หรือไม่ ถ้าลบรายการนี้แล้วจะไม่สามารถเรียกคืนได้",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#d33",
     cancelButtonColor: "#CFCECE",
     confirmButtonText: "YES",
     cancelButtonText: "CANCEL"
-  }).then((result) => {
+  }).then(result => {
     if (result.isConfirmed) {
       onDelete(recid, bookId, qty);
     }

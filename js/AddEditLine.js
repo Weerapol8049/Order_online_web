@@ -35,12 +35,12 @@ let title = document.getElementsByTagName("title")[0].innerText;
 // let API_LOAD_SIZE = SERVER + "api/OrderOnline/line/defaultSize";
 
 //let SERVER = 'http://localhost:2179/';
-// let SERVER_order = 'http://starmark.work/OrderOnline_API_Orders/';//Live
-// let SERVER_ax = 'http://starmark.work/OrderOnline_API_AIF/';//Live
+let SERVER_order = "https://starmark.work/OrderOnline_API_Orders/"; //Live
+let SERVER_ax = "https://starmark.work/OrderOnline_API_AIF/"; //Live
 
-let SERVER_order = "http://starmark.work/OrderOnline_API_Order_test/";
-let SERVER_ax = "http://starmark.work/OrderOnline_API_AIF_test/";
-//let SERVER_ax = 'http://localhost:4377/';
+// let SERVER_order = 'http://starmark.work/OrderOnline_API_Order_test/';
+// let SERVER_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';
+// let SERVER_ax = 'http://localhost:4377/';
 
 let API_SERIES = SERVER_order + "api/line/series";
 let API_MODEL = SERVER_order + "api/line/model";
@@ -91,6 +91,9 @@ if (title == "Add Line") {
   setValue("bookingId", bookId);
   //setMinConfirmDate(getItem("date_line_val"), 0);
   loadItem(item, pool, series, model);
+  //itemName_line_val
+  setValue("ItemId0", getItem("itemId_line_val"));
+  setValue("ItemName0", getItem("itemName_line_val"));
 
   if (confirmDate == "") {
     document.getElementById("timeperiod").disabled = true;
@@ -155,46 +158,47 @@ function createGroupSeries() {
     id: "ul" + seq,
     className: "list-group list-group-flush"
   });
-  document.getElementById("cardMultiSeries" + seq).appendChild(ul);
+  card.appendChild(ul);
 
   let row = createElement("div", { id: "row" + seq, className: "row" });
-  document.getElementById("ul" + seq).appendChild(row);
+  ul.appendChild(row);
 
   let colseq = createElement("div", {
     id: "colseq" + seq,
     className: "col-sm-1",
     style: "text-align: center;"
   });
-  document.getElementById("row" + seq).appendChild(colseq);
+  row.appendChild(colseq);
 
   let grouplbl = createElement("div", {
     id: "grouplbl" + seq,
     className: "form-group",
     style: "margin: 0;"
   });
-  document.getElementById("colseq" + seq).appendChild(grouplbl);
+  colseq.appendChild(grouplbl);
 
-  let b = createElement("b", { id: "b" + seq });
-  document.getElementById("colseq" + seq).appendChild(b);
-  document.getElementById("b" + seq).innerText = "ลำดับ";
+  let b = createElement("b", { id: "b" + seq, innerText: "ลำดับ" });
+  colseq.appendChild(b);
 
   let groupseq = createElement("div", {
     id: "groupseq" + seq,
     className: "form-group",
     style: "padding-top: 15px;"
   });
-  document.getElementById("colseq" + seq).appendChild(groupseq);
+  colseq.appendChild(groupseq);
 
-  let currseq = createElement("label", { id: "SERIES-CURRSEQ" + seq });
-  document.getElementById("groupseq" + seq).appendChild(currseq);
-  document.getElementById("SERIES-CURRSEQ" + seq).innerText = seq;
+  let currseq = createElement("label", {
+    id: "SERIES-CURRSEQ" + seq,
+    innerText: seq
+  });
+  groupseq.appendChild(currseq);
 
   let seq2 = createElement("label", {
     id: "SERIES-SEQ" + seq,
+    innerText: seq,
     style: "display:none;"
   });
-  document.getElementById("groupseq" + seq).appendChild(seq2);
-  document.getElementById("SERIES-SEQ" + seq).innerText = seq;
+  groupseq.appendChild(seq2);
 
   //-------------------------------------- series ----------------------------------------
 
@@ -202,40 +206,41 @@ function createGroupSeries() {
     id: "colseries" + seq,
     className: "col-sm-5"
   });
-  document.getElementById("row" + seq).appendChild(colseries);
+  row.appendChild(colseries);
 
   let groupseries = createElement("div", {
     id: "groupseries" + seq,
     className: "form-group"
   });
-  document.getElementById("colseries" + seq).appendChild(groupseries);
+  colseries.appendChild(groupseries);
 
   let inputprev = createElement("input", {
     id: `card${seq}-prevSeries`,
     type: "text",
     style: "display:none;"
   });
-  document.getElementById("colseries" + seq).appendChild(inputprev);
+  colseries.appendChild(inputprev);
 
-  let lblseries = createElement("b", { id: "lblseries" + seq });
-  document.getElementById("groupseries" + seq).appendChild(lblseries);
-  document.getElementById("lblseries" + seq).innerText = "Series";
+  let lblseries = createElement("b", {
+    id: "lblseries" + seq,
+    innerText: "Series"
+  });
+  groupseries.appendChild(lblseries);
 
   let bseries = createElement("label", {
     id: "bseries" + seq,
+    innerText: "*",
     style: "color:red;"
   });
-  document.getElementById("lblseries" + seq).appendChild(bseries);
-  document.getElementById("bseries" + seq).innerText = "*";
+  lblseries.appendChild(bseries);
 
   let series = createElement("select", {
     id: `card${seq}-series`,
     className: "form-control required select2bs4",
     style: "width: 100%;"
   });
-  document.getElementById("groupseries" + seq).appendChild(series);
-  var eleseries = document.getElementById(`card${seq}-series`);
-  eleseries.onchange = function () {
+  groupseries.appendChild(series);
+  series.onchange = function () {
     enableButton(seq, this.value);
   };
 
@@ -245,95 +250,92 @@ function createGroupSeries() {
     id: "coldelete" + seq,
     className: "col-sm-1"
   });
-  document.getElementById("row" + seq).appendChild(coldelete);
+  row.appendChild(coldelete);
 
   let groupempty = createElement("div", {
     id: "groupempty" + seq,
     className: "form-group"
   });
-  document.getElementById("coldelete" + seq).appendChild(groupempty);
+  coldelete.appendChild(groupempty);
 
   let groupdelete = createElement("div", {
     id: "groupdelete" + seq,
     className: "form-group",
     style: "margin-top: 32px"
   });
-  document.getElementById("coldelete" + seq).appendChild(groupdelete);
+  coldelete.appendChild(groupdelete);
 
   let btndelete = createElement("button", {
     id: `btndelete` + seq,
     type: "button",
     className: "btn btn-block btn-outline-danger",
+    innerText: "X",
     style: "width: 40px;"
   });
-  document.getElementById("coldelete" + seq).appendChild(btndelete);
-  var eledelete = document.getElementById("btndelete" + seq);
-  eledelete.onclick = function () {
+  coldelete.appendChild(btndelete);
+  btndelete.onclick = function () {
     deleteGroupSeries("cardMultiSeries" + seq);
   };
-  eledelete.innerText = "X";
 
   //-------------------------------------- button Add model ----------------------------------------
 
   let rowbtn = createElement("div", { id: "rowbtn" + seq, className: "row" });
-  document.getElementById("ul" + seq).appendChild(rowbtn);
+  ul.appendChild(rowbtn);
 
   let colAdd = createElement("div", {
     id: "colAdd" + seq,
     className: "col-xs-2"
   });
-  document.getElementById("rowbtn" + seq).appendChild(colAdd);
+  rowbtn.appendChild(colAdd);
 
   let groupAdd = createElement("div", {
     id: `card${seq}-groupBtnModel`,
     className: "form-group",
     style: "margin-left: 10px"
   });
-  document.getElementById("colAdd" + seq).appendChild(groupAdd);
+  colAdd.appendChild(groupAdd);
 
   let btnAdd = createElement("button", {
     id: "btnAdd" + seq,
     className: "btn btn-block btn-outline-success btn-xs",
-    type: "button"
+    type: "button",
+    innerText: "Add model",
+    disabled: true
   });
-  document.getElementById(`card${seq}-groupBtnModel`).appendChild(btnAdd);
+  groupAdd.appendChild(btnAdd);
 
   let icon = createElement("i", {
     id: "icon" + seq,
     className: "fas fa-plus nav-icon"
   });
-  document.getElementById("btnAdd" + seq).appendChild(icon);
-
-  var eleAdd = document.getElementById("btnAdd" + seq);
-  eleAdd.onclick = function () {
+  btnAdd.appendChild(icon);
+  btnAdd.onclick = function () {
     createModelGroup(
       `'${pool}'`,
       document.getElementById(`card${seq}-series`).value,
       seq
     );
   };
-  eleAdd.disabled = true;
-  eleAdd.innerText = "Add model";
 
   let inputCount = createElement("input", {
     id: `card${seq}-countItem`,
     style: "display:none;",
     type: "number"
   });
-  document.getElementById("rowbtn" + seq).appendChild(inputCount);
+  rowbtn.appendChild(inputCount);
 
   //-------------------------------------- Card model ----------------------------------------
   let cardmodel = createElement("i", {
     id: `card${seq}-cardMultiItem`,
     className: "card"
   });
-  document.getElementById("ul" + seq).appendChild(cardmodel);
+  ul.appendChild(cardmodel);
 
   let ulmodel = createElement("ul", {
     id: `ulmodel` + seq,
     className: "list-group list-group-flush"
   });
-  document.getElementById("ul" + seq).appendChild(ulmodel);
+  ul.appendChild(ulmodel);
 
   //document.getElementById("divSeries").innerHTML = htmlGroupSeries;
   document.getElementById("countSeries").value = seq;
@@ -342,84 +344,84 @@ function createGroupSeries() {
   refreshSequence("SERIES-CURRSEQ");
 }
 
-function createGroupSeries2() {
-  //warning_message("อยู่ระหว่างดำเนินการ","");
-  let htmlGroupSeries = "";
-  let seq = parseInt(document.getElementById("countSeries").value) + 1;
+// function createGroupSeries2() {
+//   //warning_message("อยู่ระหว่างดำเนินการ","");
+//   let htmlGroupSeries = "";
+//   let seq = parseInt(document.getElementById("countSeries").value) + 1;
 
-  htmlGroupSeries += document.getElementById("divSeries").innerHTML;
+//   htmlGroupSeries += document.getElementById("divSeries").innerHTML;
 
-  htmlGroupSeries += `
-  <div class="card" id="cardMultiSeries${seq}" style="padding: 10px; background-color: #EAECEE;">
-                <ul class="list-group list-group-flush">
-                  <div class="row">
-                    <div class="col-sm-1" style="text-align: center;">
-                      <div class="form-group">
-                          <b>ลำดับ</b>
-                      </div>
-                      <div class="form-group" >
-                          <label id="SERIES-CURRSEQ${seq}" >${seq}</label>
-                          <label id="SERIES-SEQ${seq}" style="display: none;">${seq}</label>
-                      </div>
-                    </div>
-                    <!-- Series -->
-                    <div class="col-sm-5">
-                      <div class="form-group">
-                        <label for="series">Series <b style="color: red;">*</b></label>
-                        <select id="card${seq}-series" class="form-control required select2bs4 " style="width: 100%;"
-                          onchange="enableButton(${seq}, this.value);"
-                        >
-                        </select>
-                      </div>
-                      <input type="text" id="card${seq}-prevSeries" style="display:none;">
-                    </div>
+//   htmlGroupSeries += `
+//   <div class="card" id="cardMultiSeries${seq}" style="padding: 10px; background-color: #EAECEE;">
+//                 <ul class="list-group list-group-flush">
+//                   <div class="row">
+//                     <div class="col-sm-1" style="text-align: center;">
+//                       <div class="form-group">
+//                           <b>ลำดับ</b>
+//                       </div>
+//                       <div class="form-group" >
+//                           <label id="SERIES-CURRSEQ${seq}" >${seq}</label>
+//                           <label id="SERIES-SEQ${seq}" style="display: none;">${seq}</label>
+//                       </div>
+//                     </div>
+//                     <!-- Series -->
+//                     <div class="col-sm-5">
+//                       <div class="form-group">
+//                         <label for="series">Series <b style="color: red;">*</b></label>
+//                         <select id="card${seq}-series" class="form-control required select2bs4 " style="width: 100%;"
+//                           onchange="enableButton(${seq}, this.value);"
+//                         >
+//                         </select>
+//                       </div>
+//                       <input type="text" id="card${seq}-prevSeries" style="display:none;">
+//                     </div>
 
-                    <div class="col-sm-1">
-                      <div class="form-group"></div>
-                      <div class="form-group" style="margin-top: 32px">
-                          <button type="button" class="btn btn-block btn-outline-danger"
-                          onclick="deleteGroupSeries('cardMultiSeries${seq}');"
-                          style="width: 40px;">X</button>
-                      </div>
-                    </div>
+//                     <div class="col-sm-1">
+//                       <div class="form-group"></div>
+//                       <div class="form-group" style="margin-top: 32px">
+//                           <button type="button" class="btn btn-block btn-outline-danger"
+//                           onclick="deleteGroupSeries('cardMultiSeries${seq}');"
+//                           style="width: 40px;">X</button>
+//                       </div>
+//                     </div>
 
-                  </div>
-                  <!-- --------------------------------------------------------------------------------------------- -->
-                  <div class="row">
-                    <div class="col-xs-2" >
-                      <div class="form-group" style="margin-left: 10px" id="card${seq}-groupBtnModel">
-                        <button type="button"  class="btn btn-block btn-outline-success btn-xs" disabled
-                          onclick="createModelGroup('${pool}', document.getElementById('card${seq}-series').value, ${seq});">
-                          <i class="fas fa-plus nav-icon"></i>
-                          Add model
-                        </button>
+//                   </div>
+//                   <!-- --------------------------------------------------------------------------------------------- -->
+//                   <div class="row">
+//                     <div class="col-xs-2" >
+//                       <div class="form-group" style="margin-left: 10px" id="card${seq}-groupBtnModel">
+//                         <button type="button"  class="btn btn-block btn-outline-success btn-xs" disabled
+//                           onclick="createModelGroup('${pool}', document.getElementById('card${seq}-series').value, ${seq});">
+//                           <i class="fas fa-plus nav-icon"></i>
+//                           Add model
+//                         </button>
 
-                        <!-- <button type="button" class="btn btn-block btn-outline-success btn-xs" 
-                          onclick="onSelectItemId('onclick', false, ${seq});">
-                          <i class="fas fa-plus nav-icon"></i>
-                          Add item 
-                        </button> -->
-                        
-                      </div>
-                      <input type="number" id="card${seq}-countItem" style="display:none;">
-                    </div>
-                  </div>
-                  <!-- ---------------------------------- Card Items ----------------------------------- -->
-                  <div class="card" id="card${seq}-cardMultiItem" >
-                    <ul class="list-group list-group-flush">
-              
-                    </ul>
-                  </div>
-                </ul>
-              </div>
-              `;
+//                         <!-- <button type="button" class="btn btn-block btn-outline-success btn-xs"
+//                           onclick="onSelectItemId('onclick', false, ${seq});">
+//                           <i class="fas fa-plus nav-icon"></i>
+//                           Add item
+//                         </button> -->
 
-  document.getElementById("divSeries").innerHTML = htmlGroupSeries;
-  document.getElementById("countSeries").value = seq;
-  document.getElementById(`card${seq}-countItem`).setAttribute("value", 0);
-  loadSeries(series, pool, "", seq);
-  refreshSequence("SERIES-CURRSEQ");
-}
+//                       </div>
+//                       <input type="number" id="card${seq}-countItem" style="display:none;">
+//                     </div>
+//                   </div>
+//                   <!-- ---------------------------------- Card Items ----------------------------------- -->
+//                   <div class="card" id="card${seq}-cardMultiItem" >
+//                     <ul class="list-group list-group-flush">
+
+//                     </ul>
+//                   </div>
+//                 </ul>
+//               </div>
+//               `;
+
+//   document.getElementById("divSeries").innerHTML = htmlGroupSeries;
+//   document.getElementById("countSeries").value = seq;
+//   document.getElementById(`card${seq}-countItem`).setAttribute("value", 0);
+//   loadSeries(series, pool, "", seq);
+//   refreshSequence("SERIES-CURRSEQ");
+// }
 
 function enableButton(seq, series) {
   let disable = "";
@@ -499,13 +501,12 @@ function loadModel(selected, seriesedit, series_s, seqSeries, id) {
       const objects = JSON.parse(this.responseText);
 
       trHTML += `<option value="" selected="selected">------ None ------</option>`;
-      for (let object of objects) {
-        let _model = object["Model"];
+      objects.map((row) => {
+        if (selected == row.Model) {
+          trHTML += `<option value="${row.Model}" selected>${row.Model}</option>`;
+        } else trHTML += `<option value="${row.Model}">${row.Model}</option>`;
+      });
 
-        if (selected == _model) {
-          trHTML += `<option value="${_model}" selected>${_model}</option>`;
-        } else trHTML += `<option value="${_model}">${_model}</option>`;
-      }
       if (title == "Add Line")
         document.getElementById(`card${seqSeries}-model` + id).innerHTML =
           trHTML;
@@ -541,36 +542,37 @@ function getDefaultItemId(pool, series, model, seqSeries, id) {
     );
     xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-        let _checked = false;
-        let _size = "";
 
         const objects = JSON.parse(this.responseText);
         if (objects.length > 0) {
-          for (let object of objects) {
-            itemId = object["ItemId"];
-            let _name = object["Name"];
-            let _booking = object["Booking"];
-            _size = object["Size"];
-            _checked = _booking == 1 ? true : false;
+
+          objects.map((row) => {
 
             document
               .getElementById(`card${seqSeries}-itemId` + id)
-              .setAttribute("value", itemId);
+              .setAttribute("value", row.ItemId);
 
-            onChecked(_checked, seqSeries, id);
-          }
+            document
+              .getElementById(`card${seqSeries}-itemName` + id)
+              .setAttribute("value", row.Name);
+
+            onChecked(row.Booking == 1 ? true : false, seqSeries, id);
+          });
+
         }
       }
     };
   }
+
 }
+
 function onSelectItemId(model, check, seqSeries) {
   var multipleItem = "";
 
   if (!existsControl(`card${seqSeries}-countItem`)) {
     let i =
       parseInt(document.getElementById(`card${seqSeries}-countItem`).value) + 1;
-    //let model = document.getElementById(`card${seqSeries}-model`).value;
+
     let defaultCheck = "";
     let minDate = "";
     let enableTS = "disabled";
@@ -591,13 +593,13 @@ function onSelectItemId(model, check, seqSeries) {
       id: `card${seqSeries}-li${i}`,
       className: "list-group-item"
     });
-    document.getElementById(`card${seqSeries}-ul${i}`).appendChild(li);
+    ul.appendChild(li);
 
     let row = createElement("div", {
       id: `card${seqSeries}-row${i}`,
       className: "row"
     });
-    document.getElementById(`card${seqSeries}-li${i}`).appendChild(row);
+    li.appendChild(row);
 
     let colseq = createElement("div", {
       id: `card${seqSeries}-colseq${i}`,
@@ -605,183 +607,195 @@ function onSelectItemId(model, check, seqSeries) {
       style:
         "font-style: normal; margin-right: 15px; margin-bottom: 0; text-align: center;"
     });
-    document.getElementById(`card${seqSeries}-row${i}`).appendChild(colseq);
+    row.appendChild(colseq);
 
     let grouplblseq = createElement("div", {
       id: `card${seqSeries}-grouplblseq${i}`,
       className: "form-group",
       style: "margin-bottom: 0;"
     });
-    document
-      .getElementById(`card${seqSeries}-colseq${i}`)
-      .appendChild(grouplblseq);
+    colseq.appendChild(grouplblseq);
 
-    let b = createElement("b", { id: `card${seqSeries}-b${i}` });
-    document.getElementById(`card${seqSeries}-grouplblseq${i}`).appendChild(b);
-    document.getElementById(`card${seqSeries}-b${i}`).innerText = "ลำดับ";
+    let b = createElement("b", {
+      id: `card${seqSeries}-b${i}`,
+      innerText: "ลำดับ"
+    });
+    grouplblseq.appendChild(b);
 
     let groupseq = createElement("div", {
       id: `card${seqSeries}-groupseq${i}`,
       className: "form-group",
       style: "padding-top: 10px;"
     });
-    document
-      .getElementById(`card${seqSeries}-colseq${i}`)
-      .appendChild(groupseq);
+    colseq.appendChild(groupseq);
 
     let currseq = createElement("label", {
-      id: `card${seqSeries}-CURRSEQ${i}`
+      id: `card${seqSeries}-CURRSEQ${i}`,
+      innerText: i
     });
-    document
-      .getElementById(`card${seqSeries}-groupseq${i}`)
-      .appendChild(currseq);
-    document.getElementById(`card${seqSeries}-CURRSEQ${i}`).innerText = i;
+    groupseq.appendChild(currseq);
 
     let seq = createElement("label", {
       id: `card${seqSeries}-SEQ${i}`,
-      style: "display: none;"
+      style: "display: none;",
+      innerText: i
     });
-    document.getElementById(`card${seqSeries}-groupseq${i}`).appendChild(seq);
-    document.getElementById(`card${seqSeries}-SEQ${i}`).innerText = i;
+    groupseq.appendChild(seq);
 
-    //-------------------------------------- ติดตั้ง ------------------------------------------
-
+    //#region ติดตั้ง
     let colconfirm = createElement("div", {
       id: `card${seqSeries}-colconfirm${i}`,
       className: "col-xs-1",
       style: "font-style: normal; text-align: center;"
     });
-    document.getElementById(`card${seqSeries}-row${i}`).appendChild(colconfirm);
+    row.appendChild(colconfirm);
 
     let groupconfirm = createElement("div", {
       id: `card${seqSeries}-groupconfirm${i}`,
       className: "form-group",
       style: "margin-bottom: 0;"
     });
-    document
-      .getElementById(`card${seqSeries}-colconfirm${i}`)
-      .appendChild(groupconfirm);
+    colconfirm.appendChild(groupconfirm);
 
-    let bconf = createElement("b", { id: `card${seqSeries}-bconf${i}` });
-    document
-      .getElementById(`card${seqSeries}-groupconfirm${i}`)
-      .appendChild(bconf);
-    document.getElementById(`card${seqSeries}-bconf${i}`).innerText = "ติดตั้ง";
+    let bconf = createElement("b", {
+      id: `card${seqSeries}-bconf${i}`,
+      innerText: "ติดตั้ง"
+    });
+    groupconfirm.appendChild(bconf);
 
     let groupCheck = createElement("div", {
       id: `card${seqSeries}-groupCheck${i}`,
       className: "form-group",
       style: "padding-top: 10px;"
     });
-    document
-      .getElementById(`card${seqSeries}-colconfirm${i}`)
-      .appendChild(groupCheck);
+    colconfirm.appendChild(groupCheck);
 
     let checkBooking = createElement("input", {
       id: `card${seqSeries}-checkBooking${i}`,
       className: "form-group",
       type: "checkbox"
     });
-    document
-      .getElementById(`card${seqSeries}-groupCheck${i}`)
-      .appendChild(checkBooking);
-    var elecheckBooking = document.getElementById(
-      `card${seqSeries}-checkBooking${i}`
-    );
-    elecheckBooking.onclick = function () {
+    groupCheck.appendChild(checkBooking);
+    checkBooking.onclick = function () {
       activeBooking(this.checked, i);
     };
+    //#endregion
+   
+    //#region model
 
-    //-------------------------------------- model ------------------------------------------
+let colmodel = createElement("div", {
+  id: `card${seqSeries}-colmodel${i}`,
+  className: "col-sm-5",
+  style: "font-style: normal;"
+});
+row.appendChild(colmodel);
 
-    let colmodel = createElement("div", {
-      id: `card${seqSeries}-colmodel${i}`,
-      className: "col-sm-5",
+let groupmodel = createElement("div", {
+  id: `card${seqSeries}-groupmodel${i}`,
+  className: "form-group"
+});
+colmodel.appendChild(groupmodel);
+
+let bmodel = createElement("b", {
+  id: `card${seqSeries}-bmodel${i}`,
+  innerText: "Model"
+});
+groupmodel.appendChild(bmodel);
+
+let bd = createElement("b", {
+  id: `card${seqSeries}-b*${i}`,
+  style: "color: red;",
+  innerText: "*"
+});
+bmodel.appendChild(bd);
+
+let model = createElement("select", {
+  id: `card${seqSeries}-model${i}`,
+  className: "form-control required select2bs4",
+  style: "width: 100%;"
+});
+groupmodel.appendChild(model);
+model.onchange = function () {
+  getDefaultItemId(
+    `${pool}`,
+    document.getElementById(`card${seqSeries}-series`).value,
+    this.value,
+    seqSeries,
+    parseInt(i - 1)
+  );
+};
+
+//#endregion
+
+    //#region Item
+    let rowItem = createElement("div", {
+      id: `card${seqSeries}-rowItem${i}`,
+      className: "row"
+    });
+    li.appendChild(rowItem);
+
+    let colItemEmpty = createElement("div", {
+      id: `card${seqSeries}-colItemEmpty${i}`,
+      className: "col-sm-1",
       style: "font-style: normal;"
     });
-    document.getElementById(`card${seqSeries}-row${i}`).appendChild(colmodel);
+    rowItem.appendChild(colItemEmpty);
 
-    let groupmodel = createElement("div", {
-      id: `card${seqSeries}-groupmodel${i}`,
-      className: "form-group"
+    let colItem = createElement("div", {
+      id: `card${seqSeries}-colItem${i}`,
+      className: "col-sm-4",
+      style: "font-style: normal;"
     });
-    document
-      .getElementById(`card${seqSeries}-colmodel${i}`)
-      .appendChild(groupmodel);
-
-    let bmodel = createElement("b", { id: `card${seqSeries}-bmodel${i}` });
-    document
-      .getElementById(`card${seqSeries}-groupmodel${i}`)
-      .appendChild(bmodel);
-    document.getElementById(`card${seqSeries}-bmodel${i}`).innerText = "Model";
-
-    let bd = createElement("b", {
-      id: `card${seqSeries}-b*${i}`,
-      style: "color: red;"
-    });
-    document.getElementById(`card${seqSeries}-bmodel${i}`).appendChild(bd);
-    document.getElementById(`card${seqSeries}-b*${i}`).innerText = "*";
-
-    let model = createElement("select", {
-      id: `card${seqSeries}-model${i}`,
-      className: "form-control required select2bs4",
-      style: "width: 100%;"
-    });
-    document
-      .getElementById(`card${seqSeries}-groupmodel${i}`)
-      .appendChild(model);
-    var elemodel = document.getElementById(`card${seqSeries}-model${i}`);
-    elemodel.onchange = function () {
-      getDefaultItemId(
-        `${pool}`,
-        document.getElementById(`card${seqSeries}-series`).value,
-        this.value,
-        seqSeries,
-        parseInt(i - 1)
-      );
-    };
+    rowItem.appendChild(colItem);
 
     let itemId = createElement("input", {
       id: `card${seqSeries}-itemId${i}`,
+      className: "form-control",
       type: "text",
-      style: "display:none;"
+      placeholder: 'รหัสสินค้า',
+      disabled : true
     });
-    document
-      .getElementById(`card${seqSeries}-colmodel${i}`)
-      .appendChild(itemId);
+    colItem.appendChild(itemId);
+
+    let colItemName = createElement("div", {
+      id: `card${seqSeries}-colItemName${i}`,
+      className: "col-sm-6",
+      style: "font-style: normal;"
+    });
+    rowItem.appendChild(colItemName);
+
+    let itemName = createElement("input", {
+      id: `card${seqSeries}-itemName${i}`,
+      className: "form-control",
+      placeholder: 'ชื่อสินค้า',
+      type: "text"
+    });
+    colItemName.appendChild(itemName);
 
     let _default = createElement("div", { id: `default` });
-    document
-      .getElementById(`card${seqSeries}-colmodel${i}`)
-      .appendChild(_default);
+    colmodel.appendChild(_default);
+    //#endregion
 
-    //-------------------------------------- จำนวน ------------------------------------------
+    //#region จำนวน
 
     let colmultiqty = createElement("div", {
       id: `card${seqSeries}-colmultiqty${i}`,
       className: "col-md-2",
       style: "font-style: normal;"
     });
-    document
-      .getElementById(`card${seqSeries}-row${i}`)
-      .appendChild(colmultiqty);
+    row.appendChild(colmultiqty);
 
     let groupmultiqty = createElement("div", {
       id: `card${seqSeries}-groupmultiqty${i}`,
       className: "form-group"
     });
-    document
-      .getElementById(`card${seqSeries}-colmultiqty${i}`)
-      .appendChild(groupmultiqty);
+    colmultiqty.appendChild(groupmultiqty);
 
     let bmultiqty = createElement("b", {
-      id: `card${seqSeries}-bmultiqty${i}`
+      id: `card${seqSeries}-bmultiqty${i}`,
+      innerText: "จำนวน"
     });
-    document
-      .getElementById(`card${seqSeries}-groupmultiqty${i}`)
-      .appendChild(bmultiqty);
-    document.getElementById(`card${seqSeries}-bmultiqty${i}`).innerText =
-      "จำนวน";
+    groupmultiqty.appendChild(bmultiqty);
 
     let multiqty = createElement("input", {
       id: `card${seqSeries}-multiqty${i}`,
@@ -790,188 +804,155 @@ function onSelectItemId(model, check, seqSeries) {
       min: 0,
       value: 0
     });
-    document
-      .getElementById(`card${seqSeries}-groupmultiqty${i}`)
-      .appendChild(multiqty);
-    var elemultiqty = document.getElementById(`card${seqSeries}-multiqty${i}`);
-    elemultiqty.onchange = function () {
+    groupmultiqty.appendChild(multiqty);
+    multiqty.onchange = function () {
       setQtyValue(seqSeries, parseInt(i - 1));
     };
-    elemultiqty.oninput = function () {
+    multiqty.oninput = function () {
       this.value = Math.abs(this.value);
     };
+    //#endregion
 
-    //-------------------------------------- ยอดเงินรวม ------------------------------------------
-
+    //#region ยอดเงินรวม
     let colamount = createElement("div", {
       id: `card${seqSeries}-colamount${i}`,
       className: "col-md-2",
       style: "font-style: normal;"
     });
-    document.getElementById(`card${seqSeries}-row${i}`).appendChild(colamount);
+    row.appendChild(colamount);
 
     let groupamount = createElement("div", {
       id: `card${seqSeries}-groupamount${i}`,
       className: "form-group"
     });
-    document
-      .getElementById(`card${seqSeries}-colamount${i}`)
-      .appendChild(groupamount);
+    colamount.appendChild(groupamount);
 
-    let bamount = createElement("b", { id: `card${seqSeries}-bamount${i}` });
-    document
-      .getElementById(`card${seqSeries}-groupamount${i}`)
-      .appendChild(bamount);
-    document.getElementById(`card${seqSeries}-bamount${i}`).innerText =
-      "ยอดเงินรวม";
+    let bamount = createElement("b", {
+      id: `card${seqSeries}-bamount${i}`,
+      innerText: "ยอดเงินรวม"
+    });
+    groupamount.appendChild(bamount);
 
     let multiamount = createElement("input", {
       id: `card${seqSeries}-multiamount${i}`,
       className: "form-control",
       type: "number",
       min: 0,
-      value: 0
+      step: ".01",
+      value: "0.00"
     });
-    document
-      .getElementById(`card${seqSeries}-groupamount${i}`)
-      .appendChild(multiamount);
-    var elemultiamount = document.getElementById(
-      `card${seqSeries}-multiamount${i}`
-    );
-    elemultiamount.onchange = function () {
+    multiamount.setAttribute("data-decimal", "2");
+    multiamount.oninput = function () {
+      enforceNumberValidation(this);
+    };
+
+    groupamount.appendChild(multiamount);
+    multiamount.onchange = function () {
       setAmountValue(seqSeries, parseInt(i - 1));
     };
-    elemultiamount.oninput = function () {
-      this.value = Math.abs(this.value);
-    };
 
-    //-------------------------------------- button delete ------------------------------------------
+    //#endregion
 
+    //#region delete button
     let coldelete = createElement("div", {
       id: `card${seqSeries}-coldelete${i}`,
       className: "col-sm-1",
       style: "font-style: normal;"
     });
-    document.getElementById(`card${seqSeries}-row${i}`).appendChild(coldelete);
+    row.appendChild(coldelete);
 
     let groupEmpty = createElement("div", {
       id: `card${seqSeries}-groupEmpty${i}`,
       className: "form-group"
     });
-    document
-      .getElementById(`card${seqSeries}-coldelete${i}`)
-      .appendChild(groupEmpty);
+    coldelete.appendChild(groupEmpty);
 
     let groupdelete = createElement("div", {
       id: `card${seqSeries}-groupdelete${i}`,
       className: "form-group",
       style: "margin-top: 25px"
     });
-    document
-      .getElementById(`card${seqSeries}-coldelete${i}`)
-      .appendChild(groupdelete);
+    coldelete.appendChild(groupdelete);
 
     let btndelete = createElement("div", {
       id: `card${seqSeries}-btndelete${i}`,
+      innerText: "X",
       className: "btn btn-block btn-outline-danger",
       type: "button",
       style: "width: 40px;"
     });
-    document
-      .getElementById(`card${seqSeries}-groupdelete${i}`)
-      .appendChild(btndelete);
-    var eleDelete = document.getElementById(`card${seqSeries}-btndelete${i}`);
-    eleDelete.onclick = function () {
+    groupdelete.appendChild(btndelete);
+    btndelete.onclick = function () {
       deleteGroup(
         `'card${seqSeries}-ul${parseInt(i - 1)}'`,
         seqSeries,
         parseInt(i - 1)
       );
     };
-    eleDelete.innerText = "X";
-    //-------------------------------------- empty ------------------------------------------
+
+    //#endregion
+   
+    //#region empty
 
     let row2 = createElement("div", {
       id: `card${seqSeries}-row2${i}`,
       className: "row"
     });
-    document.getElementById(`card${seqSeries}-li${i}`).appendChild(row2);
+    li.appendChild(row2);
 
     let colempty = createElement("div", {
       id: `card${seqSeries}-colempty${i}`,
       className: "col-sm-1",
       style: "font-style: normal;"
     });
-    document.getElementById(`card${seqSeries}-row2${i}`).appendChild(colempty);
+    row2.appendChild(colempty);
 
     let groupEmpty1 = createElement("div", {
       id: `card${seqSeries}-groupEmpty1${i}`,
       className: "form-group"
     });
-    document
-      .getElementById(`card${seqSeries}-colempty${i}`)
-      .appendChild(groupEmpty1);
+    colempty.appendChild(groupEmpty1);
 
     let groupEmpty2 = createElement("div", {
       id: `card${seqSeries}-groupEmpty2${i}`,
       className: "form-group"
     });
-    document
-      .getElementById(`card${seqSeries}-colempty${i}`)
-      .appendChild(groupEmpty2);
+    colempty.appendChild(groupEmpty2);
 
-    //-------------------------------------- sales date ------------------------------------------
-
-    // let colsalesdate = createElement('div', {id:`card${seqSeries}-colsalesdate${i}` , className: 'col-sm-2', style : 'display: none;'});
-    // document.getElementById(`card${seqSeries}-row2${i}`).appendChild(colsalesdate);
-
-    // let groupsalesdate = createElement('div', {id:`card${seqSeries}-groupsalesdate${i}` , className: 'form-group'});
-    // document.getElementById(`card${seqSeries}-colsalesdate${i}`).appendChild(groupsalesdate);
-
-    // let salesDate_line = createElement('input', {id:`salesDate_line${i}` , className: 'form-group', type: 'date', value: salesDate});
-    // document.getElementById(`card${seqSeries}-groupsalesdate${i}`).appendChild(salesDate_line);
-
-    //-------------------------------------- confirm date ------------------------------------------
+    //#endregion
+ 
+    //#region confirm date
 
     let colconfdate = createElement("div", {
       id: `card${seqSeries}-colconfdate${i}`,
       className: "col-sm-3",
       style: "font-style: normal;"
     });
-    document
-      .getElementById(`card${seqSeries}-row2${i}`)
-      .appendChild(colconfdate);
+    row2.appendChild(colconfdate);
 
     let groupconfdate = createElement("div", {
       id: `card${seqSeries}-groupconfdate${i}`,
       className: "form-group"
     });
-    document
-      .getElementById(`card${seqSeries}-colconfdate${i}`)
-      .appendChild(groupconfdate);
+    colconfdate.appendChild(groupconfdate);
 
     let bconfdate = createElement("b", {
-      id: `card${seqSeries}-bconfdate${i}`
+      id: `card${seqSeries}-bconfdate${i}`,
+      innerText: "วันที่ติดตั้ง"
     });
-    document
-      .getElementById(`card${seqSeries}-groupconfdate${i}`)
-      .appendChild(bconfdate);
-    document.getElementById(`card${seqSeries}-bconfdate${i}`).innerText =
-      "วันที่ติดตั้ง";
+    groupconfdate.appendChild(bconfdate);
 
     let icons = createElement("div", {
       id: `card${seqSeries}-icons${i}`,
       className: "input-icons"
     });
-    document
-      .getElementById(`card${seqSeries}-groupconfdate${i}`)
-      .appendChild(icons);
+    groupconfdate.appendChild(icons);
 
     let iicons = createElement("i", {
       id: `card${seqSeries}-iicons${i}`,
       className: "fa fa-calendar icon"
     });
-    document.getElementById(`card${seqSeries}-icons${i}`).appendChild(iicons);
+    icons.appendChild(iicons);
 
     let confirmDate_line = createElement("input", {
       id: `card${seqSeries}-confirmDate_line${i}`,
@@ -979,9 +960,7 @@ function onSelectItemId(model, check, seqSeries) {
       type: "text",
       style: "background-color: white; padding-left: 30px;"
     });
-    document
-      .getElementById(`card${seqSeries}-icons${i}`)
-      .appendChild(confirmDate_line);
+    icons.appendChild(confirmDate_line);
 
     flatpickr(`#card${seqSeries}-confirmDate_line${i}`, {
       locale: "th",
@@ -992,53 +971,41 @@ function onSelectItemId(model, check, seqSeries) {
           return date.getDay() === 0;
         }
       ]
-
-      //defaultDate : dateFormatSlace(object.TransDate.substring(0,10))
     });
 
-    var eleconfdate = document.getElementById(
-      `card${seqSeries}-confirmDate_line${i}`
-    );
-    eleconfdate.onchange = function () {
+    confirmDate_line.onchange = function () {
       activeTimePeriod(this.value, seqSeries, parseInt(i - 1));
     };
+    //#endregion
 
-    //-------------------------------------- ช่วงเวลา ------------------------------------------
+    //#region ช่วงเวลา
 
     let coltime = createElement("div", {
       id: `card${seqSeries}-coltime${i}`,
       className: "col-sm-2",
       style: "font-style: normal;"
     });
-    document.getElementById(`card${seqSeries}-row2${i}`).appendChild(coltime);
+    row2.appendChild(coltime);
 
     let grouptime = createElement("div", {
       id: `card${seqSeries}-grouptime${i}`,
       className: "form-group"
     });
-    document
-      .getElementById(`card${seqSeries}-coltime${i}`)
-      .appendChild(grouptime);
+    coltime.appendChild(grouptime);
 
-    let btime = createElement("b", { id: `card${seqSeries}-btime${i}` });
-    document
-      .getElementById(`card${seqSeries}-grouptime${i}`)
-      .appendChild(btime);
-    document.getElementById(`card${seqSeries}-btime${i}`).innerText =
-      "ช่วงเวลา";
+    let btime = createElement("b", {
+      id: `card${seqSeries}-btime${i}`,
+      innerText: "ช่วงเวลา"
+    });
+    grouptime.appendChild(btime);
 
     let timeperiod = createElement("select", {
       id: `card${seqSeries}-timeperiod${i}`,
       className: "form-control select2bs4",
       style: "width: 100%;"
     });
-    document
-      .getElementById(`card${seqSeries}-grouptime${i}`)
-      .appendChild(timeperiod);
-    var eletimeperiod = document.getElementById(
-      `card${seqSeries}-timeperiod${i}`
-    );
-    eletimeperiod.onchange = function () {
+    grouptime.appendChild(timeperiod);
+    timeperiod.onchange = function () {
       loadTimePeriod(this.value, seqSeries, parseInt(i - 1));
     };
 
@@ -1055,41 +1022,37 @@ function onSelectItemId(model, check, seqSeries) {
     opt3.value = "2";
     opt3.text = "บ่าย";
 
-    eletimeperiod.add(opt1, null);
-    eletimeperiod.add(opt2, null);
-    eletimeperiod.add(opt3, null);
+    timeperiod.add(opt1, null);
+    timeperiod.add(opt2, null);
+    timeperiod.add(opt3, null);
 
-    //-------------------------------------- size ------------------------------------------
-
+    //#endregion
+  
+    //#region size
     let colsize = createElement("div", {
       id: `card${seqSeries}-colsize${i}`,
       className: "col-sm-3",
       style: "font-style: normal;"
     });
-    document.getElementById(`card${seqSeries}-row2${i}`).appendChild(colsize);
+    row2.appendChild(colsize);
 
     let groupsize = createElement("div", {
       id: `card${seqSeries}-groupsize${i}`,
       className: "form-group"
     });
-    document
-      .getElementById(`card${seqSeries}-colsize${i}`)
-      .appendChild(groupsize);
+    colsize.appendChild(groupsize);
 
     let bsize = createElement("b", { id: `card${seqSeries}-bsize${i}` });
-    document
-      .getElementById(`card${seqSeries}-groupsize${i}`)
-      .appendChild(bsize);
-    document.getElementById(`card${seqSeries}-bsize${i}`).innerText = "Size";
+    groupsize.appendChild(bsize);
+    bsize.innerText = "Size";
 
     let size = createElement("select", {
       id: `card${seqSeries}-size${i}`,
       className: "form-control select2bs4",
       style: "width: 100%;"
     });
-    document.getElementById(`card${seqSeries}-groupsize${i}`).appendChild(size);
-    var elesize = document.getElementById(`card${seqSeries}-size${i}`);
-    elesize.onchange = function () {
+    groupsize.appendChild(size);
+    size.onchange = function () {
       loadSize(this.value, seqSeries, parseInt(i - 1));
     };
 
@@ -1110,21 +1073,17 @@ function onSelectItemId(model, check, seqSeries) {
     optS4.value = "L";
     optS4.text = "L (มากกว่า 7 เมตร)";
 
-    elesize.add(optS1, null);
-    elesize.add(optS2, null);
-    elesize.add(optS3, null);
-    elesize.add(optS4, null);
+    size.add(optS1, null);
+    size.add(optS2, null);
+    size.add(optS3, null);
+    size.add(optS4, null);
+    //#endregion
 
     i++;
     //let inputConfDate = createElement('input', {id:`card${seqSeries}-confirmDate_line${i}`, className: 'form-control', type: 'text', min: strToDate(salesDate, 4)});
     document.getElementById(`card${seqSeries}-countItem`).value = parseInt(
       i - 1
     ); //เก็บจำนวน item ที่เลือก
-    //document.getElementById(`card${seqSeries}-cardMultiItem`).innerHTML = multipleItem;
-
-    // document.getElementById(`card${seqSeries}-groupconfDate${i}`).appendChild(inputConfDate);
-    // var eleinstallment = document.getElementById(`card${seqSeries}-confirmDate_line${i}`);
-    // eleinstallment.onchange = function() { activeTimePeriod(this.value,seqSeries, i); };
   }
 }
 
@@ -1142,193 +1101,192 @@ function createElement(el, options, listen = []) {
   return element;
 }
 
-function onSelectItemId2(model, check, seqSeries) {
-  var multipleItem = "";
+// function onSelectItemId2(model, check, seqSeries) {
+//   var multipleItem = "";
 
-  if (!existsControl(`card${seqSeries}-countItem`)) {
-    let i =
-      parseInt(document.getElementById(`card${seqSeries}-countItem`).value) + 1;
-    //let model = document.getElementById(`card${seqSeries}-model`).value;
-    let defaultCheck = "";
-    let minDate = "";
-    let enableTS = "disabled";
-    let enableConfirmDate = "disabled";
-    let salesDate = document.getElementById("salesDate_line").value;
+//   if (!existsControl(`card${seqSeries}-countItem`)) {
+//     let i =
+//       parseInt(document.getElementById(`card${seqSeries}-countItem`).value) + 1;
+//     //let model = document.getElementById(`card${seqSeries}-model`).value;
+//     let defaultCheck = "";
+//     let minDate = "";
+//     let enableTS = "disabled";
+//     let enableConfirmDate = "disabled";
+//     let salesDate = document.getElementById("salesDate_line").value;
 
-    if (check == true) {
-      minDate = `min="${strToDate(salesDate, 4)}"`;
-    }
+//     if (check == true) {
+//       minDate = `min="${strToDate(salesDate, 4)}"`;
+//     }
 
-    multipleItem += document.getElementById(
-      `card${seqSeries}-cardMultiItem`
-    ).innerHTML;
+//     multipleItem += document.getElementById(`card${seqSeries}-cardMultiItem`)
+//       .innerHTML;
 
-    multipleItem += `<ul class="list-group list-group-flush "
-                          id="card${seqSeries}-ul${i}">
-                          <li class="list-group-item">
-                          <div class="row">
-                              <div class="col-xs-1" 
-                              style="margin-right: 15px; margin-bottom: 0; text-align: center;">
-                                <div class="form-group" style="margin-bottom: 0;">
-                                    <b>ลำดับ</b>
-                                </div>
-                                <div class="form-group" >
-                                    <label id="card${seqSeries}-CURRSEQ${i}">${i}</label>
-                                    <label id="card${seqSeries}-SEQ${i}" style="display: none;">${i}</label>
-                                </div>
-                              </div>
-                              <div class="col-xs-1" style="text-align: center;">
-                                <div class="form-group" style="margin-bottom: 0;">
-                                  <b>ติดตั้ง</b>
-                                </div>
-                                <div class="form-group" id="card${seqSeries}-groupCheck${i}">
+//     multipleItem += `<ul class="list-group list-group-flush "
+//                           id="card${seqSeries}-ul${i}">
+//                           <li class="list-group-item">
+//                           <div class="row">
+//                               <div class="col-xs-1"
+//                               style="margin-right: 15px; margin-bottom: 0; text-align: center;">
+//                                 <div class="form-group" style="margin-bottom: 0;">
+//                                     <b>ลำดับ</b>
+//                                 </div>
+//                                 <div class="form-group" >
+//                                     <label id="card${seqSeries}-CURRSEQ${i}">${i}</label>
+//                                     <label id="card${seqSeries}-SEQ${i}" style="display: none;">${i}</label>
+//                                 </div>
+//                               </div>
+//                               <div class="col-xs-1" style="text-align: center;">
+//                                 <div class="form-group" style="margin-bottom: 0;">
+//                                   <b>ติดตั้ง</b>
+//                                 </div>
+//                                 <div class="form-group" id="card${seqSeries}-groupCheck${i}">
 
-                                    <input type="checkbox" id="card${seqSeries}-checkBooking${i}" 
-                                    onclick="activeBooking(this.checked,${seqSeries}, ${i})">
+//                                     <input type="checkbox" id="card${seqSeries}-checkBooking${i}"
+//                                     onclick="activeBooking(this.checked,${seqSeries}, ${i})">
 
-                                </div>
-                              </div>
+//                                 </div>
+//                               </div>
 
-                              <div class="col-sm-5 ">
-                                <div class="form-group">
-                                <b>Model <b style="color: red;">*</b></b>
-                                <select id="card${seqSeries}-model${i}" 
-                                  class="form-control required select2bs4" style="width: 100%;"
-                                  onchange="getDefaultItemId('${pool}',document.getElementById('card${seqSeries}-series').value, this.value, ${seqSeries}, ${i})"
-                                  >
-                                </select>
+//                               <div class="col-sm-5 ">
+//                                 <div class="form-group">
+//                                 <b>Model <b style="color: red;">*</b></b>
+//                                 <select id="card${seqSeries}-model${i}"
+//                                   class="form-control required select2bs4" style="width: 100%;"
+//                                   onchange="getDefaultItemId('${pool}',document.getElementById('card${seqSeries}-series').value, this.value, ${seqSeries}, ${i})"
+//                                   >
+//                                 </select>
 
-                                    <input type="text" id="card${seqSeries}-itemId${i}" style="display:none;">
+//                                     <input type="text" id="card${seqSeries}-itemId${i}" style="display:none;">
 
-                                    <div id="default"></div>
-                                </div>
-                              </div>
+//                                     <div id="default"></div>
+//                                 </div>
+//                               </div>
 
-                              <div class="col-md-2">
-                                <div class="form-group">
-                                    <b>จำนวน</b>
-                                    <input type="number" id="card${seqSeries}-multiqty${i}" value="0"  class="form-control" 
-                                    min="0" oninput="this.value = Math.abs(this.value)"
-                                    onchange="setQtyValue(${seqSeries},${i})">
-                                </div>
-                              </div>
+//                               <div class="col-md-2">
+//                                 <div class="form-group">
+//                                     <b>จำนวน</b>
+//                                     <input type="number" id="card${seqSeries}-multiqty${i}" value="0"  class="form-control"
+//                                     min="0" oninput="this.value = Math.abs(this.value)"
+//                                     onchange="setQtyValue(${seqSeries},${i})">
+//                                 </div>
+//                               </div>
 
-                              <div class="col-md-2">
-                                <div class="form-group">
-                                  <b>ยอดเงินรวม</b>
-                                  <input type="number" id="card${seqSeries}-multiamount${i}" value="0" class="form-control" 
-                                  min="0" oninput="this.value = Math.abs(this.value)"
-                                  onchange="setAmountValue(${seqSeries},${i})">
-                                </div>
-                              </div>
+//                               <div class="col-md-2">
+//                                 <div class="form-group">
+//                                   <b>ยอดเงินรวม</b>
+//                                   <input type="number" id="card${seqSeries}-multiamount${i}" value="0" class="form-control"
+//                                   min="0" oninput="this.value = Math.abs(this.value)"
+//                                   onchange="setAmountValue(${seqSeries},${i})">
+//                                 </div>
+//                               </div>
 
-                              <div class="col-sm-1">
-                                <div class="form-group"></div>
-                                <div class="form-group" style="margin-top: 25px">
-                                    <button type="button" class="btn btn-block btn-outline-danger"
-                                        onclick="deleteGroup('card${seqSeries}-ul${i}', ${seqSeries});"
-                                    style="width: 40px;">X</button>
-                                </div>
-                              </div>
+//                               <div class="col-sm-1">
+//                                 <div class="form-group"></div>
+//                                 <div class="form-group" style="margin-top: 25px">
+//                                     <button type="button" class="btn btn-block btn-outline-danger"
+//                                         onclick="deleteGroup('card${seqSeries}-ul${i}', ${seqSeries});"
+//                                     style="width: 40px;">X</button>
+//                                 </div>
+//                               </div>
 
-                          </div>
-                          <div class="row">
-                              <div class="col-sm-1" >
-                                <div class="form-group" >
-                                 
-                                </div>
-                                <div class="form-group" >
-                        
-                                </div>
-                              </div>
+//                           </div>
+//                           <div class="row">
+//                               <div class="col-sm-1" >
+//                                 <div class="form-group" >
 
-                              <div class="col-sm-2" style="display: none;">
-                                <div class="form-group">
+//                                 </div>
+//                                 <div class="form-group" >
 
-                                    <input type="date" id="salesDate_line${i}" class="form-control" value="${salesDate}"
-                                    onchange="setMinConfirmDate(this.value, 0);">
-                                    
-                                </div>
-                              </div>
+//                                 </div>
+//                               </div>
 
-                              <div class="col-sm-3">
-                                <div class="form-group">
-                                    <b>วันที่ติดตั้ง</b>
-                                    <div id="card${seqSeries}-groupConfirmDate_line${i}">
-                                      <div class="input-icons" id="card${seqSeries}-icons${i}">
-                                        <i class="fa fa-calendar icon"></i>
-                                      </div>
-                                    </div>
-                                </div>
-                              </div>
+//                               <div class="col-sm-2" style="display: none;">
+//                                 <div class="form-group">
 
-                              <div class="col-sm-2">
-                              <div class="form-group">
-                                  <b>ช่วงเวลา</b>
-                                  <select id="card${seqSeries}-timeperiod${i}" class="form-control select2bs4" style="width: 100%;" ${enableTS}
-                                  onchange="loadTimePeriod(this.value, ${seqSeries}, ${i});"
-                                  >
-                                  <option value="0" selected></option>
-                                  <option value="1">เช้า</option>
-                                  <option value="2">บ่าย</option>
-                                  </select>
-                              </div>
-                              </div>
-                              <div class="col-sm-3">
-                              <div class="form-group">
-                                  <b>Size</b>
-                                  <select id="card${seqSeries}-size${i}" class="form-control select2bs4 required" ${enableTS}
-                                  onchange="loadSize(this.value,${seqSeries}, ${i})">
-                                  <option value="" selected></option>
-                                  <option value="S">S (1-3 เมตร)</option>
-                                  <option value="M">M (3-7 เมตร)</option>
-                                  <option value="L">L (มากกว่า 7 เมตร)</option>
-                                  </select>
-                              </div>
-                              </div>
+//                                     <input type="date" id="salesDate_line${i}" class="form-control" value="${salesDate}"
+//                                     onchange="setMinConfirmDate(this.value, 0);">
 
-                              
-                          </div>
-                          </li>
-                        <hr>
-                      </ul>`;
-    i++;
+//                                 </div>
+//                               </div>
 
-    let j = parseInt(i - 1);
+//                               <div class="col-sm-3">
+//                                 <div class="form-group">
+//                                     <b>วันที่ติดตั้ง</b>
+//                                     <div id="card${seqSeries}-groupConfirmDate_line${i}">
+//                                       <div class="input-icons" id="card${seqSeries}-icons${i}">
+//                                         <i class="fa fa-calendar icon"></i>
+//                                       </div>
+//                                     </div>
+//                                 </div>
+//                               </div>
 
-    document.getElementById(`card${seqSeries}-countItem`).value = j; //เก็บจำนวน item ที่เลือก
-    document.getElementById(`card${seqSeries}-cardMultiItem`).innerHTML =
-      multipleItem;
+//                               <div class="col-sm-2">
+//                               <div class="form-group">
+//                                   <b>ช่วงเวลา</b>
+//                                   <select id="card${seqSeries}-timeperiod${i}" class="form-control select2bs4" style="width: 100%;" ${enableTS}
+//                                   onchange="loadTimePeriod(this.value, ${seqSeries}, ${i});"
+//                                   >
+//                                   <option value="0" selected></option>
+//                                   <option value="1">เช้า</option>
+//                                   <option value="2">บ่าย</option>
+//                                   </select>
+//                               </div>
+//                               </div>
+//                               <div class="col-sm-3">
+//                               <div class="form-group">
+//                                   <b>Size</b>
+//                                   <select id="card${seqSeries}-size${i}" class="form-control select2bs4 required" ${enableTS}
+//                                   onchange="loadSize(this.value,${seqSeries}, ${i})">
+//                                   <option value="" selected></option>
+//                                   <option value="S">S (1-3 เมตร)</option>
+//                                   <option value="M">M (3-7 เมตร)</option>
+//                                   <option value="L">L (มากกว่า 7 เมตร)</option>
+//                                   </select>
+//                               </div>
+//                               </div>
 
-    let rows = createElement("input", {
-      id: `card${seqSeries}-confirmDate_line${j}`,
-      className: "form-control flatpickr",
-      type: "text",
-      style: "background-color: white; padding-left: 30px;"
-    });
-    document.getElementById(`card${seqSeries}-icons${j}`).appendChild(rows);
+//                           </div>
+//                           </li>
+//                         <hr>
+//                       </ul>`;
+//     i++;
 
-    flatpickr(`#card${seqSeries}-confirmDate_line${j}`, {
-      locale: "th",
-      dateFormat: "d/m/Y",
-      minDate: addDays(document.getElementById("salesDate_line").value, 4),
-      disable: [
-        function (date) {
-          return date.getDay() === 0;
-        }
-      ]
+//     let j = parseInt(i - 1);
 
-      //defaultDate : dateFormatSlace(object.TransDate.substring(0,10))
-    });
+//     document.getElementById(`card${seqSeries}-countItem`).value = j; //เก็บจำนวน item ที่เลือก
+//     document.getElementById(
+//       `card${seqSeries}-cardMultiItem`
+//     ).innerHTML = multipleItem;
 
-    var eleconfdate = document.getElementById(
-      `card${seqSeries}-confirmDate_line${j}`
-    );
-    eleconfdate.onchange = function () {
-      activeTimePeriod(this.value, seqSeries, j);
-    };
-  }
-}
+//     let rows = createElement("input", {
+//       id: `card${seqSeries}-confirmDate_line${j}`,
+//       className: "form-control flatpickr",
+//       type: "text",
+//       style: "background-color: white; padding-left: 30px;"
+//     });
+//     document.getElementById(`card${seqSeries}-icons${j}`).appendChild(rows);
+
+//     flatpickr(`#card${seqSeries}-confirmDate_line${j}`, {
+//       locale: "th",
+//       dateFormat: "d/m/Y",
+//       minDate: addDays(document.getElementById("salesDate_line").value, 4),
+//       disable: [
+//         function(date) {
+//           return date.getDay() === 0;
+//         }
+//       ]
+
+//       //defaultDate : dateFormatSlace(object.TransDate.substring(0,10))
+//     });
+
+//     var eleconfdate = document.getElementById(
+//       `card${seqSeries}-confirmDate_line${j}`
+//     );
+//     eleconfdate.onchange = function() {
+//       activeTimePeriod(this.value, seqSeries, j);
+//     };
+//   }
+// }
 
 function addDays(date_string, addDay) {
   let parts_of_date = date_string.split("/");
@@ -1337,12 +1295,10 @@ function addDays(date_string, addDay) {
 
   let y = d.getFullYear();
   let _date =
-    d
-      .getDate()
-      .toLocaleString("th-TH", {
-        minimumIntegerDigits: 2,
-        useGrouping: false
-      }) +
+    d.getDate().toLocaleString("th-TH", {
+      minimumIntegerDigits: 2,
+      useGrouping: false
+    }) +
     "/" +
     (d.getMonth() + 1).toLocaleString("th-TH", {
       minimumIntegerDigits: 2,
@@ -1376,13 +1332,11 @@ function loadSeries(selected, pooledit, pool_s, seqSeries) {
       const objects = JSON.parse(this.responseText);
 
       trHTML += `<option value="" selected="selected">------ None ------</option>`;
-      for (let object of objects) {
-        let _series = object["ProdSeries"];
-
-        if (selected == _series)
-          trHTML += `<option value="${_series}" selected>${_series}</option>`;
-        else trHTML += `<option value="${_series}">${_series}</option>`;
-      }
+      objects.map((row) => {
+        if (selected == row.ProdSeries)
+          trHTML += `<option value="${row.ProdSeries}" selected>${row.ProdSeries}</option>`;
+        else trHTML += `<option value="${row.ProdSeries}">${row.ProdSeries}</option>`;
+      });
 
       if (title == "Add Line")
         document.getElementById(`card${seqSeries}-series`).innerHTML = trHTML;
@@ -1394,18 +1348,6 @@ function loadSeries(selected, pooledit, pool_s, seqSeries) {
 function loadItem(selected, pool, series, model, seqSeries) {
   let _checked = false;
 
-  // var element = document.getElementById("multipleItem");
-  // if (typeof element != "undefined" && element != null) element.innerHTML = "";
-
-  // if (model == "") {
-  //   if (!existsControl(`card${seqSeries}-itemId`))
-  //     document.getElementById(`card${seqSeries}-itemId`).innerText = "";
-
-  //   return;
-  // }
-  // else {
-  //   loadModel(model, '', series, seqSeries);
-  // }
   if (model == "") {
     document.getElementById(`itemId`).value = "";
     return;
@@ -1430,14 +1372,13 @@ function loadItem(selected, pool, series, model, seqSeries) {
       let _size = "";
 
       if (objects.length > 0) {
-        for (let object of objects) {
-          _ItemId = object["ItemId"];
-          let _name = object["Name"];
-          let _booking = object["Booking"];
-          _size = object["Size"];
 
-          _checked = _booking == 1 ? true : false;
-        }
+        objects.map((row) => {
+          _ItemId = row.ItemId;
+          _size = row.Size;
+          _checked = row.Booking == 1 ? true : false;
+        });
+
       }
       onSelectItemId(model, _checked, seqSeries);
 
@@ -1477,7 +1418,6 @@ function loadItem(selected, pool, series, model, seqSeries) {
 
 function deleteGroupSeries(name) {
   document.getElementById(name).remove();
-  //document.getElementById("countSeries").value = parseInt(document.getElementById("countSeries").value) - 1;
   refreshSequence("SERIES-CURRSEQ");
 }
 
@@ -1485,7 +1425,6 @@ function deleteGroup(name, seqSeries, id) {
   const rev = document.getElementById(`card${seqSeries}-ul${id}`);
   rev.remove();
 
-  //document.getElementById(`card${seqSeries}-countItem`).value = parseInt(document.getElementById(`card${seqSeries}-countItem`).value) - 1;
   refreshSequence(`card${seqSeries}-CURRSEQ`);
 }
 
@@ -1584,44 +1523,6 @@ function loadTimePeriod(selected, seqSeries, id) {
   }
 }
 
-// function createDemoItems(trHTML, selected, seq){
-//     if (selected == "onclick")
-//       trHTML += `<option value="" data-icon="nav-icon" selected> ----------- None ----------  </option>`;
-//     for (let i = 1; i <= 10; i++) {
-//         let demoItemId = "BUILT_IN_SET" + i;
-//         // if (trHTML == "") document.getElementById("itemId" + seq).innerHTML = "";
-
-//         if (selected == demoItemId)
-//           trHTML += `<option value="${demoItemId}" data-icon="nav-icon" selected>${demoItemId} </option>`;
-//         else
-//           trHTML += `<option value="${demoItemId}" data-icon="nav-icon" >${demoItemId} </option>`;
-//       }
-
-//       for (let i = 1; i <= 10; i++) {
-//         let demoItemId = "SERVICE_SET"+ i;
-//         // if (trHTML == '')
-//         //     document.getElementById("itemId" + seq).innerHTML = '';
-
-//             if (selected == demoItemId)
-//                 trHTML += `<option value="${demoItemId}" data-icon="nav-icon" selected>${demoItemId} </option>`;
-//             else
-//                 trHTML += `<option value="${demoItemId}" data-icon="nav-icon" >${demoItemId} </option>`;
-//     }
-
-//       for (let i = 1; i <= 10; i++) {
-//           let demoItemId = "TOP_SET"+ i;
-//           // if (trHTML == '')
-//           //     document.getElementById("itemId" + seq).innerHTML = '';
-
-//               if (selected == demoItemId)
-//                   trHTML += `<option value="${demoItemId}" data-icon="nav-icon" selected>${demoItemId} </option>`;
-//               else
-//                   trHTML += `<option value="${demoItemId}" data-icon="nav-icon" >${demoItemId} </option>`;
-//       }
-
-//       return trHTML;
-// }
-
 function loadDefaultSize(itemId, seqSeries, id) {
   let series = "";
   model = "";
@@ -1648,10 +1549,10 @@ function loadDefaultSize(itemId, seqSeries, id) {
     if (this.readyState == 4 && this.status == 200) {
       const objects = JSON.parse(this.responseText);
 
-      for (let object of objects) {
-        let _val = object["Size"];
-        loadSize(_val, seqSeries, id);
-      }
+      objects.map((row) => {
+        loadSize(row.Size, seqSeries, id);
+      });
+
     }
   };
 }
@@ -1694,13 +1595,6 @@ function loadSize(val, seqSeries, id) {
 function onChecked(checked, seqSeries, id) {
   //Check header change on sub Checkbox
   let seq = 1;
-  //checked or unchecked all
-  // let checkbox = strCheckBox(seqSeries, id, checked == true ? "checked" : "");
-  // document.getElementById(`card${seqSeries}-groupCheck` + id).innerHTML = checkbox;
-
-  //  var checkbox = document.getElementById(`card${seqSeries}-checkBooking` + id);
-  //  checkbox.setAttribute('value', checked);
-  // console.log(document.getElementById(`card${seqSeries}-checkBooking` + id).checked);
 
   setValueCheckBox(seqSeries, id, checked == true ? "checked" : "");
 
@@ -1977,17 +1871,16 @@ function edit_line() {
       "โปรดเลือก Model",
       "กรุณาใส่ข้อมูลให้ครบถ้วนก่อนทำการบันทึก"
     );
-  }
-  // else if (getElement("itemId") == "") {
-  //   warning_message(
-  //     "โปรดเลือก Item number",
-  //     "กรุณาใส่ข้อมูลให้ครบถ้วนก่อนทำการบันทึก"
-  //   );
-  // }
-  else if (
+  } else if (
     getElement("confirmDate_line0") !== "" &&
     getElement("size0") == ""
   ) {
+    // else if (getElement("itemId") == "") {
+    //   warning_message(
+    //     "โปรดเลือก Item number",
+    //     "กรุณาใส่ข้อมูลให้ครบถ้วนก่อนทำการบันทึก"
+    //   );
+    // }
     warning_message(
       "โปรดเลือก Size",
       "คุณได้กำหนดวันที่ติดตั้ง จึงจำเป็นต้องเลือก Size"
@@ -2229,6 +2122,28 @@ function getElement(element) {
 
 function getItem(key) {
   return sessionStorage.getItem(key);
+}
+
+function enforceNumberValidation(ele) {
+  if ($(ele).data("decimal") != null) {
+    // found valid rule for decimal
+    var decimal = parseInt($(ele).data("decimal")) || 0;
+    var val = $(ele).val();
+    if (decimal > 0) {
+      var splitVal = val.split(".");
+      if (splitVal.length == 2 && splitVal[1].length > decimal) {
+        // user entered invalid input
+        $(ele).val(splitVal[0] + "." + splitVal[1].substr(0, decimal));
+      }
+    } else if (decimal == 0) {
+      // do not allow decimal place
+      var splitVal = val.split(".");
+      if (splitVal.length > 1) {
+        // user entered invalid input
+        $(ele).val(splitVal[0]); // always trim everything after '.'
+      }
+    }
+  }
 }
 
 function clear() {

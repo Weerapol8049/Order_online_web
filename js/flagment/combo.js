@@ -251,9 +251,8 @@ function loadCardDeposit(data) {
       group2.appendChild(curseq);
       group2.appendChild(seq2);
       group2.appendChild(lblRecId);
-
-      //------------------------------- วันที่จ่าย ---------------------------------------------
-
+     
+      //#region วันที่จ่าย
       let colPaymDate = createElement("div", {
         id: "colPaymDate" + id,
         className: "col-sm-3"
@@ -288,9 +287,9 @@ function loadCardDeposit(data) {
         dateFormat: "d/m/Y",
         defaultDate: dateFormatSlace(object.TransDate.substring(0, 10))
       });
-
-      //---------------------------------------- งวด -------------------------------------------------
-
+      //#endregion
+      
+      //#region งวด
       let colinstall = createElement("div", {
         id: "colinstallment" + id,
         className: "col-sm-2"
@@ -318,8 +317,9 @@ function loadCardDeposit(data) {
         onchangeInstallment(this.value, id);
       };
 
-      //---------------------------------------- มูลค่า -------------------------------------------------
+      //#endregion
 
+      //#region มูลค่า
       let colamount = createElement("div", {
         id: "colamount" + id,
         className: "col-sm-3"
@@ -351,8 +351,9 @@ function loadCardDeposit(data) {
         this.value = Math.abs(this.value);
       };
 
-      //---------------------------------------- button delete -------------------------------------------------
-
+      //#endregion
+      
+      //#region delete button
       let coldelete = createElement("div", {
         id: "coldelete" + id,
         className: "col-sm-1"
@@ -401,8 +402,9 @@ function loadCardDeposit(data) {
         );
       };
 
-      //---------------------------------------- button print -------------------------------------------------
-
+      //#endregion
+     
+      //#region print button
       let coldprint = createElement("div", {
         id: "coldprint" + id,
         className: "col-sm-1"
@@ -429,8 +431,9 @@ function loadCardDeposit(data) {
       };
       linkPrint.appendChild(imgPrint);
 
-      //---------------------------------------- button cancel -------------------------------------------------
-
+      //#endregion
+      
+      //#region cancel button
       let colcancel = createElement("div", {
         id: "colcancel" + id,
         className: "col-sm-1"
@@ -453,9 +456,9 @@ function loadCardDeposit(data) {
       btnCancel.onclick = function () {
         cancelDeposit(btnCancel.id.substring(9, 11));
       };
-
-      //---------------------------------------- remark -------------------------------------------------
-
+      //#endregion
+      
+      //#region payment remark
       let rowPaymRemark = createElement("div", {
         id: "rowPaymRemark" + id,
         className: "row"
@@ -507,8 +510,9 @@ function loadCardDeposit(data) {
         onchangeRemark(this.value, inputPaymRemark.id.substring(6, 8));
       };
 
-      //---------------------------------------- remark -------------------------------------------------
-
+      //#endregion
+      
+      //#region remark
       let rowRemark = createElement("div", {
         id: "rowRemark" + id,
         className: "row"
@@ -542,6 +546,8 @@ function loadCardDeposit(data) {
         onchangeRemark(this.value, inputRemark.id.substring(6, 8));
       };
 
+      //#endregion
+      
       document.getElementById("countDeposit").value = id;
       onchangeInstallment(0, id);
       refreshSequence(`CURRSEQ`);
@@ -557,8 +563,7 @@ function loadCardDeposit(data) {
 
       deposit_arr.push(document.getElementById("cardDeposit").innerHTML);
 
-      // //---------------------------------------- วิธีชำระเงิน -------------------------------------------------
-
+      //#region วิธีชำระเงิน
       let rowPaym = createElement("div", {
         className: "row",
         id: "rowPaym" + id,
@@ -651,6 +656,8 @@ function loadCardDeposit(data) {
       } else if (object.PaymType == 3) {
         createPaymentCreditCard(true, id, object);
       }
+      //#endregion
+      
     }
     id++;
   });
@@ -971,6 +978,7 @@ function addCardDeposit_original(event) {
     colPaymCredit.appendChild(lblCredit);
   }
 }
+
 function addCardDeposit(event) {
   let cardHTML = "";
   let id = parseInt(document.getElementById("countDeposit").value) + 1;
@@ -989,52 +997,49 @@ function addCardDeposit(event) {
     document.getElementById("cardDeposit").appendChild(ul);
 
     let row = createElement("div", { id: "row" + id, className: "row" });
-    document.getElementById("groupDeposit" + id).appendChild(row);
+    ul.appendChild(row);
 
     let seq = createElement("div", {
       id: "seq" + id,
       className: "col-sm-1",
       style: "text-align: center;"
     });
-    document.getElementById("row" + id).appendChild(seq);
+    row.appendChild(seq);
 
     let group = createElement("div", {
       id: "group" + id,
       className: "form-group",
       style: "margin-bottom: 0;"
     });
-    document.getElementById("seq" + id).appendChild(group);
+    seq.appendChild(group);
 
-    let label = createElement("label", { id: "label" + id });
-    document.getElementById("group" + id).appendChild(label);
-    document.getElementById("label" + id).innerText = "ลำดับ";
+    let label = createElement("label", { id: "label" + id, innerText: "ลำดับ" });
+    group.appendChild(label);
 
-    let group2 = createElement("div", {
+    let grouplbl = createElement("div", {
       id: "grouplbl" + id,
       className: "form-group"
     });
-    document.getElementById("seq" + id).appendChild(group2);
+    seq.appendChild(grouplbl);
 
-    let curseq = createElement("label", { id: "CURRSEQ" + id });
-    document.getElementById("grouplbl" + id).appendChild(curseq);
-    document.getElementById("CURRSEQ" + id).innerText = id.toString();
+    let curseq = createElement("label", { id: "CURRSEQ" + id, innerText: id.toString() });
+    grouplbl.appendChild(curseq);
 
     let seq2 = createElement("label", {
       id: "SEQ" + id,
+      innerText: id.toString(),
       style: "display:none;"
     });
-    document.getElementById("grouplbl" + id).appendChild(seq2);
-    document.getElementById("SEQ" + id).innerText = id.toString();
+    grouplbl.appendChild(seq2);
 
     let lblRecId = createElement("label", {
       id: "RECID" + id,
+      innerText : 0,
       style: "display:none;"
     });
-    document.getElementById("grouplbl" + id).appendChild(lblRecId);
-    document.getElementById("RECID" + id).innerText = 0;
+    grouplbl.appendChild(lblRecId);
 
-    //------------------------------- วันที่จ่าย ---------------------------------------------
-
+    //#region วันที่จ่าย
     let colPaymDate = createElement("div", {
       id: "colPaymDate" + id,
       className: "col-sm-3"
@@ -1075,8 +1080,9 @@ function addCardDeposit(event) {
       //defaultDate : '09/09/2023'
     });
 
-    //---------------------------------------- งวด -------------------------------------------------
-
+    //#endregion
+    
+    //#region งวด
     let colinstall = createElement("div", {
       id: "colinstallment" + id,
       className: "col-sm-2"
@@ -1113,8 +1119,9 @@ function addCardDeposit(event) {
     document.getElementById("groupinstallment" + id).appendChild(sInstall);
     document.getElementById("installment" + id).disabled = true;
 
-    //---------------------------------------- มูลค่า -------------------------------------------------
-
+    //#endregion
+    
+    //#region มูลค่า
     let colamount = createElement("div", {
       id: "colamount" + id,
       className: "col-sm-3"
@@ -1145,9 +1152,9 @@ function addCardDeposit(event) {
     elepayment.oninput = function () {
       this.value = Math.abs(this.value);
     };
-
-    //---------------------------------------- button delete -------------------------------------------------
-
+    //#endregion
+    
+    //#region delete button
     let coldelete = createElement("div", {
       id: "coldelete" + id,
       className: "col-sm-1"
@@ -1177,8 +1184,9 @@ function addCardDeposit(event) {
     });
     document.getElementById("linkDelete" + id).appendChild(imgDelete);
 
-    //---------------------------------------- ชำระค่า -------------------------------------------------
-
+    //#endregion
+    
+    //#region ชำระค่า
     let rowPaymRemark = createElement("div", {
       id: "rowPaymRemark" + id,
       className: "row"
@@ -1210,9 +1218,9 @@ function addCardDeposit(event) {
       placeholder: "ชำระค่า"
     });
     groupPaymRemark.appendChild(inputPaymRemark);
-
-    //---------------------------------------- remark -------------------------------------------------
-
+    //#endregion
+    
+    //#region remark
     let rowRemark = createElement("div", {
       id: "rowRemark" + id,
       className: "row"
@@ -1252,8 +1260,9 @@ function addCardDeposit(event) {
     onchangeInstallment(0, id);
     refreshSequence(`CURRSEQ`);
 
-    //---------------------------------------- วิธีชำระเงิน -------------------------------------------------
-
+    //#endregion
+    
+    //#region วิธีชำระเงิน
     let rowPaym = createElement("div", {
       className: "row",
       id: "rowPaym" + id,
@@ -1341,6 +1350,8 @@ function addCardDeposit(event) {
       style: "padding-left: 5px;"
     });
     document.getElementById(colPaymCredit.id).appendChild(lblCredit);
+    //#endregion
+    
   }
 }
 
@@ -1792,6 +1803,7 @@ function loadCardDeposit_original(data) {
     id++;
   });
 }
+
 function dateFormatSlace(date) {
   var d = new Date(date);
   let y = d.getFullYear();
@@ -1829,7 +1841,7 @@ function createPaymentCash(checked, id, value = null) {
       bank = value.PaymBank;
       branch = value.PaymBankBranch;
     }
-    console.log(bank);
+
     var element = document.getElementById("cash" + id);
     if (typeof element != "undefined" && element != null) {
       //Exists element
@@ -1890,13 +1902,14 @@ function createPaymentCash(checked, id, value = null) {
     });
     let lblbranch = createElement("label", {
       id: "lblbranch" + id,
+      class: "form-control",
       innerHTML: "สาขา ",
       style: "padding-right: 20px",
       for: "bankBranch" + id
     });
     let bankBranch = createElement("input", {
       id: "bankBranch" + id,
-      class: "form-control",
+      className: "form-control",
       type: "text",
       value: branch
     });
@@ -2006,7 +2019,7 @@ function createPaymentCheque(checked, id, value = null) {
     });
     let bankCash = createElement("input", {
       id: "chequeNum" + id,
-      class: "form-control",
+      className: "form-control",
       type: "text",
       value: bankNum
     });
@@ -2101,7 +2114,7 @@ function createPaymentCreditCard(checked, id, value = null) {
     });
     let bankBranch = createElement("input", {
       id: "bankCreditNum" + id,
-      class: "form-control",
+      className: "form-control",
       type: "text",
       value: bankNum
     });
@@ -2342,7 +2355,7 @@ function deleteGroup(name, recid) {
   Swal.fire({
     title: "ยืนยันลบรายการ",
     html: `<label>คุณต้องการลบรายการเงินมัดจำนี้หรือไม่?</label> <br> 
-        <input type="text" id="recid-delete" class="form-control" style="display:block;" value="${recid}">`,
+        <input type="text" id="recid-delete" class="form-control" style="display:none;" value="${recid}">`,
     text: "คุณต้องการลบงวดมัดจำหรือไม่",
     focusConfirm: false,
     icon: "info",
@@ -2958,9 +2971,11 @@ function chkNewDelivery(value) {
 function getValue(element) {
   return sessionStorage.getItem(element);
 }
+
 function getElementVal(element) {
   return document.getElementById(element).value;
 }
+
 function setElementVal(element, selected) {
   document.getElementById(element).value = selected;
 }

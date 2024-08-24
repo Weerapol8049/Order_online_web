@@ -145,9 +145,6 @@
                           onchange="loadItem(item, sessionStorage.getItem('pool_line_val'), document.getElementById('series').value, this.value);">
                         </select>
 
-                        
-                        <!-- <select id="model" class="form-control select2bs4"  style="width: 100%;" onchange="getStock(document.getElementById('series').value, this.value)">
-                        </select> -->
                         <div id="display_stock">
                         </div>
                       </div>
@@ -167,56 +164,20 @@
                     <input type="text" id="itemId" class="form-control" style="display:none;">
                   </div>
 
-                  <!-- Item Number -->
-                  <!-- <div class="row">
-                    <div class="col-sm-8">
+                  <div class="row">
+                    <div class="col-sm-5">
                       <div class="form-group">
-                        <label for="itemId">Item number <b style="color: red;">*</b></label>
-                        <select id="itemId" class="form-control select2bs4"  style="width: 100%;"  style="width: 100%;" >
-              
-                        </select>
-                        <div id="default" style="display:none"></div>
+                        <label for="ItemId0">รหัสสินค้า</label>
+                        <input type="text" id="ItemId0" class="form-control">
                       </div>
                     </div>
-                    
+                    <div class="col-sm-7">
+                      <div class="form-group">
+                        <label for="ItemName0">ชื่อสินค้า</label>
+                        <input type="text" id="ItemName0" class="form-control">
+                      </div>
+                    </div>
                   </div>
-                -->
-                  <!-- <div class="row">
-                   <div class="col-sm-4">
-                      <div class="form-group">
-                        <label for="sink">Sink</label>
-                        <select id="sink" class="form-control select2bs4" style="width: 100%;">
-                          <option value="" selected >----- None -----</option>
-                          <option value="L">L</option>
-                          <option value="R">R</option>
-                          <option value="NS_L">NS_L</option>
-                          <option value="NS_R">NS_R</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-sm-4">
-                      <div class="form-group">
-                        <label for="top">Top</label>
-                        <select id="top" class="form-control select2bs4" style="width: 100%;">
-                          <option value="" selected >----- None -----</option>
-                          <option value="B">B</option>
-                          <option value="W">W</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-sm-4">
-                      <div class="form-group" >
-                        <label for="size0">Size</label>
-                        <select id="size0" class="form-control select2bs4" style="width: 100%;">
-                          <option value="" selected >----- None -----</option>
-                          <option value="S">S</option>
-                          <option value="M">M</option>
-                          <option value="L">L</option>
-  
-                        </select>
-                      </div>
-                    </div>
-                  </div> -->
                 
                   <div class="row">
                     <div class="col-sm-6">
@@ -228,7 +189,9 @@
                     <div class="col-sm-6">
                       <div class="form-group">
                         <label for="multiamount0">ยอดเงินรวม</label>
-                        <input type="number" id="multiamount0" class="form-control" min="0" oninput="this.value = Math.abs(this.value)">
+                        <input type="number" id="multiamount0" class="form-control" min="0" step=".01" value="0.00"
+                          data-decimal="2" oninput="enforceNumberValidation(this)"
+                          oninput="this.value = Math.abs(this.value)">
                       </div>
                     </div>
                   </div>
