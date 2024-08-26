@@ -200,52 +200,52 @@ function createGroupSeries() {
   });
   groupseq.appendChild(seq2);
 
-  //-------------------------------------- series ----------------------------------------
+  //#region series
+    let colseries = createElement("div", {
+      id: "colseries" + seq,
+      className: "col-sm-5"
+    });
+    row.appendChild(colseries);
 
-  let colseries = createElement("div", {
-    id: "colseries" + seq,
-    className: "col-sm-5"
-  });
-  row.appendChild(colseries);
+    let groupseries = createElement("div", {
+      id: "groupseries" + seq,
+      className: "form-group"
+    });
+    colseries.appendChild(groupseries);
 
-  let groupseries = createElement("div", {
-    id: "groupseries" + seq,
-    className: "form-group"
-  });
-  colseries.appendChild(groupseries);
+    let inputprev = createElement("input", {
+      id: `card${seq}-prevSeries`,
+      type: "text",
+      style: "display:none;"
+    });
+    colseries.appendChild(inputprev);
 
-  let inputprev = createElement("input", {
-    id: `card${seq}-prevSeries`,
-    type: "text",
-    style: "display:none;"
-  });
-  colseries.appendChild(inputprev);
+    let lblseries = createElement("b", {
+      id: "lblseries" + seq,
+      innerText: "Series"
+    });
+    groupseries.appendChild(lblseries);
 
-  let lblseries = createElement("b", {
-    id: "lblseries" + seq,
-    innerText: "Series"
-  });
-  groupseries.appendChild(lblseries);
+    let bseries = createElement("label", {
+      id: "bseries" + seq,
+      innerText: "*",
+      style: "color:red;"
+    });
+    lblseries.appendChild(bseries);
 
-  let bseries = createElement("label", {
-    id: "bseries" + seq,
-    innerText: "*",
-    style: "color:red;"
-  });
-  lblseries.appendChild(bseries);
+    let series = createElement("select", {
+      id: `card${seq}-series`,
+      className: "form-control required select2bs4",
+      style: "width: 100%;"
+    });
+    groupseries.appendChild(series);
+    series.onchange = function () {
+      enableButton(seq, this.value);
+    };
 
-  let series = createElement("select", {
-    id: `card${seq}-series`,
-    className: "form-control required select2bs4",
-    style: "width: 100%;"
-  });
-  groupseries.appendChild(series);
-  series.onchange = function () {
-    enableButton(seq, this.value);
-  };
+    //#endregion
 
-  //-------------------------------------- button delete ----------------------------------------
-
+  //#region delete button
   let coldelete = createElement("div", {
     id: "coldelete" + seq,
     className: "col-sm-1"
@@ -276,9 +276,9 @@ function createGroupSeries() {
   btndelete.onclick = function () {
     deleteGroupSeries("cardMultiSeries" + seq);
   };
+  //#endregion
 
-  //-------------------------------------- button Add model ----------------------------------------
-
+  //#region add model button
   let rowbtn = createElement("div", { id: "rowbtn" + seq, className: "row" });
   ul.appendChild(rowbtn);
 
@@ -323,7 +323,8 @@ function createGroupSeries() {
     type: "number"
   });
   rowbtn.appendChild(inputCount);
-
+  //#endregion
+  
   //-------------------------------------- Card model ----------------------------------------
   let cardmodel = createElement("i", {
     id: `card${seq}-cardMultiItem`,
@@ -530,6 +531,8 @@ function getDefaultItemId(pool, series, model, seqSeries, id) {
     onChecked(false, seqSeries, id);
     return;
   } else {
+
+    
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", API_ITEM);
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -544,13 +547,12 @@ function getDefaultItemId(pool, series, model, seqSeries, id) {
       if (this.readyState == 4 && this.status == 200) {
 
         const objects = JSON.parse(this.responseText);
+        const itemId = document.getElementById(`card${seqSeries}-itemId` + id);
         if (objects.length > 0) {
 
           objects.map((row) => {
 
-            document
-              .getElementById(`card${seqSeries}-itemId` + id)
-              .setAttribute("value", row.ItemId);
+            itemId.setAttribute("value", row.ItemId);
 
             document
               .getElementById(`card${seqSeries}-itemName` + id)
@@ -560,6 +562,17 @@ function getDefaultItemId(pool, series, model, seqSeries, id) {
           });
 
         }
+        else {
+          const dateObj = new Date();
+          const day     = dateObj.getUTCDate();
+          const month   = dateObj.getUTCMonth() + 1; // months from 1-12
+          const year    = dateObj.getUTCFullYear() + 543;// year thai พ.ศ.
+
+          const newDate = `${year}`;
+          const pMonth  = month.toString().padStart(2,"0");
+          
+          itemId.value = `${newDate.substring(2, 4)}${pMonth}-*****`
+        }
       }
     };
   }
@@ -567,16 +580,10 @@ function getDefaultItemId(pool, series, model, seqSeries, id) {
 }
 
 function onSelectItemId(model, check, seqSeries) {
-  var multipleItem = "";
-
   if (!existsControl(`card${seqSeries}-countItem`)) {
     let i =
       parseInt(document.getElementById(`card${seqSeries}-countItem`).value) + 1;
 
-    let defaultCheck = "";
-    let minDate = "";
-    let enableTS = "disabled";
-    let enableConfirmDate = "disabled";
     let salesDate = document.getElementById("salesDate_line").value;
 
     if (check == true) {
@@ -683,49 +690,49 @@ function onSelectItemId(model, check, seqSeries) {
    
     //#region model
 
-let colmodel = createElement("div", {
-  id: `card${seqSeries}-colmodel${i}`,
-  className: "col-sm-5",
-  style: "font-style: normal;"
-});
-row.appendChild(colmodel);
+    let colmodel = createElement("div", {
+      id: `card${seqSeries}-colmodel${i}`,
+      className: "col-sm-5",
+      style: "font-style: normal;"
+    });
+    row.appendChild(colmodel);
 
-let groupmodel = createElement("div", {
-  id: `card${seqSeries}-groupmodel${i}`,
-  className: "form-group"
-});
-colmodel.appendChild(groupmodel);
+    let groupmodel = createElement("div", {
+      id: `card${seqSeries}-groupmodel${i}`,
+      className: "form-group"
+    });
+    colmodel.appendChild(groupmodel);
 
-let bmodel = createElement("b", {
-  id: `card${seqSeries}-bmodel${i}`,
-  innerText: "Model"
-});
-groupmodel.appendChild(bmodel);
+    let bmodel = createElement("b", {
+      id: `card${seqSeries}-bmodel${i}`,
+      innerText: "Model"
+    });
+    groupmodel.appendChild(bmodel);
 
-let bd = createElement("b", {
-  id: `card${seqSeries}-b*${i}`,
-  style: "color: red;",
-  innerText: "*"
-});
-bmodel.appendChild(bd);
+    let bd = createElement("b", {
+      id: `card${seqSeries}-b*${i}`,
+      style: "color: red;",
+      innerText: "*"
+    });
+    bmodel.appendChild(bd);
 
-let model = createElement("select", {
-  id: `card${seqSeries}-model${i}`,
-  className: "form-control required select2bs4",
-  style: "width: 100%;"
-});
-groupmodel.appendChild(model);
-model.onchange = function () {
-  getDefaultItemId(
-    `${pool}`,
-    document.getElementById(`card${seqSeries}-series`).value,
-    this.value,
-    seqSeries,
-    parseInt(i - 1)
-  );
-};
+    let model = createElement("select", {
+      id: `card${seqSeries}-model${i}`,
+      className: "form-control required select2bs4",
+      style: "width: 100%;"
+    });
+    groupmodel.appendChild(model);
+    model.onchange = function () {
+      getDefaultItemId(
+        `${pool}`,
+        document.getElementById(`card${seqSeries}-series`).value,
+        this.value,
+        seqSeries,
+        parseInt(i - 1)
+      );
+    };
 
-//#endregion
+    //#endregion
 
     //#region Item
     let rowItem = createElement("div", {
@@ -777,7 +784,6 @@ model.onchange = function () {
     //#endregion
 
     //#region จำนวน
-
     let colmultiqty = createElement("div", {
       id: `card${seqSeries}-colmultiqty${i}`,
       className: "col-md-2",
@@ -1448,13 +1454,11 @@ function setAmountValue(seqSeries, id) {
   input.setAttribute("value", input.value);
 }
 
-function setValueInputDate(seqSeries, id, value) {
-  let inputDate = `<input type="date" id="card${seqSeries}-confirmDate_line${id}"  class="form-control"
-  ${minDate} onchange="activeTimePeriod(this.value,${seqSeries}, ${id}) " ${enableConfirmDate}>`;
-  document.getElementById(
-    `card${seqSeries}-groupConfirmDate_line${id}`
-  ).innerHTML = inputDate;
-}
+// function setValueInputDate(seqSeries, id, value) {
+//   let inputDate = `<input type="date" id="card${seqSeries}-confirmDate_line${id}"  class="form-control"
+//   ${minDate} onchange="activeTimePeriod(this.value,${seqSeries}, ${id}) " ${enableConfirmDate}>`;
+//   document.getElementById(`card${seqSeries}-groupConfirmDate_line${id}`).innerHTML = inputDate;
+// }
 
 function activeBooking(active, seqSeries, id) {
   let disable = "";
@@ -1463,8 +1467,7 @@ function activeBooking(active, seqSeries, id) {
 
   setValueCheckBox(seqSeries, id, active == true ? "checked" : "");
 
-  document.getElementById(`card${seqSeries}-confirmDate_line` + id).disabled =
-    disable;
+  document.getElementById(`card${seqSeries}-confirmDate_line` + id).disabled = disable;
   if (disable) {
     document.getElementById(`card${seqSeries}-size` + id).disabled = disable;
     document.getElementById(`card${seqSeries}-timeperiod` + id).disabled =
@@ -1484,7 +1487,7 @@ function activeTimePeriod(value, seqSeries, id) {
   let disable = "";
   if (value == "") disable = true;
   else disable = false;
-
+console.log("date click");
   document
     .getElementById(`card${seqSeries}-confirmDate_line` + id)
     .setAttribute("value", value);
@@ -1603,41 +1606,26 @@ function onChecked(checked, seqSeries, id) {
     element.setAttribute("value", checked);
     //element.value = checked;
     seq = id; // parseInt(document.getElementById(`card${seqSeries}-countItem`).value);
-
+    const confirmdate = document.getElementById(`card${seqSeries}-confirmDate_line` + seq);
     if (checked) {
-      document.getElementById(
-        `card${seqSeries}-confirmDate_line` + seq
-      ).disabled = false;
+      confirmdate.disabled = false;
     } else
-      document.getElementById(
-        `card${seqSeries}-confirmDate_line` + seq
-      ).disabled = true;
+      confirmdate.disabled = true;
 
-    if (
-      document.getElementById(`card${seqSeries}-confirmDate_line` + seq)
-        .value == ""
-    ) {
+    if (confirmdate.value == "") {
       document.getElementById(
         `card${seqSeries}-timeperiod` + seq
       ).disabled = true;
       document.getElementById(`card${seqSeries}-size` + seq).disabled = true;
       loadSize(0, seqSeries, seq); //set default none
       loadTimePeriod(0, seqSeries, seq);
-      setMinConfirmDate(
-        document.getElementById("salesDate_line").value,
-        seqSeries
-      );
+      setMinConfirmDate(document.getElementById("salesDate_line").value, seqSeries);
     } else {
-      document.getElementById(
-        `card${seqSeries}-timeperiod` + seq
-      ).disabled = true;
+      document.getElementById(`card${seqSeries}-timeperiod` + seq).disabled = true;
       document.getElementById(`card${seqSeries}-size` + seq).disabled = true;
       loadTimePeriod(0, seqSeries, seq);
       loadDefaultSize(
-        document.getElementById(`card${seqSeries}-itemId` + seq).value,
-        seqSeries,
-        seq
-      );
+        document.getElementById(`card${seqSeries}-itemId` + seq).value, seqSeries, seq);
     }
   }
 }
@@ -1749,6 +1737,7 @@ function create_line() {
         Amount: multiamount.value,
         Date: dateFormatYMD(document.getElementById("salesDate_line").value),
         ItemId: document.getElementById(`card${j}-itemId` + i).value,
+        ItemName: document.getElementById(`card${j}-itemName` + i).value,
         Size: document.getElementById(`card${j}-size` + i).value,
         Zone: sessionStorage.getItem("region_val"),
         Pool: sessionStorage.getItem("pool_val"),
@@ -1817,10 +1806,7 @@ function create_line() {
       if (result.isConfirmed) {
         const xhttp = new XMLHttpRequest();
         xhttp.open("POST", API_CREATE_LINE);
-        xhttp.setRequestHeader(
-          "Content-Type",
-          "application/json;charset=UTF-8"
-        );
+        xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xhttp.send(JSON.stringify(rowsData));
 
         xhttp.onreadystatechange = function () {
@@ -1934,6 +1920,7 @@ function excecuteEditLine(status) {
       Amount: document.getElementById("multiamount0").value,
       Date: dateFormatYMD(document.getElementById("salesDate_line").value),
       ItemId: document.getElementById("itemId").value,
+      ItemName: document.getElementById("ItemName0").value,
       Size: document.getElementById("size0").value,
       Zone: sessionStorage.getItem("region_val"),
       Pool: sessionStorage.getItem("pool_val"),

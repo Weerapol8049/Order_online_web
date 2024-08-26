@@ -81,18 +81,15 @@
             const dropArea = document.querySelector('.drop-section')
             const fileSelector = document.querySelector('.file-selector')
             const fileSelectorInput = document.querySelector('.file-selector-input')
-            // upload files with browse button
 
             fileSelector.onclick = () => fileSelectorInput.click()
             fileSelectorInput.onchange = () =>
             {
-                console.log("1122");
+                console.log(fileSelectorInput.files);
                 [...fileSelectorInput.files].forEach((file) =>
                 {
-                    console.log(file);
                     if (typeValidation(file.type))
                     {
-                        console.log("5555");
                         uploadFile(file)
                     }
                 })
