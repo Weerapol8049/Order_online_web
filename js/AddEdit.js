@@ -159,6 +159,8 @@ function createPool(recId) {
     });
   });
 
+  console.log('insert pool', arrRow);
+
   const xhttp = new XMLHttpRequest();
   xhttp.open("POST", API_CREATE_POOL);
   xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -290,6 +292,8 @@ function edit() {
     _morePool += `${pool},`;
   });
   const pools = _morePool.slice(0, -1);
+
+  console.log('edit', pools);
 
   let chkInvDelivery = document.getElementById("chkDefaultDelivery").checked;
   let chkNewDelivery = document.getElementById("chkNewDelivery").checked;

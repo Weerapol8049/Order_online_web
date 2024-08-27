@@ -13,6 +13,9 @@ let API_XML_LINE_LOAD = SERVER_order + "api/xml/line/load/";
 let API_XMLTABLE_CREATE = SERVER_ax + "api/xml/create";
 let API_XMLLINE_CREATE = SERVER_ax + "api/xml/line/create";
 
+let xmlTable = [];
+let xmlLine = [];
+
 function load() {
   const xhttp = new XMLHttpRequest();
   xhttp.open("GET", API_XML_LOAD);
@@ -100,36 +103,50 @@ function load_line(recId) {
 
 function openFile(fileupload) {
   let input = fileupload;
-
-  for (var index = 0; index < input.files.length; index++) {
+  console.log(input[0]);
+  uploadFile(input[0]);
+  //input.files.length
+  for (var index = 0; index < input.length; index++) {
     let reader = new FileReader();
     reader.onload = () => {
       // this 'text' is the content of the file
+
       var text = reader.result;
       const parser = new DOMParser();
       const doc = parser.parseFromString(text, "text/xml");
 
       var customer = doc.getElementsByTagName("CUSTOMER").item(0);
       var aritcleNo = doc.getElementsByTagName("ARTICLENO").item(0);
+      console.log(aritcleNo);
+      xmlTable.push({
+        ItemId: aritcleNo,
+        ItemName: "",
+        UploadBy: username,
+        FileName: input[index - 1].name,
+        xmlLine: xmlLine
+      });
 
       var set = doc.getElementsByTagName("Set");
       for (var idxLine = 0; idxLine < set.length; idxLine++) {
         var setLine = set.item(idxLine);
         var pName = setLine.getElementsByTagName("Pname").item(0).textContent;
-        console.log(pName);
+        var price = setLine
+          .getElementsByTagName("ARTICLE_PRICE_INFO1")
+          .item(0).textContent;
+
+        xmlLine.push({
+          Article: pName,
+          Onhand: 0,
+          Price: price
+        });
       }
+      console.log(xmlTable);
     };
-    reader.readAsText(input.files[index]);
+    reader.readAsText(input[index]); //input.files[index]
   }
 }
 
 function create() {
-  let tableRow = [];
-  let lineRow = [];
-
-  const dataTable = { Data: tableRow };
-  const dataLine = { Data: lineRow };
-
   const elementFiles = document.querySelectorAll(``);
   elementFiles.forEach((eleSeries) => {
     tableRow.push({
@@ -191,7 +208,7 @@ function uploadFile(file) {
         </div>
         <div class="col">
             <svg xmlns="http://www.w3.org/2000/svg" class="cross" height="20" width="20"><path d="m5.979 14.917-.854-.896 4-4.021-4-4.062.854-.896 4.042 4.062 4-4.062.854.896-4 4.062 4 4.021-.854.896-4-4.063Z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="tick" height="20" width="20"><path d="m8.229 14.438-3.896-3.917 1.438-1.438 2.458 2.459 6-6L15.667 7Z"/></svg>
+            <!-- <svg xmlns="http://www.w3.org/2000/svg" class="tick" height="20" width="20"><path d="m8.229 14.438-3.896-3.917 1.438-1.438 2.458 2.459 6-6L15.667 7Z"/></svg> -->
         </div>
     `;
 
@@ -205,17 +222,22 @@ function uploadFile(file) {
     li.classList.add("complete");
     li.classList.remove("in-prog");
   };
+
   http.upload.onprogress = (e) => {
     var percent_complete = (e.loaded / e.total) * 100;
     li.querySelectorAll("span")[0].innerHTML =
       Math.round(percent_complete) + "%";
     li.querySelectorAll("span")[1].style.width = percent_complete + "%";
   };
+  const cross = li.querySelector(".cross");
 
-  //http.open("POST", "sender.php", true);
-  //http.send(data);
-  li.querySelector(".cross").onclick = () => http.abort();
+  http.open("POST", "", true);
+  http.send(data);
+
+  cross.onclick = () => li.remove();
+  //li.querySelector(".cross").onclick = () => http.abort();
   http.onabort = () => li.remove();
+
 }
 // find icon for file
 function iconSelector(type) {

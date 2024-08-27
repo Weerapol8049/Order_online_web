@@ -200,3 +200,9 @@ body {
 .list-section li.in-prog svg.tick {
   display: none;
 }
+
+.list-section li.complete svg.cross {
+  display: block;
+  background-color: rgb(231, 93, 93);
+}
+

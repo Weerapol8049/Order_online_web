@@ -35,12 +35,13 @@ let title = document.getElementsByTagName("title")[0].innerText;
 // let API_LOAD_SIZE = SERVER + "api/OrderOnline/line/defaultSize";
 
 //let SERVER = 'http://localhost:2179/';
-let SERVER_order = "https://starmark.work/OrderOnline_API_Orders/"; //Live
-let SERVER_ax = "https://starmark.work/OrderOnline_API_AIF/"; //Live
+//let SERVER_order = "https://starmark.work/OrderOnline_API_Orders/"; //Live
+//let SERVER_ax = "https://starmark.work/OrderOnline_API_AIF/"; //Live
 
-// let SERVER_order = 'http://starmark.work/OrderOnline_API_Order_test/';
-// let SERVER_ax = 'http://starmark.work/OrderOnline_API_AIF_test/';
-// let SERVER_ax = 'http://localhost:4377/';
+let SERVER_order = "http://starmark.work/OrderOnline_API_Order_test/";
+let SERVER_ax = "http://starmark.work/OrderOnline_API_AIF_test/";
+//let SERVER_ax = 'http://localhost:4377/';
+//let SERVER_order = "http://localhost:54871/";
 
 let API_SERIES = SERVER_order + "api/line/series";
 let API_MODEL = SERVER_order + "api/line/model";
@@ -201,49 +202,49 @@ function createGroupSeries() {
   groupseq.appendChild(seq2);
 
   //#region series
-    let colseries = createElement("div", {
-      id: "colseries" + seq,
-      className: "col-sm-5"
-    });
-    row.appendChild(colseries);
+  let colseries = createElement("div", {
+    id: "colseries" + seq,
+    className: "col-sm-5"
+  });
+  row.appendChild(colseries);
 
-    let groupseries = createElement("div", {
-      id: "groupseries" + seq,
-      className: "form-group"
-    });
-    colseries.appendChild(groupseries);
+  let groupseries = createElement("div", {
+    id: "groupseries" + seq,
+    className: "form-group"
+  });
+  colseries.appendChild(groupseries);
 
-    let inputprev = createElement("input", {
-      id: `card${seq}-prevSeries`,
-      type: "text",
-      style: "display:none;"
-    });
-    colseries.appendChild(inputprev);
+  let inputprev = createElement("input", {
+    id: `card${seq}-prevSeries`,
+    type: "text",
+    style: "display:none;"
+  });
+  colseries.appendChild(inputprev);
 
-    let lblseries = createElement("b", {
-      id: "lblseries" + seq,
-      innerText: "Series"
-    });
-    groupseries.appendChild(lblseries);
+  let lblseries = createElement("b", {
+    id: "lblseries" + seq,
+    innerText: "Series"
+  });
+  groupseries.appendChild(lblseries);
 
-    let bseries = createElement("label", {
-      id: "bseries" + seq,
-      innerText: "*",
-      style: "color:red;"
-    });
-    lblseries.appendChild(bseries);
+  let bseries = createElement("label", {
+    id: "bseries" + seq,
+    innerText: "*",
+    style: "color:red;"
+  });
+  lblseries.appendChild(bseries);
 
-    let series = createElement("select", {
-      id: `card${seq}-series`,
-      className: "form-control required select2bs4",
-      style: "width: 100%;"
-    });
-    groupseries.appendChild(series);
-    series.onchange = function () {
-      enableButton(seq, this.value);
-    };
+  let series = createElement("select", {
+    id: `card${seq}-series`,
+    className: "form-control required select2bs4",
+    style: "width: 100%;"
+  });
+  groupseries.appendChild(series);
+  series.onchange = function () {
+    enableButton(seq, this.value);
+  };
 
-    //#endregion
+  //#endregion
 
   //#region delete button
   let coldelete = createElement("div", {
@@ -324,7 +325,7 @@ function createGroupSeries() {
   });
   rowbtn.appendChild(inputCount);
   //#endregion
-  
+
   //-------------------------------------- Card model ----------------------------------------
   let cardmodel = createElement("i", {
     id: `card${seq}-cardMultiItem`,
@@ -531,8 +532,6 @@ function getDefaultItemId(pool, series, model, seqSeries, id) {
     onChecked(false, seqSeries, id);
     return;
   } else {
-
-    
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", API_ITEM);
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -545,13 +544,10 @@ function getDefaultItemId(pool, series, model, seqSeries, id) {
     );
     xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-
         const objects = JSON.parse(this.responseText);
         const itemId = document.getElementById(`card${seqSeries}-itemId` + id);
         if (objects.length > 0) {
-
           objects.map((row) => {
-
             itemId.setAttribute("value", row.ItemId);
 
             document
@@ -560,23 +556,20 @@ function getDefaultItemId(pool, series, model, seqSeries, id) {
 
             onChecked(row.Booking == 1 ? true : false, seqSeries, id);
           });
-
-        }
-        else {
+        } else {
           const dateObj = new Date();
-          const day     = dateObj.getUTCDate();
-          const month   = dateObj.getUTCMonth() + 1; // months from 1-12
-          const year    = dateObj.getUTCFullYear() + 543;// year thai พ.ศ.
+          const day = dateObj.getUTCDate();
+          const month = dateObj.getUTCMonth() + 1; // months from 1-12
+          const year = dateObj.getUTCFullYear() + 543; // year thai พ.ศ.
 
           const newDate = `${year}`;
-          const pMonth  = month.toString().padStart(2,"0");
-          
-          itemId.value = `${newDate.substring(2, 4)}${pMonth}-*****`
+          const pMonth = month.toString().padStart(2, "0");
+
+          itemId.value = `${newDate.substring(2, 4)}${pMonth}-*****`;
         }
       }
     };
   }
-
 }
 
 function onSelectItemId(model, check, seqSeries) {
@@ -687,7 +680,7 @@ function onSelectItemId(model, check, seqSeries) {
       activeBooking(this.checked, i);
     };
     //#endregion
-   
+
     //#region model
 
     let colmodel = createElement("div", {
@@ -759,8 +752,8 @@ function onSelectItemId(model, check, seqSeries) {
       id: `card${seqSeries}-itemId${i}`,
       className: "form-control",
       type: "text",
-      placeholder: 'รหัสสินค้า',
-      disabled : true
+      placeholder: "รหัสสินค้า",
+      disabled: true
     });
     colItem.appendChild(itemId);
 
@@ -774,7 +767,7 @@ function onSelectItemId(model, check, seqSeries) {
     let itemName = createElement("input", {
       id: `card${seqSeries}-itemName${i}`,
       className: "form-control",
-      placeholder: 'ชื่อสินค้า',
+      placeholder: "ชื่อสินค้า",
       type: "text"
     });
     colItemName.appendChild(itemName);
@@ -897,7 +890,7 @@ function onSelectItemId(model, check, seqSeries) {
     };
 
     //#endregion
-   
+
     //#region empty
 
     let row2 = createElement("div", {
@@ -926,7 +919,7 @@ function onSelectItemId(model, check, seqSeries) {
     colempty.appendChild(groupEmpty2);
 
     //#endregion
- 
+
     //#region confirm date
 
     let colconfdate = createElement("div", {
@@ -1033,7 +1026,7 @@ function onSelectItemId(model, check, seqSeries) {
     timeperiod.add(opt3, null);
 
     //#endregion
-  
+
     //#region size
     let colsize = createElement("div", {
       id: `card${seqSeries}-colsize${i}`,
@@ -1341,7 +1334,8 @@ function loadSeries(selected, pooledit, pool_s, seqSeries) {
       objects.map((row) => {
         if (selected == row.ProdSeries)
           trHTML += `<option value="${row.ProdSeries}" selected>${row.ProdSeries}</option>`;
-        else trHTML += `<option value="${row.ProdSeries}">${row.ProdSeries}</option>`;
+        else
+          trHTML += `<option value="${row.ProdSeries}">${row.ProdSeries}</option>`;
       });
 
       if (title == "Add Line")
@@ -1378,13 +1372,11 @@ function loadItem(selected, pool, series, model, seqSeries) {
       let _size = "";
 
       if (objects.length > 0) {
-
         objects.map((row) => {
           _ItemId = row.ItemId;
           _size = row.Size;
           _checked = row.Booking == 1 ? true : false;
         });
-
       }
       onSelectItemId(model, _checked, seqSeries);
 
@@ -1467,7 +1459,8 @@ function activeBooking(active, seqSeries, id) {
 
   setValueCheckBox(seqSeries, id, active == true ? "checked" : "");
 
-  document.getElementById(`card${seqSeries}-confirmDate_line` + id).disabled = disable;
+  document.getElementById(`card${seqSeries}-confirmDate_line` + id).disabled =
+    disable;
   if (disable) {
     document.getElementById(`card${seqSeries}-size` + id).disabled = disable;
     document.getElementById(`card${seqSeries}-timeperiod` + id).disabled =
@@ -1487,7 +1480,7 @@ function activeTimePeriod(value, seqSeries, id) {
   let disable = "";
   if (value == "") disable = true;
   else disable = false;
-console.log("date click");
+  console.log("date click");
   document
     .getElementById(`card${seqSeries}-confirmDate_line` + id)
     .setAttribute("value", value);
@@ -1555,7 +1548,6 @@ function loadDefaultSize(itemId, seqSeries, id) {
       objects.map((row) => {
         loadSize(row.Size, seqSeries, id);
       });
-
     }
   };
 }
@@ -1606,11 +1598,12 @@ function onChecked(checked, seqSeries, id) {
     element.setAttribute("value", checked);
     //element.value = checked;
     seq = id; // parseInt(document.getElementById(`card${seqSeries}-countItem`).value);
-    const confirmdate = document.getElementById(`card${seqSeries}-confirmDate_line` + seq);
+    const confirmdate = document.getElementById(
+      `card${seqSeries}-confirmDate_line` + seq
+    );
     if (checked) {
       confirmdate.disabled = false;
-    } else
-      confirmdate.disabled = true;
+    } else confirmdate.disabled = true;
 
     if (confirmdate.value == "") {
       document.getElementById(
@@ -1619,13 +1612,21 @@ function onChecked(checked, seqSeries, id) {
       document.getElementById(`card${seqSeries}-size` + seq).disabled = true;
       loadSize(0, seqSeries, seq); //set default none
       loadTimePeriod(0, seqSeries, seq);
-      setMinConfirmDate(document.getElementById("salesDate_line").value, seqSeries);
+      setMinConfirmDate(
+        document.getElementById("salesDate_line").value,
+        seqSeries
+      );
     } else {
-      document.getElementById(`card${seqSeries}-timeperiod` + seq).disabled = true;
+      document.getElementById(
+        `card${seqSeries}-timeperiod` + seq
+      ).disabled = true;
       document.getElementById(`card${seqSeries}-size` + seq).disabled = true;
       loadTimePeriod(0, seqSeries, seq);
       loadDefaultSize(
-        document.getElementById(`card${seqSeries}-itemId` + seq).value, seqSeries, seq);
+        document.getElementById(`card${seqSeries}-itemId` + seq).value,
+        seqSeries,
+        seq
+      );
     }
   }
 }
@@ -1806,7 +1807,10 @@ function create_line() {
       if (result.isConfirmed) {
         const xhttp = new XMLHttpRequest();
         xhttp.open("POST", API_CREATE_LINE);
-        xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhttp.setRequestHeader(
+          "Content-Type",
+          "application/json;charset=UTF-8"
+        );
         xhttp.send(JSON.stringify(rowsData));
 
         xhttp.onreadystatechange = function () {
@@ -1919,7 +1923,7 @@ function excecuteEditLine(status) {
       Qty: document.getElementById("multiqty0").value,
       Amount: document.getElementById("multiamount0").value,
       Date: dateFormatYMD(document.getElementById("salesDate_line").value),
-      ItemId: document.getElementById("itemId").value,
+      ItemId: document.getElementById("ItemId0").value,
       ItemName: document.getElementById("ItemName0").value,
       Size: document.getElementById("size0").value,
       Zone: sessionStorage.getItem("region_val"),

@@ -27,7 +27,7 @@
 
     </head>
 
-    <body >
+    <body>
         <!-- <div class="content-wrapper">
             <section class="content-header">
                 <div class="container-fluid">
@@ -56,7 +56,7 @@
                 <p>Upload files you want to share with your team members.</p>
                 <p>PDF, Images & Videos are allowed.</p>
             </div>
-            <div class="drop-section">
+            <div class="drop-section" >
                 <div class="col">
                     <div class="cloud-icon">
                         <img src="../images/icons/cloud.png" alt="cloud">
@@ -85,12 +85,12 @@
             fileSelector.onclick = () => fileSelectorInput.click()
             fileSelectorInput.onchange = () =>
             {
-                console.log(fileSelectorInput.files);
                 [...fileSelectorInput.files].forEach((file) =>
                 {
                     if (typeValidation(file.type))
                     {
-                        uploadFile(file)
+                        //uploadFile(file)
+                        openFile(fileSelectorInput.files);
                     }
                 })
             }
@@ -142,7 +142,7 @@
                 }
             }
         </script>
-        
+
 
     </body>
     <footer class="main-footer" style="margin-left: 0;">

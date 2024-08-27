@@ -1,11 +1,11 @@
 let title = document.getElementsByTagName("title")[0].innerText;
 let userAccountType = localStorage.getItem("type_val"); // 2 Manager
 
-let SERVER_CB_order = "http://starmark.work/OrderOnline_API_Order_test/";
+//let SERVER_CB_order = "http://starmark.work/OrderOnline_API_Order_test/";
 let SERVER_CB_ax = "http://starmark.work/OrderOnline_API_AIF_test/";
 
 //let SERVER_CB_ax = "http://localhost:4377/";
-//let SERVER_CB_order = "http://localhost:54871/";
+let SERVER_CB_order = "http://localhost:54871/";
 
 let API_EMPLOYEE = SERVER_CB_order + "api/order/employee";
 let API_STORE = SERVER_CB_order + "api/order/stored";
@@ -127,6 +127,7 @@ window.onload = function () {
       localStorage.getItem("usr_val"),
       localStorage.getItem("type_val")
     );
+    console.log('pools', pool);
     loadPools(pool);
     //loadRegion(region);
     //loadProvince(provinceId);
@@ -2560,8 +2561,11 @@ function loadPools(selected) {
         let _pool = object["PoolId"];
         let _pools = object["Pools"];
 
-        if (selected !== "AddOrder" && (selected == _pool || _pools == 1))
+        if (selected !== "AddOrder" && (selected == _pool || _pools == 1)){
+          console.log(_pool);
+          console.log(selected);
           trHTML += `<option value="${_pool}" selected>${_pool} (${object["Name"]})</option>`;
+        }
         else
           trHTML += `<option value="${_pool}">${_pool} (${object["Name"]})</option>`;
       }
