@@ -72,6 +72,7 @@ function load() {
           _confdate = "-";
         }
         if (row.No > 0) {
+        
           trBody += `<tr>
                                     <td>${rowcount}</td>
                                     <td style="align-items: center;">

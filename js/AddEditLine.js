@@ -39,8 +39,8 @@ let title = document.getElementsByTagName("title")[0].innerText;
 //let SERVER_ax = "https://starmark.work/OrderOnline_API_AIF/"; //Live
 
 let SERVER_order = "http://starmark.work/OrderOnline_API_Order_test/";
-let SERVER_ax = "http://starmark.work/OrderOnline_API_AIF_test/";
-//let SERVER_ax = 'http://localhost:4377/';
+//let SERVER_ax = "http://starmark.work/OrderOnline_API_AIF_test/";
+let SERVER_ax = "http://localhost:4377/";
 //let SERVER_order = "http://localhost:54871/";
 
 let API_SERIES = SERVER_order + "api/line/series";
@@ -566,7 +566,11 @@ function getDefaultItemId(pool, series, model, seqSeries, id) {
           const pMonth = month.toString().padStart(2, "0");
 
           itemId.value = `${newDate.substring(2, 4)}${pMonth}-*****`;
+
+          onChecked(false, seqSeries, id);
         }
+
+       
       }
     };
   }
@@ -1480,7 +1484,7 @@ function activeTimePeriod(value, seqSeries, id) {
   let disable = "";
   if (value == "") disable = true;
   else disable = false;
-  console.log("date click");
+
   document
     .getElementById(`card${seqSeries}-confirmDate_line` + id)
     .setAttribute("value", value);
@@ -1598,18 +1602,18 @@ function onChecked(checked, seqSeries, id) {
     element.setAttribute("value", checked);
     //element.value = checked;
     seq = id; // parseInt(document.getElementById(`card${seqSeries}-countItem`).value);
-    const confirmdate = document.getElementById(
-      `card${seqSeries}-confirmDate_line` + seq
-    );
+    const confirmdate = document.getElementById(`card${seqSeries}-confirmDate_line` + seq);
+    const timeperiod = document.getElementById(`card${seqSeries}-timeperiod` + seq);
+    const size = document.getElementById(`card${seqSeries}-size` + seq);
+    const itemId = document.getElementById(`card${seqSeries}-itemId` + seq);
+
     if (checked) {
       confirmdate.disabled = false;
     } else confirmdate.disabled = true;
 
     if (confirmdate.value == "") {
-      document.getElementById(
-        `card${seqSeries}-timeperiod` + seq
-      ).disabled = true;
-      document.getElementById(`card${seqSeries}-size` + seq).disabled = true;
+      timeperiod.disabled = true;
+      size.disabled = true;
       loadSize(0, seqSeries, seq); //set default none
       loadTimePeriod(0, seqSeries, seq);
       setMinConfirmDate(
@@ -1617,16 +1621,10 @@ function onChecked(checked, seqSeries, id) {
         seqSeries
       );
     } else {
-      document.getElementById(
-        `card${seqSeries}-timeperiod` + seq
-      ).disabled = true;
-      document.getElementById(`card${seqSeries}-size` + seq).disabled = true;
+      timeperiod.disabled = true;
+      size.disabled = true;
       loadTimePeriod(0, seqSeries, seq);
-      loadDefaultSize(
-        document.getElementById(`card${seqSeries}-itemId` + seq).value,
-        seqSeries,
-        seq
-      );
+      loadDefaultSize(itemId.value, seqSeries, seq);
     }
   }
 }

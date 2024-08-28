@@ -2,13 +2,13 @@ const listSection = document.querySelector(".list-section");
 const listContainer = document.querySelector(".list");
 let username = localStorage.getItem("username_val");
 
-// let SERVER_CB_order = "http://starmark.work/OrderOnline_API_Order_test/";
+let SERVER_order = "http://starmark.work/OrderOnline_API_Order_test/";
 // let SERVER_CB_ax = "http://starmark.work/OrderOnline_API_AIF_test/";
 
-let SERVER_order = "";
-let SERVER_ax = "";
+//let SERVER_order = "";
+let SERVER_ax = "http://localhost:4377/";
 
-let API_XML_LOAD = SERVER_order + "api/xml/load";
+let API_XML_LOAD = SERVER_order + "api/xml/load/";
 let API_XML_LINE_LOAD = SERVER_order + "api/xml/line/load/";
 let API_XMLTABLE_CREATE = SERVER_ax + "api/xml/create";
 let API_XMLLINE_CREATE = SERVER_ax + "api/xml/line/create";
@@ -16,9 +16,13 @@ let API_XMLLINE_CREATE = SERVER_ax + "api/xml/line/create";
 let xmlTable = [];
 let xmlLine = [];
 
+const rowsData = { Data: xmlTable };
+
+load();
+
 function load() {
   const xhttp = new XMLHttpRequest();
-  xhttp.open("GET", API_XML_LOAD);
+  xhttp.open("GET", API_XML_LOAD + 0);
   xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhttp.send();
   xhttp.onreadystatechange = function () {
@@ -49,7 +53,13 @@ function load() {
                         <td>${row.ItemName}</td>
                         <td>${row.FileName}</td>
                         <td>${row.UploadBy}</td>
-                        <td>${row.CreatedDate}</td>
+                        <td>${row.CreatedDate.toLocaleString("en-US")}</td>
+                        <td>
+                            <button type="button" class="btn btn-block btn-outline-success btn-xs" 
+                                onclick="load_line(${row.RecId})">Lines (${
+          row.Lines
+        })</button>
+                        </td>
                     </tr>
                     `;
       });
@@ -76,7 +86,6 @@ function load_line(recId) {
                       <tr>
                         <th>N0.</th>
                         <th>Article</th>
-                        <th>Lead time</th>
                         <th>On-hand</th>
                         <th>Price</th>
                       </tr>
@@ -88,7 +97,6 @@ function load_line(recId) {
         trBody += `<tr>
                         <td>${row.Seq}</td>
                         <td>${row.Article}</td>
-                        <td>${row.LeadTime}</td>
                         <td>${row.Onhand}</td>
                         <td>${row.Price}</td>
                     </tr>
@@ -103,7 +111,7 @@ function load_line(recId) {
 
 function openFile(fileupload) {
   let input = fileupload;
-  console.log(input[0]);
+
   uploadFile(input[0]);
   //input.files.length
   for (var index = 0; index < input.length; index++) {
@@ -115,16 +123,8 @@ function openFile(fileupload) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(text, "text/xml");
 
-      var customer = doc.getElementsByTagName("CUSTOMER").item(0);
-      var aritcleNo = doc.getElementsByTagName("ARTICLENO").item(0);
-      console.log(aritcleNo);
-      xmlTable.push({
-        ItemId: aritcleNo,
-        ItemName: "",
-        UploadBy: username,
-        FileName: input[index - 1].name,
-        xmlLine: xmlLine
-      });
+      let customer = doc.getElementsByTagName("CUSTOMER").item(0).textContent;
+      let aritcle = doc.getElementsByTagName("ARTICLENO").item(0).textContent;
 
       var set = doc.getElementsByTagName("Set");
       for (var idxLine = 0; idxLine < set.length; idxLine++) {
@@ -140,36 +140,31 @@ function openFile(fileupload) {
           Price: price
         });
       }
-      console.log(xmlTable);
+
+      xmlTable.push({
+        ItemId: aritcle,
+        ItemName: "",
+        UploadBy: username,
+        FileName: input[index - 1].name,
+        Lines: xmlLine
+      });
     };
     reader.readAsText(input[index]); //input.files[index]
   }
 }
 
 function create() {
-  const elementFiles = document.querySelectorAll(``);
-  elementFiles.forEach((eleSeries) => {
-    tableRow.push({
-      ItemId: "",
-      ItemName: "",
-      UploadBy: username,
-      FileName: ""
-    });
+  console.log(rowsData);
 
-    var set = doc.getElementsByTagName("Set");
-    for (var idxLine = 0; idxLine < set.length; idxLine++) {
-      var setLine = set.item(idxLine);
-      var pName = setLine.getElementsByTagName("Pname").item(0).textContent;
-
-      lineRow.push({
-        Article: "",
-        LeadTime: "",
-        Onhand: 0,
-        Price: 0,
-        RecId: 0
-      });
+  const xhttp = new XMLHttpRequest();
+  xhttp.open("POST", API_XMLTABLE_CREATE);
+  xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhttp.send(JSON.stringify(rowsData));
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      const objects = JSON.parse(this.responseText);
     }
-  });
+  };
 }
 
 // check the file type
@@ -237,7 +232,6 @@ function uploadFile(file) {
   cross.onclick = () => li.remove();
   //li.querySelector(".cross").onclick = () => http.abort();
   http.onabort = () => li.remove();
-
 }
 // find icon for file
 function iconSelector(type) {

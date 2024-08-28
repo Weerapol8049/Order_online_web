@@ -147,6 +147,103 @@ function create() {
   });
 }
 
+function edit() {
+  let _morePool = "";
+  // ------ multiple select pool ---------
+  const morePool = $("#pool").val();
+  morePool.forEach((pool) => {
+    _morePool += `${pool},`;
+  });
+  const pools = _morePool.slice(0, -1);
+
+  let chkInvDelivery = document.getElementById("chkDefaultDelivery").checked;
+  let chkNewDelivery = document.getElementById("chkNewDelivery").checked;
+  let province = "", zone = "";
+  if (chkInvDelivery) {
+    province = document.getElementById("addressProvince_inv").value;
+  } else {
+    province = document.getElementById("addressProvince_delivery").value;
+  }
+
+  if (!chkInvDelivery && !chkNewDelivery) {
+    warning_message(
+      "โปรดระบุที่อยู่จัดส่ง",
+      "กรุณาระบุที่อยู่สำหรับจัดส่งสินค้าก่อนทำการสร้าง"
+    );
+    return;
+  }
+
+  Swal.fire({
+    title: "ยืนยันบันทึกรายการ",
+    text: "คุณต้องการบันทึกรายการที่แก้ไขนี้หรือไม่",
+    icon: "info",
+    showCancelButton: true,
+    confirmButtonColor: "#41BD23",
+    cancelButtonColor: "#CFCECE",
+    confirmButtonText: "บันทึก",
+    cancelButtonText: "ยกเลิก"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const xhttp = new XMLHttpRequest();
+      xhttp.open("POST", API_UPDATE);
+      xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhttp.send(
+        JSON.stringify({
+          RecId: getElementVal("recId"),
+          Date: dateFormat(getElementVal("salesDate")),
+          StoreId: getElementVal("store"),
+          SalesId: getElementVal("salesOrder"),
+          PurchId: getElementVal("purchOrder"),
+          CustName: getElementVal("custName"),
+          PersonnelNumber: getElementVal("personnelNumber"),
+          Pool: pools,
+          Qty: getElementVal("qty"),
+          Amount: getElementVal("amount"),
+          //Region: zone,
+          ProvinceId: province,
+          //Region: getElementVal("region"),
+          //ProvinceId: document.getElementById("province").value,
+          CreateBy: "",
+
+          ShippingCost: getElementVal("shippingcost"),
+          Discount: getElementVal("discount"),
+          InstallTeam: getElementVal("installTeam"),
+          Free: getElementVal("free"),
+          Remark: getElementVal("remark"),
+          TaxNum: getElementVal("taxnum"),
+          Phone: getElementVal("phone")
+        })
+      );
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          const objects = JSON.parse(this.responseText);
+          if (objects.Status == "OK") {
+            createPool(objects.RecId);
+
+            if (document.getElementById("addressProvince_inv").value != "None") {
+              createAddress(objects.RecId);
+            }
+
+            Swal.fire(
+              "บันทึกรายการสำเร็จ",
+              "รายการถูกบันทึกไปที่หน้า Orders แล้ว คุณสามารถเข้าไปดูรายการได้โดยกดปุ่ม OK.",
+              "success"
+            ).then(() => {
+              window.location = "OrdersPage.html";
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: objects.Status
+              //text: 'Something went wrong!',
+            });
+          }
+        }
+      };
+    }
+  });
+}
+
 function createPool(recId) {
   let id = 0;
   let arrRow = [];
@@ -158,8 +255,6 @@ function createPool(recId) {
       SalesSoDaily: recId
     });
   });
-
-  console.log('insert pool', arrRow);
 
   const xhttp = new XMLHttpRequest();
   xhttp.open("POST", API_CREATE_POOL);
@@ -213,8 +308,6 @@ function createDeposit(recId) {
       bank = document.getElementById("bankCredit" + id).value;
       num = document.getElementById("bankCreditNum" + id).value;
     }
-
-    console.log(bank);
 
     //รายการที่เพิ่มงวดมัดจำใหม่
     if (_recid == 0) {
@@ -282,108 +375,6 @@ function createDeposit(recId) {
       }
     };
   }
-}
-
-function edit() {
-  let _morePool = "";
-  // ------ multiple select pool ---------
-  const morePool = $("#pool").val();
-  morePool.forEach((pool) => {
-    _morePool += `${pool},`;
-  });
-  const pools = _morePool.slice(0, -1);
-
-  console.log('edit', pools);
-
-  let chkInvDelivery = document.getElementById("chkDefaultDelivery").checked;
-  let chkNewDelivery = document.getElementById("chkNewDelivery").checked;
-  let province = "",
-    zone = "";
-  if (chkInvDelivery) {
-    province = document.getElementById("addressProvince_inv").value;
-  } else {
-    province = document.getElementById("addressProvince_delivery").value;
-  }
-
-  if (!chkInvDelivery && !chkNewDelivery) {
-    warning_message(
-      "โปรดระบุที่อยู่จัดส่ง",
-      "กรุณาระบุที่อยู่สำหรับจัดส่งสินค้าก่อนทำการสร้าง"
-    );
-    return;
-  }
-
-  Swal.fire({
-    title: "ยืนยันบันทึกรายการ",
-    text: "คุณต้องการบันทึกรายการที่แก้ไขนี้หรือไม่",
-    icon: "info",
-    showCancelButton: true,
-    confirmButtonColor: "#41BD23",
-    cancelButtonColor: "#CFCECE",
-    confirmButtonText: "บันทึก",
-    cancelButtonText: "ยกเลิก"
-  }).then((result) => {
-    if (result.isConfirmed) {
-      const xhttp = new XMLHttpRequest();
-      xhttp.open("POST", API_UPDATE);
-      xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-      xhttp.send(
-        JSON.stringify({
-          RecId: getElementVal("recId"),
-          Date: dateFormat(getElementVal("salesDate")),
-          StoreId: getElementVal("store"),
-          SalesId: getElementVal("salesOrder"),
-          PurchId: getElementVal("purchOrder"),
-          CustName: getElementVal("custName"),
-          PersonnelNumber: getElementVal("personnelNumber"),
-          Pool: pools,
-          Qty: getElementVal("qty"),
-          Amount: getElementVal("amount"),
-          //Region: zone,
-          ProvinceId: province,
-          //Region: getElementVal("region"),
-          //ProvinceId: document.getElementById("province").value,
-          CreateBy: "",
-
-          ShippingCost: getElementVal("shippingcost"),
-          Discount: getElementVal("discount"),
-          InstallTeam: getElementVal("installTeam"),
-          Free: getElementVal("free"),
-          Remark: getElementVal("remark"),
-          TaxNum: getElementVal("taxnum"),
-          Phone: getElementVal("phone")
-        })
-      );
-      xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          const objects = JSON.parse(this.responseText);
-          if (objects.Status == "OK") {
-            createPool(objects.RecId);
-
-            if (
-              document.getElementById("addressProvince_inv").value != "None"
-            ) {
-              createAddress(objects.RecId);
-            }
-
-            Swal.fire(
-              "บันทึกรายการสำเร็จ",
-              "รายการถูกบันทึกไปที่หน้า Orders แล้ว คุณสามารถเข้าไปดูรายการได้โดยกดปุ่ม OK.",
-              "success"
-            ).then(() => {
-              window.location = "OrdersPage.html";
-            });
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: objects.Status
-              //text: 'Something went wrong!',
-            });
-          }
-        }
-      };
-    }
-  });
 }
 
 function createAddress(recId) {

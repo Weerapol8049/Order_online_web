@@ -1,11 +1,11 @@
 let title = document.getElementsByTagName("title")[0].innerText;
 let userAccountType = localStorage.getItem("type_val"); // 2 Manager
 
-//let SERVER_CB_order = "http://starmark.work/OrderOnline_API_Order_test/";
+let SERVER_CB_order = "http://starmark.work/OrderOnline_API_Order_test/";
 let SERVER_CB_ax = "http://starmark.work/OrderOnline_API_AIF_test/";
 
 //let SERVER_CB_ax = "http://localhost:4377/";
-let SERVER_CB_order = "http://localhost:54871/";
+//let SERVER_CB_order = "http://localhost:54871/";
 
 let API_EMPLOYEE = SERVER_CB_order + "api/order/employee";
 let API_STORE = SERVER_CB_order + "api/order/stored";
@@ -127,7 +127,7 @@ window.onload = function () {
       localStorage.getItem("usr_val"),
       localStorage.getItem("type_val")
     );
-    console.log('pools', pool);
+
     loadPools(pool);
     //loadRegion(region);
     //loadProvince(provinceId);
@@ -136,10 +136,8 @@ window.onload = function () {
 
     calculateTotal();
     loadAddress(recId);
-
   }
 };
-
 
 function readXMLFile(filePath) {
   return new Promise((resolve, reject) => {
@@ -252,7 +250,7 @@ function loadCardDeposit(data) {
       group2.appendChild(curseq);
       group2.appendChild(seq2);
       group2.appendChild(lblRecId);
-     
+
       //#region วันที่จ่าย
       let colPaymDate = createElement("div", {
         id: "colPaymDate" + id,
@@ -289,7 +287,7 @@ function loadCardDeposit(data) {
         defaultDate: dateFormatSlace(object.TransDate.substring(0, 10))
       });
       //#endregion
-      
+
       //#region งวด
       let colinstall = createElement("div", {
         id: "colinstallment" + id,
@@ -353,7 +351,7 @@ function loadCardDeposit(data) {
       };
 
       //#endregion
-      
+
       //#region delete button
       let coldelete = createElement("div", {
         id: "coldelete" + id,
@@ -404,7 +402,7 @@ function loadCardDeposit(data) {
       };
 
       //#endregion
-     
+
       //#region print button
       let coldprint = createElement("div", {
         id: "coldprint" + id,
@@ -433,7 +431,7 @@ function loadCardDeposit(data) {
       linkPrint.appendChild(imgPrint);
 
       //#endregion
-      
+
       //#region cancel button
       let colcancel = createElement("div", {
         id: "colcancel" + id,
@@ -458,7 +456,7 @@ function loadCardDeposit(data) {
         cancelDeposit(btnCancel.id.substring(9, 11));
       };
       //#endregion
-      
+
       //#region payment remark
       let rowPaymRemark = createElement("div", {
         id: "rowPaymRemark" + id,
@@ -512,7 +510,7 @@ function loadCardDeposit(data) {
       };
 
       //#endregion
-      
+
       //#region remark
       let rowRemark = createElement("div", {
         id: "rowRemark" + id,
@@ -548,7 +546,7 @@ function loadCardDeposit(data) {
       };
 
       //#endregion
-      
+
       document.getElementById("countDeposit").value = id;
       onchangeInstallment(0, id);
       refreshSequence(`CURRSEQ`);
@@ -658,7 +656,6 @@ function loadCardDeposit(data) {
         createPaymentCreditCard(true, id, object);
       }
       //#endregion
-      
     }
     id++;
   });
@@ -1014,7 +1011,10 @@ function addCardDeposit(event) {
     });
     seq.appendChild(group);
 
-    let label = createElement("label", { id: "label" + id, innerText: "ลำดับ" });
+    let label = createElement("label", {
+      id: "label" + id,
+      innerText: "ลำดับ"
+    });
     group.appendChild(label);
 
     let grouplbl = createElement("div", {
@@ -1023,7 +1023,10 @@ function addCardDeposit(event) {
     });
     seq.appendChild(grouplbl);
 
-    let curseq = createElement("label", { id: "CURRSEQ" + id, innerText: id.toString() });
+    let curseq = createElement("label", {
+      id: "CURRSEQ" + id,
+      innerText: id.toString()
+    });
     grouplbl.appendChild(curseq);
 
     let seq2 = createElement("label", {
@@ -1035,7 +1038,7 @@ function addCardDeposit(event) {
 
     let lblRecId = createElement("label", {
       id: "RECID" + id,
-      innerText : 0,
+      innerText: 0,
       style: "display:none;"
     });
     grouplbl.appendChild(lblRecId);
@@ -1082,7 +1085,7 @@ function addCardDeposit(event) {
     });
 
     //#endregion
-    
+
     //#region งวด
     let colinstall = createElement("div", {
       id: "colinstallment" + id,
@@ -1121,7 +1124,7 @@ function addCardDeposit(event) {
     document.getElementById("installment" + id).disabled = true;
 
     //#endregion
-    
+
     //#region มูลค่า
     let colamount = createElement("div", {
       id: "colamount" + id,
@@ -1154,7 +1157,7 @@ function addCardDeposit(event) {
       this.value = Math.abs(this.value);
     };
     //#endregion
-    
+
     //#region delete button
     let coldelete = createElement("div", {
       id: "coldelete" + id,
@@ -1186,7 +1189,7 @@ function addCardDeposit(event) {
     document.getElementById("linkDelete" + id).appendChild(imgDelete);
 
     //#endregion
-    
+
     //#region ชำระค่า
     let rowPaymRemark = createElement("div", {
       id: "rowPaymRemark" + id,
@@ -1220,7 +1223,7 @@ function addCardDeposit(event) {
     });
     groupPaymRemark.appendChild(inputPaymRemark);
     //#endregion
-    
+
     //#region remark
     let rowRemark = createElement("div", {
       id: "rowRemark" + id,
@@ -1262,7 +1265,7 @@ function addCardDeposit(event) {
     refreshSequence(`CURRSEQ`);
 
     //#endregion
-    
+
     //#region วิธีชำระเงิน
     let rowPaym = createElement("div", {
       className: "row",
@@ -1352,7 +1355,6 @@ function addCardDeposit(event) {
     });
     document.getElementById(colPaymCredit.id).appendChild(lblCredit);
     //#endregion
-    
   }
 }
 
@@ -2150,8 +2152,18 @@ function createPaymentCreditCard(checked, id, value = null) {
     );
 
     for (var i = 0; i < bankName.length; ++i) {
-      bankCash[bankCash.length] = new Option(bankName[i], bankName[i]);
+      var option = document.createElement("option");
+      option.value = bankName[i];
+      option.text = bankName[i];
+
+      if (bank == bankName[i]) {
+        option.selected = true;
+      }
+      bankCash.appendChild(option);
     }
+    // for (var i = 0; i < bankName.length; ++i) {
+    //   bankCash[bankCash.length] = new Option(bankName[i], bankName[i]);
+    // }
 
     document.getElementById("groupDeposit" + id).appendChild(rowCash);
 
@@ -2561,12 +2573,9 @@ function loadPools(selected) {
         let _pool = object["PoolId"];
         let _pools = object["Pools"];
 
-        if (selected !== "AddOrder" && (selected == _pool || _pools == 1)){
-          console.log(_pool);
-          console.log(selected);
+        if (selected !== "AddOrder" && (selected == _pool || _pools == 1)) {
           trHTML += `<option value="${_pool}" selected>${_pool} (${object["Name"]})</option>`;
-        }
-        else
+        } else
           trHTML += `<option value="${_pool}">${_pool} (${object["Name"]})</option>`;
       }
       document.getElementById("pool").innerHTML = trHTML;
@@ -2655,7 +2664,7 @@ function loadAddress(recid) {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       const data = JSON.parse(this.responseText);
-      console.log(data);
+
       data.map((row) => {
         if (row.Type == 1) {
           //ที่อยู่ใบกำกับภาษี

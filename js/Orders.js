@@ -755,7 +755,7 @@ function clickEdit(
   TaxNum,
   phone
 ) {
-  console.log(qty, amount);
+
   setItem("emp_val", emp); //แสดงชื่อที่ผูกกับ personnelNumber
   setItem("store_val", store);
   setItem("pool_val", pool);
