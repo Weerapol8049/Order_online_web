@@ -33,46 +33,88 @@ let API_ADDRESS_UPDATE = SERVER_2_ax + "api/Order/address/update";
 let API_ADDRESS_DELETE = SERVER_2_ax + "api/Order/address/delete";
 
 function create() {
-  let _morePool = "";
-  // ------ multiple select pool ---------
-  const morePool = $("#pool").val();
-  morePool.forEach((pool) => {
-    _morePool += `${pool},`;
-  });
-  const pools = _morePool.slice(0, -1);
+    let msgRequire  = ""
+    let _morePool = '';
+    // ------ multiple select pool ---------
+    const morePool = $('#pool').val();
+    morePool.forEach(pool => {
+        _morePool += `${pool},`;
+    });
+    const pools = _morePool.slice(0, -1) 
 
-  let warning = 0;
-  const elements = document.querySelectorAll(`[id^="paymDate"]`);
-  elements.forEach((element) => {
-    let paymdate = document.getElementById(element.id).value;
-    if (paymdate == "") warning++;
-  });
+    let warning = 0;
+	  let salesDate = dateFormat(getElementVal('salesDate'));
+    let userAccount = getElementVal('personnelNumber');
+    let province = "", zone = "";
+    
+    let storeId  = getElementVal('store');
+    let customer = getElementVal('custName');
+    let qty      = getElementVal('qty');
+    let amount   = getElementVal('amount');
 
-  if (warning > 0) {
-    warning_message(
-      "โปรดระบุวันที่จ่ายเงินมัดจำ",
-      "กรุณาระบุวันที่จ่ายเงินมัดจำก่อนทำการสร้าง"
-    );
-    return;
-  }
+    let chkInvDelivery = document.getElementById("chkDefaultDelivery").checked;
+    let chkNewDelivery = document.getElementById("chkNewDelivery").checked;
 
-  let chkInvDelivery = document.getElementById("chkDefaultDelivery").checked;
-  let chkNewDelivery = document.getElementById("chkNewDelivery").checked;
-  let province = "",
-    zone = "";
-  if (chkInvDelivery) {
-    province = document.getElementById("addressProvince_inv").value;
-  } else {
-    province = document.getElementById("addressProvince_delivery").value;
-  }
+    const elements = document.querySelectorAll(`[id^="paymDate"]`);
+    elements.forEach(element => { 
+        let paymdate = document.getElementById(element.id).value;
+        if (paymdate == '')
+            warning++;
+     });
 
-  if (!chkInvDelivery && !chkNewDelivery) {
-    warning_message(
-      "โปรดระบุที่อยู่จัดส่ง",
-      "กรุณาระบุที่อยู่สำหรับจัดส่งสินค้าก่อนทำการสร้าง"
-    );
-    return;
-  }
+	  if (salesDate == ""){
+        msgRequire += ` <label> วันที่ขาย </label> <br>`;
+     }
+     if (storeId == ""){
+        msgRequire += ` <label> Store Id </label> <br>`;
+     }
+	 if (!pools){
+        msgRequire += ` <label> Pool </label> <br>`;
+     }
+     if (userAccount == ""){
+        msgRequire += ` <label> Sales EmpID </label> <br>`;
+     }
+     if (qty == "" || amount == "" || qty == 0 || amount == 0){
+        msgRequire += ` <label> จำนวน และยอดเงินรวม </label> <br>`;
+     }
+     if (customer == ""){
+        msgRequire += ` <label> ชื่อ-สกุล </label> <br>`;
+     }
+     if (warning > 0){
+        msgRequire += ` <label> วันที่จ่ายเงินมัดจำ </label> <br>`;
+     }
+     
+    if (chkInvDelivery) {
+      province = document.getElementById("addressProvince_inv").value;
+    } else {
+      province = document.getElementById("addressProvince_delivery").value;
+    }
+
+    if (!chkInvDelivery && !chkNewDelivery) {
+      msgRequire += ` <label> ที่อยู่จัดส่ง </label> <br>`;
+    }
+
+    if (province == ""){
+      msgRequire += ` <label> จังหวัด </label> <br>`;
+    }
+
+     if (msgRequire != ""){
+        Swal.fire({
+            title: "โปรดระบุ",
+            text: "กรุณาระบุข้อมูลก่อนการสร้าง",
+            html: msgRequire,
+            icon: "warning",
+            showCancelButton: false,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#CFCECE",
+            confirmButtonText: "OK"
+          }).then((result) => {
+            if (result.isConfirmed) {
+            }
+          });
+        //warning_message(`<label> โปรดระบุ </label> <br>`, msgRequire);
+        return;
+     }
 
   Swal.fire({
     title: "ยืนยันการสร้างรายการ",
@@ -156,6 +198,14 @@ function edit() {
   });
   const pools = _morePool.slice(0, -1);
 
+  if (!pools) {
+    warning_message(
+      "โปรดระบุ Pool",
+      "กรุณาระบุ Pool ก่อนทำการบันทึก"
+    );
+    return;
+  }
+
   let chkInvDelivery = document.getElementById("chkDefaultDelivery").checked;
   let chkNewDelivery = document.getElementById("chkNewDelivery").checked;
   let province = "", zone = "";
@@ -168,7 +218,7 @@ function edit() {
   if (!chkInvDelivery && !chkNewDelivery) {
     warning_message(
       "โปรดระบุที่อยู่จัดส่ง",
-      "กรุณาระบุที่อยู่สำหรับจัดส่งสินค้าก่อนทำการสร้าง"
+      "กรุณาระบุที่อยู่สำหรับจัดส่งสินค้าก่อนทำการบันทึก"
     );
     return;
   }
