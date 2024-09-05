@@ -29,6 +29,8 @@ function openFile(fileupload) {
       const doc = parser.parseFromString(text, "text/xml");
 
       let customer = doc.getElementsByTagName("CUSTOMER").item(0).textContent;
+      let firstname = doc.getElementsByTagName("INFO15").item(0).textContent;
+      let lastname = doc.getElementsByTagName("INFO16").item(0).textContent;
       let aritcle = doc.getElementsByTagName("ARTICLENO").item(0).textContent;
 
       var set = doc.getElementsByTagName("Set");
@@ -48,7 +50,7 @@ function openFile(fileupload) {
 
       xmlTable.push({
         ItemId: aritcle,
-        ItemName: "",
+        ItemName: firstname + " " + lastname,
         UploadBy: username,
         FileName: input[index - 1].name,
         Lines: xmlLine
@@ -79,20 +81,14 @@ function create() {
           const objects = JSON.parse(this.responseText);
 
           if (objects.Status == "OK") {
-            Swal.fire(
-                "อัปโหลดสำเร็จ",
-                "",
-                "success"
-              ).then(() => {
-                window.location = "XMLUpload.html";
-              });
-          }
-          else
-          {
+            Swal.fire("อัปโหลดสำเร็จ", "", "success").then(() => {
+              window.location = "XMLUpload.html";
+            });
+          } else {
             Swal.fire({
-                icon: "error",
-                title: objects.Status
-              });
+              icon: "error",
+              title: objects.Status
+            });
           }
         }
       };
@@ -113,7 +109,7 @@ function uploadFile(file) {
   const { name, type, size } = file;
 
   listSection.style.display = "block";
-  document.getElementById("btnUpload").style.display = 'block';
+  document.getElementById("btnUpload").style.display = "block";
 
   var li = document.createElement("li");
   li.classList.add("in-prog");
@@ -165,19 +161,19 @@ function uploadFile(file) {
   http.send(data);
 
   cross.onclick = () => {
-    let itemId = li.querySelector(".name").innerHTML.replace(".xml", '');
+    let itemId = li.querySelector(".name").innerHTML.replace(".xml", "");
     xmlTable.map((e) => {
-        if (e.ItemId == itemId) {
-            xmlTable.splice(itemId, 1);
-        }
-    });//remove array
-    
+      if (e.ItemId == itemId) {
+        xmlTable.splice(itemId, 1);
+      }
+    }); //remove array
+
     li.remove();
 
-    if (xmlTable.length == 0){
-        document.getElementById("btnUpload").style.display = 'none';
+    if (xmlTable.length == 0) {
+      document.getElementById("btnUpload").style.display = "none";
     }
-  }
+  };
   //li.querySelector(".cross").onclick = () => http.abort();
   http.onabort = () => li.remove();
 }
