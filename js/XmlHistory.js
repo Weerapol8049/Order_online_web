@@ -66,63 +66,68 @@ function load_line(recId) {
 
       let trBody = "";
       document.getElementById("body").innerHTML = "";
-      trBody += `<table id="xmlLine" class="table fold-table table-bordered table-hover " >
+      trBody += `<table id="example1" class="table table-bordered table-hover " >
                   <thead>
                       <tr>
+                        <th style="width: 5%"></th>
                         <th style="width: 10%">N0.</th>
                         <th>Article</th>
-
                         <th style="width: 20%">Price</th>
+                        <th style="width: 10%">Line</th>
                       </tr>
                   </thead>
                   <tbody id="body-data" >
                 `;
 
       data.map((row) => {
-        trBody += `<tr class="view">
-                        <td >${row.Seq}</td>
+        let line = row.BaseLine.length;
+        let display = line > 0 ? '<i class="fas fa-angle-down"></i>' : '';
+
+        trBody += `<tr class="view" >
+                        <td id="angle-${row.Article}">${display}</i></td>
+                        <td>${row.Seq}</td>
                         <td>${row.Article}</td>
-                        
                         <td align="right">${numberFormat(row.Price)}</td>
+                        <td>${line > 0 ? line : ''}</td>
                     </tr>
                     `;
 
-        if (row.BaseLine.length > 0) {
-          trBody += `<tr class="fold" style="padding-left: 50px">
+        if (line > 0) {
+          trBody += `
+                    <tr class="fold ${row.Article}" style="display:none; padding-left: 50px;">
                       <td colspan="5">
-                        <div class="fold-content">
-                          <h3>Article : ${row.Article}</h3>
+                        
+                          <h4>Article : ${row.Article}</h4>
                             <table>
                               <thead>
                                 <tr>
                                   <th>No</th>
                                   <th>Item number</th>
                                   <th>Name</th>
-                                  <th style="width: 12%">Lead time</th>
-                                  <th style="width: 12%">On-hand</th>
+                                  <th >Lead time</th>
+                                  <th >On-hand</th>
                                 </tr>
                               </thead>
                               <tbody>`;
 
           row.BaseLine.map((baseline) => {
-            trBody += `
-                      <tr>
+
+            trBody += `<tr>
                         <td>${baseline.Seq}</td>
                         <td>${baseline.ItemId}</td>
                         <td>${baseline.ItemName}</td>
-                        <td align="right">${numberFormat(
-                          baseline.LeadTime
-                        )}</td>
+                        <td align="right">${numberFormat(baseline.LeadTime)}</td>
                         <td align="right">${numberFormat(baseline.Onhand)}</td>
-                      </tr>
+                      </tr> 
                     `;
           });
           trBody += `
-                </tbody>
-              </table>
-            </div>
-          </td>
-         </tr>`;
+                              </tbody>
+                            </table>
+                          
+                        </td>
+                      </tr>
+                 `;
         }
       });
 
@@ -130,27 +135,33 @@ function load_line(recId) {
       document.getElementById("body").innerHTML = trBody;
     }
 
-    var table = document.getElementById("xmlLine");
+    var table = document.getElementById("example1");
     var rows = table.getElementsByClassName("view");
-    console.log(table);
+
     for (i = 1; i < rows.length; i++) {
       var row = table.rows[i];
       row.onclick = (function (myrow) {
         return function () {
-          var cell = myrow.getElementsByTagName("td")[0];
+          var cell = myrow.getElementsByTagName("td")[2];
           var id = cell.innerHTML;
 
           myrow.classList.toggle("open");
 
-          var fold = table.getElementsByClassName("fold")[0];
+          var fold = table.getElementsByClassName("fold " + id)[0];
           fold.classList.toggle("open");
 
-          var view = table.getElementsByClassName("view")[0];
-          var view_open = table.getElementsByClassName("view open")[0];
+          const angle = document.getElementById("angle-" + id);
 
-          if (view.length > 0) fold.style.display = "none";
-
-          if (view_open.length > 0) fold.style.display = "block";
+          if (myrow.className == "view open") {
+            fold.style.display = "contents";
+            angle.innerHTML = '<i class="fas fa-angle-up"></i>';
+          }
+            
+          if (myrow.className == "view")
+          {
+            fold.style.display = "none";
+            angle.innerHTML = '<i class="fas fa-angle-down"></i>';
+          }
         };
       })(row);
     }
