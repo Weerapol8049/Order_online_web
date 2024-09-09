@@ -71,7 +71,7 @@ async function load(username, userAccountType, show, RG = "", Year = "") {
       Year: Year
     })
   );
-  xhttp.onreadystatechange = function () {
+  xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       const data = JSON.parse(this.responseText);
 
@@ -145,7 +145,7 @@ async function load(username, userAccountType, show, RG = "", Year = "") {
                 
                       `;
 
-      data.map((row) => {
+      data.map(row => {
         let _provinceName = row.ProvinceName;
         if (_provinceName != "") _provinceName = _provinceName + " / ";
 
@@ -170,46 +170,24 @@ async function load(username, userAccountType, show, RG = "", Year = "") {
         trBody += `<tr>
                             <td>
                                 <div class="col-sm-12" style="margin: 5px;"> 
-                                  <button type="button" id="btnEdit${
-                                    row.RecId
-                                  }" class="btn btn-block btn-outline-success btn-xs" 
+                                  <button type="button" id="btnEdit${row.RecId}" class="btn btn-block btn-outline-success btn-xs" 
                                     style="display: ${display}"
-                                    onclick="clickEdit('${row.EmpName}','${
-          row.StoreId
-        }','${row.Pool}','${row.Qty}'
-                                                    ,'${row.Amount}','${
-          row.CustName
-        }','${row.Date.toLocaleString()}'
-                                                    ,'${row.SalesId}','${
-          row.PurchId
-        }','${row.PersonnelNumber}','${row.RecId}','${row.OrderId}'
-                                                    ,'${row.Region}','${
-          row.ProvinceId
-        }','${row.CountPools}'
-                                                    ,'${row.ShippingCost}','${
-          row.Discount
-        }','${row.InstallTeam}','${row.Free}','${row.Remark}','${
-          row.TaxNum
-        }','${row.Phone}'
+                                    onclick="clickEdit('${row.EmpName}','${row.StoreId}','${row.Pool}','${row.Qty}'
+                                                    ,'${row.Amount}','${row.CustName}','${row.Date.toLocaleString()}'
+                                                    ,'${row.SalesId}','${row.PurchId}','${row.PersonnelNumber}','${row.RecId}','${row.OrderId}'
+                                                    ,'${row.Region}','${row.ProvinceId}','${row.CountPools}'
+                                                    ,'${row.ShippingCost}','${row.Discount}','${row.InstallTeam}','${row.Free}','${row.Remark}','${row.TaxNum}','${row.Phone}'
                                                     )">
                                                     Edit</button>
                                 </div>
                                 <div class="col-sm-12" style="margin: 5px; display: ${displayCancel};">
-                                  <button type="button" id="btnCancel${
-                                    row.RecId
-                                  }" class="btn btn-block btn-outline-danger btn-xs" 
-                                  onclick="clickCancel('${row.RecId}','${
-          row.CustName
-        }','${row.SalesIdAX}')">
+                                  <button type="button" id="btnCancel${row.RecId}" class="btn btn-block btn-outline-danger btn-xs" 
+                                  onclick="clickCancel('${row.RecId}','${row.CustName}','${row.SalesIdAX}')">
                           
                                   Cancel</button>
                                 </div>
                                 <div class="col-sm-12" style="margin: 5px; display: ${display};">
-                                <button type="button" id="btnImage${
-                                  row.RecId
-                                }" class="btn btn-block btn-outline-info btn-xs" onclick="clickBrowsImg('${
-          row.RecId
-        }')">
+                                <button type="button" id="btnImage${row.RecId}" class="btn btn-block btn-outline-info btn-xs" onclick="clickBrowsImg('${row.RecId}')">
                             
                                 Upload image</button>
                                 </div>
@@ -217,9 +195,7 @@ async function load(username, userAccountType, show, RG = "", Year = "") {
 
 
                                 <div class="col-sm-12" style="margin: 5px; display: ${display};">
-                                <button type="button" id="btnPrint${
-                                  row.RecId
-                                }" class="btn btn-block btn-outline-info btn-xs" 
+                                <button type="button" id="btnPrint${row.RecId}" class="btn btn-block btn-outline-info btn-xs" 
                                     onclick="clickPrint('${row.RecId}')">
                                   Print</button>
                                 </div>
@@ -228,9 +204,7 @@ async function load(username, userAccountType, show, RG = "", Year = "") {
 
                                 <div class="col-sm-12" style="margin: 5px; display: ${displayImg};">
                                 <a style="cursor: pointer; " 
-                                  onclick="detailCancelDeposit('${
-                                    row.CustName
-                                  }', '${dateFormat(
+                                  onclick="detailCancelDeposit('${row.CustName}', '${dateFormat(
           row.CancelDate.toLocaleString()
         )}', '${row.CancelRemark}')">
                                   <img style="with: 48px; height: 48px" src="../images/vecteezy_cancelled-rubber-stamp-on-white-background-vector-illustration_19495927.jpg" alt="Cancel deposit" >
@@ -259,9 +233,7 @@ async function load(username, userAccountType, show, RG = "", Year = "") {
                                 ${row.Pool}
                               </div>
                               <div class="col-sm-12">
-                                <small> ${row.ProvinceName} ${
-          row.RegionName
-        }  </small>
+                                <small> ${row.ProvinceName} ${row.RegionName}  </small>
                                 </div>
                             </td>
                             
@@ -284,36 +256,22 @@ async function load(username, userAccountType, show, RG = "", Year = "") {
                             </td>
                             <td style="display: flex; align-items: center;">
                                 <div class="col-sm-12">
-                                  <label style="font-weight: 500;">${
-                                    row.CustName
-                                  }</label>
+                                  <label style="font-weight: 500;">${row.CustName}</label>
                                 </div>
                                 <div class="col-sm-12">
-                                SO : <label style="font-weight: 400;">${
-                                  row.SalesId
-                                }</label>, PO : <label style="font-weight: 400;">${
-          row.PurchId
-        }</label>
+                                SO : <label style="font-weight: 400;">${row.SalesId}</label>, PO : <label style="font-weight: 400;">${row.PurchId}</label>
                               </div>
                             </td>
                             
                             <td >
                               <button type="button"  class="btn btn-block btn-outline-info btn-xs" 
                                 style="display: ${display}"
-                                onclick="clickLine('${row.RecId}','${
-          row.Pool
-        }','${row.EmpName}'
+                                onclick="clickLine('${row.RecId}','${row.Pool}','${row.EmpName}'
                                                   ,'${row.StoreId}','${row.Qty}'
-                                                  ,'${row.Amount}','${
-          row.CustName
-        }','${row.Date.toLocaleString()}'
-                                                  ,'${row.SalesId}','${
-          row.PurchId
-        }'
+                                                  ,'${row.Amount}','${row.CustName}','${row.Date.toLocaleString()}'
+                                                  ,'${row.SalesId}','${row.PurchId}'
                                                   ,'${row.PersonnelNumber}'
-                                                  ,'${row.Region}','${
-          row.RegionName
-        }','${row.ProvinceName}'
+                                                  ,'${row.Region}','${row.RegionName}','${row.ProvinceName}'
                                                   )">
                                                 Line (${row.LineCount})
                               </button>
@@ -362,20 +320,20 @@ function loadYear(type, selected) {
       Type: type
     })
   );
-  xhttp.onreadystatechange = function () {
+  xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       const data = JSON.parse(this.responseText);
       var option = "";
       var Year = new Date().getFullYear();
-      data.map((row) => {
+      data.map(row => {
         if (Year == row.YearFilter || selected == row.YearFilter)
-          option += `<option value="${row.YearFilter}" selected>${
-            parseInt(row.YearFilter) + 543
-          }</option>`;
+          option += `<option value="${row.YearFilter}" selected>${parseInt(
+            row.YearFilter
+          ) + 543}</option>`;
         else
-          option += `<option value="${row.YearFilter}">${
-            parseInt(row.YearFilter) + 543
-          }</option>`;
+          option += `<option value="${row.YearFilter}">${parseInt(
+            row.YearFilter
+          ) + 543}</option>`;
       });
 
       document.getElementById(`yearFilter`).innerHTML = option;
@@ -509,7 +467,7 @@ function loadYear(type, selected) {
 
 function createTable(data) {
   let id = 1;
-  data.map((row) => {
+  data.map(row => {
     let _provinceName = row.ProvinceName;
     if (_provinceName != "") _provinceName = _provinceName + " / ";
 
@@ -598,11 +556,11 @@ function createTable(data) {
 function createElement(el, options, listen = []) {
   let element = document.createElement(el);
 
-  Object.keys(options).forEach(function (k) {
+  Object.keys(options).forEach(function(k) {
     element[k] = options[k];
   });
   if (listen.length > 0) {
-    listen.forEach(function (l) {
+    listen.forEach(function(l) {
       element.addEventListener(l.event, l.f);
     });
   }
@@ -623,7 +581,7 @@ function loadDeposit(recid) {
       recid: recid
     })
   );
-  xhttp.onreadystatechange = function () {
+  xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       const objects = JSON.parse(this.responseText);
 
@@ -662,7 +620,7 @@ function detailCancelDeposit(customer, datecancel, remark) {
        `,
     focusConfirm: false,
     icon: "info"
-  }).then((result) => {});
+  }).then(result => {});
 }
 
 function htmlDeposit(response) {
@@ -755,7 +713,6 @@ function clickEdit(
   TaxNum,
   phone
 ) {
-
   setItem("emp_val", emp); //แสดงชื่อที่ผูกกับ personnelNumber
   setItem("store_val", store);
   setItem("pool_val", pool);
@@ -836,7 +793,7 @@ function clickCancel(recId, customer, salesIdAX) {
       confirmButtonColor: "#d33",
       cancelButtonColor: "#CFCECE",
       confirmButtonText: "OK"
-    }).then((result) => {
+    }).then(result => {
       if (result.isConfirmed) {
       }
     });
@@ -861,7 +818,7 @@ function clickCancel(recId, customer, salesIdAX) {
       }
       return { Remark: remark };
     }
-  }).then((result) => {
+  }).then(result => {
     onCancel(recId, result.value.Remark);
   });
 }
@@ -876,7 +833,7 @@ function onCancel(_recid, remark) {
       CancelRemark: remark
     })
   );
-  xhttp.onreadystatechange = function () {
+  xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       const objects = JSON.parse(this.responseText);
       if (objects.Status == "OK") {
@@ -924,12 +881,12 @@ function clickBrowsImg(recId) {
         method: "POST"
       };
 
-      return fetch(API_UPLOAD_IMAGE, othePram).then((data) => {
+      return fetch(API_UPLOAD_IMAGE, othePram).then(data => {
         return data.json();
       });
     },
     allowOutsideClick: () => !Swal.isLoading()
-  }).then((result) => {
+  }).then(result => {
     if (result.isConfirmed) {
       Swal.fire({
         position: "top-end",
